@@ -11,7 +11,7 @@
 | Fase | Status | Progresso |
 |------|--------|-----------|
 | 📐 Planejamento | ✅ Concluído | 100% |
-| 🔧 Setup Inicial | 🔄 Em andamento | 30% |
+| 🔧 Setup Inicial | 🔄 Em andamento | 70% |
 | 🎨 Frontend | ⏳ Aguardando | 0% |
 | ⚙️ Backend | ⏳ Aguardando | 0% |
 | 🧪 Testes | ⏳ Aguardando | 0% |
@@ -23,6 +23,8 @@
 - ❌ Bloqueado
 - 🔥 Prioritário
 
+**Última atualização:** 01/04/2026 19:51 UTC
+
 ---
 
 ## 🏗️ FASE 1: Setup e Infraestrutura
@@ -30,27 +32,31 @@
 ### 1.1 Inicialização do Projeto
 | # | Tarefa | Responsável | Status | Prazo |
 |---|--------|-------------|--------|-------|
-| 1.1.1 | Criar projeto Next.js 14 com App Router | David | ⏳ | 01/04 19h |
-| 1.1.2 | Configurar TypeScript | David | ⏳ | 01/04 19h |
-| 1.1.3 | Configurar TailwindCSS | David | ⏳ | 01/04 19h |
-| 1.1.4 | Instalar shadcn/ui | David | ⏳ | 01/04 19h |
-| 1.1.5 | Configurar Prisma ORM | David | ⏳ | 01/04 20h |
-| 1.1.6 | Configurar variáveis de ambiente | David | ⏳ | 01/04 20h |
+| 1.1.1 | Criar projeto Next.js 14 com App Router | David | ✅ | 01/04 19h |
+| 1.1.2 | Configurar TypeScript | David | ✅ | 01/04 19h |
+| 1.1.3 | Configurar TailwindCSS | David | ✅ | 01/04 19h |
+| 1.1.4 | Instalar shadcn/ui | David | ✅ | 01/04 19h |
+| 1.1.5 | Configurar Prisma ORM | David | ✅ | 01/04 20h |
+| 1.1.6 | Configurar variáveis de ambiente | David | ✅ | 01/04 20h |
 
 **Notas:**
-- Script de instalação: `npx create-next-app@latest sexta-do-empreendedor --typescript --tailwind --app`
-- Prisma: `npm install @prisma/client && npx prisma init`
+- ✅ Projeto criado com sucesso
+- ✅ Prisma 6.6.0 instalado e configurado
 
 ---
 
 ### 1.2 Configuração do Banco de Dados
 | # | Tarefa | Responsável | Status | Prazo |
 |---|--------|-------------|--------|-------|
-| 1.2.1 | Configurar PostgreSQL (local ou remoto) | David | ⏳ | 01/04 21h |
-| 1.2.2 | Aplicar schema Prisma | David | ⏳ | 01/04 21h |
+| 1.2.1 | Configurar PostgreSQL (local ou remoto) | David | ✅ | 01/04 21h |
+| 1.2.2 | Aplicar schema Prisma | David | 🔄 | 01/04 21h |
 | 1.2.3 | Executar primeira migração | David | ⏳ | 01/04 21h |
 | 1.2.4 | Criar seed inicial (categorias) | David | ⏳ | 01/04 22h |
 | 1.2.5 | Testar conexão com banco | David | ⏳ | 01/04 22h |
+
+**Notas:**
+- ✅ PostgreSQL configurado
+- 🔄 Corrigindo erro linha 10 do schema.prisma
 
 **Dependências:**
 - Tarefa 1.2.1 depende de 1.1.5
@@ -286,22 +292,16 @@
 
 ---
 
-### 7.3 URL Shortener (Futuro - v1.1)
+## 💰 FASE 8: Sistema de Pagamento
+
+### 8.1 Integração Stripe/PayPal (PRIORIDADE MVP)
 | # | Tarefa | Responsável | Status | Prazo |
 |---|--------|-------------|--------|-------|
-| 7.3.1 | Criar sistema de links curtos | David | ⏳ | v1.1 |
-| 7.3.2 | Endpoint /api/short/:code (redirect) | David | ⏳ | v1.1 |
-
----
-
-## 💰 FASE 8: Sistema de Pagamento (Manual - MVP)
-
-### 8.1 Backend - Pagamentos
-| # | Tarefa | Responsável | Status | Prazo |
-|---|--------|-------------|--------|-------|
-| 8.1.1 | Endpoint POST /api/payments (criar pagamento) | David | 🔥 | 03/04 15h |
-| 8.1.2 | Upload de comprovante | David | 🔥 | 03/04 15h |
-| 8.1.3 | Webhook para atualizar status (futuro Stripe) | David | ⏳ | v1.1 |
+| 8.1.1 | Configurar Stripe SDK | David | 🔥 | 02/04 15h |
+| 8.1.2 | Criar endpoint POST /api/payments/create-session | David | 🔥 | 02/04 16h |
+| 8.1.3 | Webhook Stripe para confirmação | David | 🔥 | 02/04 16h |
+| 8.1.4 | Atualizar status do anúncio após pagamento | David | 🔥 | 02/04 17h |
+| 8.1.5 | Configurar PayPal SDK (alternativa) | David | ⏳ | 02/04 18h |
 
 ---
 
@@ -309,9 +309,11 @@
 | # | Tarefa | Responsável | Status | Prazo |
 |---|--------|-------------|--------|-------|
 | 8.2.1 | Página de pagamento (/anuncios/:id/pagamento) | Lia | 🔥 | 03/04 16h |
-| 8.2.2 | Instruções para Zelle | Lia | 🔥 | 03/04 16h |
-| 8.2.3 | Upload de comprovante | Lia | 🔥 | 03/04 16h |
-| 8.2.4 | Confirmação de envio | Lia | ⏳ | 03/04 17h |
+| 8.2.2 | Integração com Stripe Checkout | Lia | 🔥 | 03/04 17h |
+| 8.2.3 | Página de sucesso (/pagamento/sucesso) | Lia | 🔥 | 03/04 17h |
+| 8.2.4 | Página de erro (/pagamento/erro) | Lia | ⏳ | 03/04 18h |
+
+**Nota:** Zelle será adicionado na próxima semana (pós-MVP)
 
 ---
 
@@ -325,18 +327,6 @@
 | 9.1.3 | Endpoint POST /api/admin/categories (criar) | David | ⏳ | 03/04 18h |
 | 9.1.4 | Endpoint PATCH /api/admin/categories/:id | David | ⏳ | 03/04 18h |
 
-**Categorias Iniciais:**
-- Alimentação
-- Beleza e Estética
-- Construção e Reformas
-- Serviços Automotivos
-- Limpeza e Manutenção
-- Consultoria e Contabilidade
-- Saúde e Bem-estar
-- Educação
-- Tecnologia
-- Outros Serviços
-
 ---
 
 ### 9.2 Frontend - Gestão de Categorias
@@ -345,7 +335,6 @@
 | 9.2.1 | Página /admin/categorias | Lia | ⏳ | 03/04 18h |
 | 9.2.2 | Tabela com categorias | Lia | ⏳ | 03/04 19h |
 | 9.2.3 | Modal criar/editar categoria | Lia | ⏳ | 03/04 19h |
-| 9.2.4 | Drag and drop para reordenar | Lia | ⏳ | v1.1 |
 
 ---
 
@@ -383,37 +372,22 @@
 
 ---
 
-## 📈 Roadmap Futuro (v1.1+)
-
-### v1.1 - Melhorias
-- [ ] Integração Stripe/PayPal (David)
-- [ ] Sistema de cupons (David + Lia)
-- [ ] Notificações por e-mail avançadas (David)
-- [ ] Analytics completo (David + Lia)
-- [ ] URL Shortener (David)
-
-### v1.2 - Expansão
-- [ ] App mobile (React Native)
-- [ ] Sistema de avaliações
-- [ ] Chat interno
-- [ ] Multi-idioma
-
-### v2.0 - Enterprise
-- [ ] Bot WhatsApp
-- [ ] Integração CRM
-- [ ] Planos recorrentes
-- [ ] Marketplace diário
-
----
-
 ## 📝 Notas Importantes
 
 ### Prioridades para MVP (até 02/04)
-1. 🔥 Autenticação básica
-2. 🔥 Landing page
-3. 🔥 Criação de anúncio
-4. 🔥 Vitrine pública
-5. 🔥 Painel admin (moderação + pagamentos)
+1. 🔥 Setup completo (David) - **EM ANDAMENTO**
+2. 🔥 Autenticação básica (David)
+3. 🔥 Landing page (Lia)
+4. 🔥 Criação de anúncio (David + Lia)
+5. 🔥 Vitrine pública (Lia)
+6. 🔥 Painel admin (moderação + pagamentos) (David + Lia)
+7. 🔥 **Integração Stripe/PayPal (David + Lia)** - ADICIONADO
+
+### Requisitos Técnicos
+- **Mobile-first:** Interface otimizada para mobile como prioridade
+- **Desktop:** Aparência profissional e de alto impacto
+- **Pagamentos:** Stripe/PayPal no MVP, Zelle na próxima semana
+- **Design:** Seguir diretrizes do Marco, padrões FBR apenas para software interno
 
 ### O que pode ficar para v1.1
 - Notificações avançadas
@@ -423,12 +397,13 @@
 - Reordenação drag and drop
 
 ### Comunicação
+- **Updates obrigatórios:** Reportar CADA etapa concluída imediatamente
+- **Paralizações:** Justificar bloqueios IMEDIATAMENTE
 - **Daily sync:** Telegram grupo às 9h
 - **Bloqueios:** Reportar imediatamente no grupo
-- **Updates:** Atualizar status neste arquivo a cada tarefa concluída
 
 ---
 
-**Última atualização:** 01/04/2026 18:01 UTC  
+**Última atualização:** 01/04/2026 19:51 UTC  
 **Próxima revisão:** 02/04/2026 09:00 UTC  
 **Mantido por:** Chiara Garcia
