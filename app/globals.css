@@ -2,17 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary: #0B3C6F;
-  --secondary: #1E5AA8;
-  --gold: #FFC300;
-  --dark-gold: #E6A800;
+@theme inline {
+  /* Fontes */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  
+  /* Cores da Marca FBR */
+  --color-brand-primary: #F97316;
+  --color-brand-dark: #101622;
+  --color-background: #F8FAFC;
+  --color-foreground: #0F172A;
+  --color-card: #FFFFFF;
+  
+  /* Cores Extendidas */
+  --color-accent: #FCD34D;
+  --color-secondary: #3B82F6;
 }
 
-body {
-  font-family: 'Poppins', sans-serif;
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl font-semibold;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl font-semibold;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', sans-serif;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }

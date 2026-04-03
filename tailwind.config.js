@@ -7,11 +7,20 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-outfit)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       colors: {
-        primary: '#0B3C6F',
-        secondary: '#1E5AA8',
-        gold: '#FFC300',
-        darkGold: '#E6A800',
+        background: '#F8FAFC',
+        foreground: '#0F172A',
+        card: '#FFFFFF',
+        primary: {
+          DEFAULT: '#F97316',
+          hover: '#EA580C',
+        },
+        accent: '#FCD34D',
+        secondary: '#3B82F6',
       },
     },
   },

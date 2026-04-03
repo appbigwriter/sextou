@@ -1,113 +1,194 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-primary via-secondary to-primary">
+    <main className="min-h-screen">
       {/* Header */}
-      <header className="bg-white/10 backdrop-blur-md border-b border-white/20">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-white">Sexta do Empreendedor</h1>
-          <nav className="space-x-4">
-            <Link href="/anuncios" className="text-white hover:text-gold transition">
+      <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <Link href="/" className="font-heading font-extrabold text-2xl tracking-tight text-[#F97316]">
+            Sexta do Empreendedor
+          </Link>
+          <nav className="hidden md:flex items-center space-x-6">
+            <Link href="/" className="text-slate-700 hover:text-[#F97316] transition font-medium">
+              Home
+            </Link>
+            <Link href="/anuncios" className="text-slate-700 hover:text-[#F97316] transition font-medium">
               Anúncios
             </Link>
-            <Link href="/cadastro" className="bg-gold text-primary px-4 py-2 rounded-lg font-bold hover:bg-darkGold transition">
-              Anunciar
+            <Link 
+              href="/cadastro" 
+              className="bg-[#F97316] hover:bg-[#EA580C] text-white px-6 py-2.5 rounded-lg font-semibold transition shadow-md hover:shadow-lg"
+            >
+              Anunciar Agora
             </Link>
           </nav>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-6">
-          A Vitrine da<br />Comunidade Brasileira
-        </h2>
-        <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-          Toda sexta-feira, milhares de brasileiros descobrem negócios incríveis. 
-          Seu negócio pode ser o próximo!
-        </p>
-        <Link href="/anuncios" className="inline-block bg-gold text-primary px-8 py-4 rounded-lg text-xl font-bold hover:bg-darkGold transition transform hover:scale-105">
-          Ver Anúncios 🔥
-        </Link>
+      {/* Hero Section com Imagem de Fundo */}
+      <section className="relative h-[600px] md:h-[700px] flex items-center justify-center overflow-hidden">
+        {/* Background com gradiente e padrão */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#101622] via-slate-900 to-[#0F172A]">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGOTczMTYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDEzNEgxNHYtMWgyMXYxem0wLTVIMTR2LTFoMjJ2MXoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
+        </div>
+
+        {/* Conteúdo do Hero */}
+        <div className="relative z-10 container mx-auto px-4 text-center">
+          <div className="max-w-4xl mx-auto space-y-8">
+            {/* Badge */}
+            <div className="inline-flex items-center space-x-2 bg-[#F97316]/10 border border-[#F97316]/20 rounded-full px-4 py-2">
+              <span className="text-[#FCD34D] text-2xl">🔥</span>
+              <span className="text-white/90 font-medium text-sm">Alcance milhares de brasileiros toda sexta-feira</span>
+            </div>
+
+            {/* Título Principal */}
+            <h1 className="font-heading font-bold text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
+              A Vitrine da<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F97316] to-[#FCD34D]">
+                Comunidade Brasileira
+              </span>
+            </h1>
+
+            {/* Subtítulo */}
+            <p className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              Toda sexta-feira, milhares de brasileiros descobrem negócios incríveis. 
+              Seu negócio pode ser o próximo!
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+              <Link 
+                href="/anuncios"
+                className="group bg-[#F97316] hover:bg-[#EA580C] text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2"
+              >
+                <span>Ver Anúncios</span>
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
+              <Link 
+                href="/cadastro"
+                className="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition backdrop-blur-sm"
+              >
+                Anunciar Agora
+              </Link>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
+              <div className="text-center">
+                <div className="font-heading font-bold text-4xl text-white">1000+</div>
+                <div className="text-slate-400 text-sm mt-1">Anúncios</div>
+              </div>
+              <div className="text-center">
+                <div className="font-heading font-bold text-4xl text-white">US$ 30</div>
+                <div className="text-slate-400 text-sm mt-1">Por Publicação</div>
+              </div>
+              <div className="text-center">
+                <div className="font-heading font-bold text-4xl text-white">24h</div>
+                <div className="text-slate-400 text-sm mt-1">Aprovação</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Decoração inferior */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent"></div>
       </section>
 
       {/* Como Funciona */}
-      <section className="bg-white py-20">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <h3 className="text-4xl font-bold text-primary text-center mb-12">Como Funciona</h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6 border-2 border-gold rounded-xl">
-              <div className="text-5xl mb-4">📝</div>
-              <h4 className="text-2xl font-bold text-primary mb-2">1. Crie seu Anúncio</h4>
-              <p className="text-gray-600">Cadastre seu negócio em minutos</p>
-            </div>
-            <div className="text-center p-6 border-2 border-gold rounded-xl">
-              <div className="text-5xl mb-4">💳</div>
-              <h4 className="text-2xl font-bold text-primary mb-2">2. Pague US$ 30</h4>
-              <p className="text-gray-600">Investimento único por publicação</p>
-            </div>
-            <div className="text-center p-6 border-2 border-gold rounded-xl">
-              <div className="text-5xl mb-4">🚀</div>
-              <h4 className="text-2xl font-bold text-primary mb-2">3. Apareça na Sexta</h4>
-              <p className="text-gray-600">Milhares de clientes veem seu negócio</p>
-            </div>
+          <h2 className="font-heading text-center mb-4 text-slate-900">Como Funciona</h2>
+          <p className="text-center text-slate-600 mb-12 max-w-2xl mx-auto text-lg">
+            Três passos simples para colocar seu negócio diante de milhares de potenciais clientes
+          </p>
+          
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[
+              { icon: '📝', title: '1. Crie seu Anúncio', desc: 'Cadastre seu negócio em minutos com fotos e descrição completa' },
+              { icon: '💳', title: '2. Pague US$ 30', desc: 'Investimento único por publicação, sem mensalidades' },
+              { icon: '🚀', title: '3. Apareça na Sexta', desc: 'Milhares de clientes em potencial veem seu negócio toda sexta-feira' }
+            ].map((step, i) => (
+              <div key={i} className="bg-card rounded-xl p-8 border border-slate-200 hover:border-[#F97316] hover:shadow-lg transition">
+                <div className="text-5xl mb-4">{step.icon}</div>
+                <h3 className="font-heading font-semibold text-xl mb-3 text-slate-900">{step.title}</h3>
+                <p className="text-slate-600 leading-relaxed">{step.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Benefícios */}
-      <section className="bg-gradient-to-br from-secondary to-primary py-20">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h3 className="text-4xl font-bold text-white text-center mb-12">Por que Anunciar?</h3>
-          <div className="grid md:grid-cols-2 gap-8 text-white">
-            <div className="flex items-start space-x-4">
-              <div className="text-4xl">📈</div>
-              <div>
-                <h4 className="text-2xl font-bold mb-2">Alcance Real</h4>
-                <p className="text-white/90">Milhares de brasileiros engajados toda semana</p>
+          <h2 className="font-heading text-center mb-4 text-slate-900">Por que Anunciar Conosco?</h2>
+          <p className="text-center text-slate-600 mb-12 max-w-2xl mx-auto text-lg">
+            A maneira mais eficaz de alcançar a comunidade brasileira
+          </p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {[
+              { icon: '📈', title: 'Alcance Real', desc: 'Milhares de brasileiros engajados toda semana' },
+              { icon: '💰', title: 'Custo Baixo', desc: 'Apenas US$ 30 por publicação, sem taxas ocultas' },
+              { icon: '🤝', title: 'Comunidade', desc: 'Brasileiros apoiam brasileiros' },
+              { icon: '⚡', title: 'Resultados Rápidos', desc: 'Contatos diretos via WhatsApp' }
+            ].map((benefit, i) => (
+              <div key={i} className="text-center p-6 rounded-xl hover:bg-slate-50 transition">
+                <div className="text-5xl mb-4">{benefit.icon}</div>
+                <h4 className="font-heading font-semibold text-lg mb-2 text-slate-900">{benefit.title}</h4>
+                <p className="text-slate-600 text-sm">{benefit.desc}</p>
               </div>
-            </div>
-            <div className="flex items-start space-x-4">
-              <div className="text-4xl">💰</div>
-              <div>
-                <h4 className="text-2xl font-bold mb-2">Investimento Baixo</h4>
-                <p className="text-white/90">Apenas US$ 30 por publicação</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-4">
-              <div className="text-4xl">🤝</div>
-              <div>
-                <h4 className="text-2xl font-bold mb-2">Comunidade</h4>
-                <p className="text-white/90">Brasileiros apoiam brasileiros</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-4">
-              <div className="text-4xl">⚡</div>
-              <div>
-                <h4 className="text-2xl font-bold mb-2">Resultados Rápidos</h4>
-                <p className="text-white/90">Contatos diretos via WhatsApp</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* CTA Final */}
-      <section className="bg-gold py-20 text-center">
-        <div className="container mx-auto px-4">
-          <h3 className="text-4xl font-bold text-primary mb-6">Pronto para Crescer?</h3>
-          <p className="text-xl text-primary/80 mb-8">Seu negócio merece ser visto</p>
-          <Link href="/cadastro" className="inline-block bg-primary text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-secondary transition transform hover:scale-105">
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#F97316] to-[#EA580C]"></div>
+        <div className="relative z-10 container mx-auto px-4 text-center">
+          <h2 className="font-heading font-bold text-4xl md:text-5xl text-white mb-6">
+            Pronto para Crescer?
+          </h2>
+          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            Junte-se a centenas de empreendedores que já alcançaram sucesso com a gente
+          </p>
+          <Link 
+            href="/cadastro"
+            className="inline-block bg-white text-[#F97316] px-10 py-5 rounded-lg font-heading font-bold text-xl hover:bg-slate-100 transition shadow-2xl hover:scale-105"
+          >
             Criar Meu Anúncio Agora
           </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-primary text-white py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2026 Sexta do Empreendedor. Todos os direitos reservados.</p>
+      <footer className="bg-[#101622] text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <h3 className="font-heading font-bold text-xl mb-4">Sexta do Empreendedor</h3>
+              <p className="text-slate-400">A vitrine da comunidade brasileira</p>
+            </div>
+            <div>
+              <h4 className="font-heading font-semibold mb-4">Links</h4>
+              <ul className="space-y-2 text-slate-400">
+                <li><Link href="/anuncios" className="hover:text-[#F97316] transition">Anúncios</Link></li>
+                <li><Link href="/cadastro" className="hover:text-[#F97316] transition">Anunciar</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-heading font-semibold mb-4">Contato</h4>
+              <p className="text-slate-400">contato@sextadoempreendedor.com</p>
+            </div>
+          </div>
+          <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
+            <p>&copy; 2026 Sexta do Empreendedor. Todos os direitos reservados.</p>
+          </div>
         </div>
       </footer>
     </main>
