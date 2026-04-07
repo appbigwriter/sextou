@@ -8,6 +8,9 @@ interface ExtendedUser extends User {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  // trustHost faz o NextAuth detectar o host automaticamente da requisição
+  // sem precisar de NEXTAUTH_URL configurado corretamente
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -20,9 +23,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string }
-        })
+        let user
+        try {
+          user = await prisma.user.findUnique({
+            where: { email: credentials.email as string }
+          })
+        } catch (err) {
+          console.error("[AUTH] DB error:", err)
+          return null
+        }
 
         if (!user || !user.passwordHash) {
           return null
