@@ -1,8 +1,7 @@
-# Dockerfile para Sexta do Empreendedor - EasyPanel
-FROM node:20-alpine
+# ===== STAGE 1: Builder =====
+FROM node:20-alpine AS builder
 
 RUN apk add --no-cache libc6-compat
-
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
@@ -12,17 +11,17 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-ENV PORT=3000
-ENV HOSTNAME=0.0.0.0
 
+# Gerar Prisma Client para os binários da plataforma correta
 RUN npx prisma generate
+
+# Build do Next.js
 RUN npm run build
 
-# Copiar arquivos para standalone mode
-FROM node:20-alpine
+# ===== STAGE 2: Runner =====
+FROM node:20-alpine AS runner
 
 RUN apk add --no-cache libc6-compat
-
 WORKDIR /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -30,10 +29,24 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-COPY --from=0 /app/public ./public
-COPY --from=0 /app/.next/standalone ./
-COPY --from=0 /app/.next/static ./.next/static
+# Copiar arquivos do build standalone
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# CRÍTICO: Copiar Prisma client gerado (binários nativos)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+# Copiar schema e migrations para rodar migrate deploy no startup
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+
+# Copiar script de inicialização
+COPY --from=builder /app/start.sh ./start.sh
+RUN chmod +x start.sh
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+# Roda migrations e inicia o servidor
+CMD ["/bin/sh", "start.sh"]
