@@ -61,9 +61,13 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    console.error("Register error:", error)
+    // Log detalhado para diagnóstico
+    const errMsg = error instanceof Error ? error.message : String(error)
+    const errCode = (error as any)?.code || 'UNKNOWN'
+    console.error("[REGISTER ERROR]", { code: errCode, message: errMsg, error })
+    
     return NextResponse.json(
-      { error: "Erro ao criar conta" },
+      { error: "Erro ao criar conta", detail: errMsg, code: errCode },
       { status: 500 }
     )
   }
