@@ -1,0 +1,31 @@
+# EasyPanel Docker Compose - Sexta do Empreendedor
+# Use este arquivo para EasyPanel com PostgreSQL externo
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sexta-empreendedor
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sexta.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.sexta.tls=true"
+      - "traefik.http.routers.sexta.entrypoints=websecure"
+
+networks:
+  default:
+    name: sextadoempreendedor

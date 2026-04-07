@@ -1,0 +1,71 @@
+import NextAuth, { User } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { compare } from "bcryptjs"
+import { prisma } from "@/lib/prisma"
+
+interface ExtendedUser extends User {
+  businessName?: string
+}
+
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials): Promise<ExtendedUser | null> {
+        if (!credentials?.email || !credentials?.password) {
+          return null
+        }
+
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email as string }
+        })
+
+        if (!user || !user.passwordHash) {
+          return null
+        }
+
+        const isPasswordValid = await compare(
+          credentials.password as string,
+          user.passwordHash
+        )
+
+        if (!isPasswordValid) {
+          return null
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.fullName,
+          businessName: user.businessName,
+        }
+      }
+    })
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+        token.businessName = (user as any).businessName
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string
+        session.user.businessName = token.businessName as string
+      }
+      return session
+    }
+  },
+  pages: {
+    signIn: "/login",
+  },
+  session: {
+    strategy: "jwt",
+  },
+})
