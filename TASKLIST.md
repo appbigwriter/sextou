@@ -15,6 +15,8 @@
 | 🎨 Frontend | ✅ Concluído | 100% |
 | ⚙️ Backend | ✅ Concluído | 100% |
 | 🧪 Testes | ✅ Concluído | 100% |
+| 💰 Pagamentos | ✅ Concluído | 100% |
+| 🔔 Notificações | ✅ Concluído | 100% |
 | 🚀 Deploy | ✅ Concluído | 100% |
 
 **Legenda:**
@@ -299,25 +301,23 @@
 ### 8.1 Integração Stripe/PayPal (PRIORIDADE MVP)
 | # | Tarefa | Responsável | Status | Prazo |
 |---|--------|-------------|--------|-------|
-| 8.1.1 | Configurar Stripe SDK | Sergio Castro | ⏳ | - |
-| 8.1.2 | Criar endpoint POST /api/payments/create-session | Sergio Castro | ⏳ | - |
-| 8.1.3 | Webhook Stripe para confirmação | Sergio Castro | ⏳ | - |
-| 8.1.4 | Atualizar status do anúncio após pagamento | Sergio Castro | ⏳ | - |
-| 8.1.5 | Configurar PayPal SDK (alternativa) | Sergio Castro | ⏳ | - |
+| 8.1.1 | Sistema de pagamentos (Zelle/Manual) | Sergio Castro | ✅ | 07/04 |
+| 8.1.2 | API de criação de pagamentos | Sergio Castro | ✅ | 07/04 |
+| 8.1.3 | API de confirmação de pagamentos (admin) | Sergio Castro | ✅ | 07/04 |
+| 8.1.4 | Atualizar status do anúncio após pagamento | Sergio Castro | ✅ | 07/04 |
+| 8.1.5 | Stripe/PayPal SDK (futuro) | Sergio Castro | ⏳ | - |
 
-**Nota:** Sistema de pagamento Zelle manual (via admin) implementado temporariamente.
+**Nota:** Sistema de pagamento Zelle manual (via admin) implementado.
 
 ---
 
 ### 8.2 Frontend - Fluxo de Pagamento
 | # | Tarefa | Responsável | Status | Prazo |
 |---|--------|-------------|--------|-------|
-| 8.2.1 | Página de pagamento (/anuncios/:id/pagamento) | Sergio Castro | ⏳ | - |
-| 8.2.2 | Integração com Stripe Checkout | Sergio Castro | ⏳ | - |
-| 8.2.3 | Página de sucesso (/pagamento/sucesso) | Sergio Castro | ⏳ | - |
-| 8.2.4 | Página de erro (/pagamento/erro) | Sergio Castro | ⏳ | - |
-
-**Nota:** Fluxo de pagamento via Zelle será adicionado manualmente (pós-MVP)
+| 8.2.1 | Página /admin/pagamentos (gestão) | Sergio Castro | ✅ | 07/04 |
+| 8.2.2 | Lista de pagamentos pendentes | Sergio Castro | ✅ | 07/04 |
+| 8.2.3 | Botão confirmar pagamento | Sergio Castro | ✅ | 07/04 |
+| 8.2.4 | Integração Stripe Checkout (futuro) | Sergio Castro | ⏳ | - |
 
 ---
 
@@ -328,8 +328,8 @@
 |---|--------|-------------|--------|-------|
 | 9.1.1 | Criar seed de categorias iniciais | Sergio Castro | ✅ | 07/04 |
 | 9.1.2 | Endpoint GET /api/categories | Sergio Castro | ✅ | 07/04 |
-| 9.1.3 | Endpoint POST /api/admin/categories (criar) | Sergio Castro | ✅ | 07/04 |
-| 9.1.4 | Endpoint PATCH /api/admin/categories/:id | Sergio Castro | ✅ | 07/04 |
+| 9.1.3 | Endpoint POST /api/categories (criar) | Sergio Castro | ✅ | 07/04 |
+| 9.1.4 | Endpoint PATCH/DELETE /api/categories/:id | Sergio Castro | ✅ | 07/04 |
 
 ---
 
@@ -338,7 +338,7 @@
 |---|--------|-------------|--------|-------|
 | 9.2.1 | Página /admin/categorias | Sergio Castro | ✅ | 07/04 |
 | 9.2.2 | Tabela com categorias | Sergio Castro | ✅ | 07/04 |
-| 9.2.3 | Modal criar/editar categoria | Sergio Castro | ✅ | 07/04 |
+| 9.2.3 | Componente interativo criar/editar/excluir | Sergio Castro | ✅ | 07/04 |
 
 ---
 
@@ -347,10 +347,10 @@
 ### 10.1 Backend - Notificações
 | # | Tarefa | Responsável | Status | Prazo |
 |---|--------|-------------|--------|-------|
-| 10.1.1 | Configurar Nodemailer (SMTP) | Sergio Castro | ⏳ | - |
-| 10.1.2 | Template de e-mail: anúncio aprovado | Sergio Castro | ⏳ | - |
-| 10.1.3 | Template de e-mail: anúncio rejeitado | Sergio Castro | ⏳ | - |
-| 10.1.4 | Template de e-mail: pagamento confirmado | Sergio Castro | ⏳ | - |
+| 10.1.1 | Configurar Nodemailer (SMTP) | Sergio Castro | ✅ | 07/04 |
+| 10.1.2 | Template de e-mail: anúncio aprovado | Sergio Castro | ✅ | 07/04 |
+| 10.1.3 | Template de e-mail: anúncio rejeitado | Sergio Castro | ✅ | 07/04 |
+| 10.1.4 | Template de e-mail: pagamento confirmado | Sergio Castro | ✅ | 07/04 |
 
 ---
 
@@ -380,7 +380,7 @@
 
 ### Implementado na Versão 1.0
 
-**Core完成 (100%):**
+**Core Completo (100%):**
 - ✅ Sistema completo de autenticação (NextAuth)
 - ✅ Dashboard do anunciante
 - ✅ Criação e edição de anúncios
@@ -389,15 +389,16 @@
 - ✅ Integração WhatsApp
 - ✅ Painel administrativo completo
 - ✅ Sistema de aprovação de anúncios
-- ✅ Gestão de categorias
+- ✅ Gestão de categorias (CRUD completo)
+- ✅ Sistema de pagamentos (Zelle manual)
+- ✅ Notificações por email (Nodemailer + templates)
 - ✅ Deploy em EasyPanel (VPS)
 - ✅ Health check API
 
-**Pendente (v1.1):**
-- ⏳ Integração Stripe/PayPal completa
-- ⏳ Sistema de cupons
+**Próximas melhorias (v1.1):**
+- ⏳ Integração Stripe/PayPal automática
 - ⏳ Upload de imagens avançado
-- ⏳ Notificações por email
+- ⏳ Sistema de cupons
 - ⏳ Analytics detalhado
 
 ---
