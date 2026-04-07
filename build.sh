@@ -13,9 +13,10 @@ fi
 echo "📦 Instalando dependências..."
 npm ci
 
-# Gerar Prisma Client
-echo "🔧 Gerando Prisma Client..."
+# Gerar Prisma Client e aplicar migrações na produção
+echo "🔧 Gerando Prisma Client e Migrando Banco..."
 npx prisma generate
+npx prisma migrate deploy
 
 # Build do Next.js
 echo "⚙️ Building Next.js..."
