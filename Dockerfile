@@ -15,6 +15,7 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
+RUN npx prisma generate
 RUN npm run build
 
 # Copiar arquivos para standalone mode
