@@ -16,6 +16,7 @@ const createAdSchema = z.object({
   deliveryType: z.enum(["LOCAL", "ONLINE", "BOTH"]),
   externalLink: z.string().url().optional().or(z.literal("")),
   whatsappContact: z.string().min(10, "WhatsApp é obrigatório"),
+  images: z.array(z.string().url()).optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -48,12 +49,17 @@ export async function POST(request: NextRequest) {
         price: data.price,
         promotionText: data.promotionText || null,
         city: data.city,
-        state: data.state,
         deliveryType: data.deliveryType,
         externalLink: data.externalLink || null,
         whatsappContact: data.whatsappContact,
         status: "DRAFT",
         paymentStatus: "PENDING",
+        images: {
+          create: (data.images || []).map((url, index) => ({
+            imageUrl: url,
+            order: index,
+          })),
+        },
       },
     })
 

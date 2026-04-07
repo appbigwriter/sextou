@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ImageUpload } from "@/components/image-upload"
 
 const categories = [
   { id: "1", name: "Alimentação", slug: "alimentacao" },
@@ -47,6 +48,7 @@ export default function CriarAnuncioPage() {
     deliveryType: "LOCAL",
     externalLink: "",
     whatsappContact: "",
+    images: [] as string[],
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -159,6 +161,13 @@ export default function CriarAnuncioPage() {
                       ))}
                     </select>
                   </div>
+                  
+                  <ImageUpload
+                    images={formData.images}
+                    onChange={(images) => setFormData({ ...formData, images })}
+                    maxImages={5}
+                  />
+
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Título do Anúncio</label>
                     <Input

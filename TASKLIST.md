@@ -17,12 +17,18 @@
 | 🧪 Testes | ✅ Concluído | 100% |
 | 💰 Pagamentos | ✅ Concluído | 100% |
 | 🔔 Notificações | ✅ Concluído | 100% |
+| 🎁 Cupons | ✅ Concluído | 100% |
+| 📊 Analytics | ✅ Concluído | 100% |
+| 👥 Gestão Usuários | ✅ Concluído | 100% |
+| 👤 Perfil Usuário | ✅ Concluído | 100% |
+| 🔍 Busca/Filtros | ✅ Concluído | 100% |
+| 💳 Stripe Integração | ✅ Concluído | 100% |
 | 🚀 Deploy | ✅ Concluído | 100% |
 
 **Legenda:**
 - ✅ Concluído
 - 🔄 Em andamento
-- ⏳ Aguardando
+- ⏳ Pendente (futuro)
 - ❌ Bloqueado
 - 🔥 Prioritário
 
@@ -305,9 +311,10 @@
 | 8.1.2 | API de criação de pagamentos | Sergio Castro | ✅ | 07/04 |
 | 8.1.3 | API de confirmação de pagamentos (admin) | Sergio Castro | ✅ | 07/04 |
 | 8.1.4 | Atualizar status do anúncio após pagamento | Sergio Castro | ✅ | 07/04 |
-| 8.1.5 | Stripe/PayPal SDK (futuro) | Sergio Castro | ⏳ | - |
+| 8.1.5 | Integração Stripe Checkout | Sergio Castro | ✅ | 07/04 |
+| 8.1.6 | Stripe Webhooks para confirmações | Sergio Castro | ✅ | 07/04 |
 
-**Nota:** Sistema de pagamento Zelle manual (via admin) implementado.
+**Nota:** Sistema de pagamento Zelle manual + Stripe Checkout implementado.
 
 ---
 
@@ -317,7 +324,7 @@
 | 8.2.1 | Página /admin/pagamentos (gestão) | Sergio Castro | ✅ | 07/04 |
 | 8.2.2 | Lista de pagamentos pendentes | Sergio Castro | ✅ | 07/04 |
 | 8.2.3 | Botão confirmar pagamento | Sergio Castro | ✅ | 07/04 |
-| 8.2.4 | Integração Stripe Checkout (futuro) | Sergio Castro | ⏳ | - |
+| 8.2.4 | Checkout Stripe integrado | Sergio Castro | ✅ | 07/04 |
 
 ---
 
@@ -378,9 +385,19 @@
 
 ## 📝 Notas Importantes
 
-### Implementado na Versão 1.0
+### Implementado na Versão 1.1
 
-**Core Completo (100%):**
+**Melhorias v1.1 (100%):**
+- ✅ Sistema de cupons (CRUD completo, validação, 3 tipos)
+- ✅ Analytics API (métricas por período, categorias, relatórios)
+- ✅ Gestão de usuários admin (lista, status, estatísticas)
+- ✅ Página de perfil do anunciante (stats, anúncios publicados)
+- ✅ Configurações do usuário (editar perfil, senha, logout)
+- ✅ Busca avançada na vitrine (filtros por categoria, cidade, preço)
+- ✅ 26 rotas total (páginas + APIs)
+- ✅ Integração Stripe (Checkout Sessions, Webhooks, API de verificação)
+
+**Core v1.0 (Completo):**
 - ✅ Sistema completo de autenticação (NextAuth)
 - ✅ Dashboard do anunciante
 - ✅ Criação e edição de anúncios
@@ -390,19 +407,30 @@
 - ✅ Painel administrativo completo
 - ✅ Sistema de aprovação de anúncios
 - ✅ Gestão de categorias (CRUD completo)
-- ✅ Sistema de pagamentos (Zelle manual)
+- ✅ Sistema de pagamentos (Zelle manual + Stripe)
 - ✅ Notificações por email (Nodemailer + templates)
 - ✅ Deploy em EasyPanel (VPS)
 - ✅ Health check API
 
-**Próximas melhorias (v1.1):**
-- ⏳ Integração Stripe/PayPal automática
-- ⏳ Upload de imagens avançado
-- ⏳ Sistema de cupons
-- ⏳ Analytics detalhado
+---
+
+**Próximas melhorias (v2.0):**
+- ⏳ Upload de imagens avançado (Cloudinary)
+- ⏳ App mobile
+- ⏳ Sistema de mensagens chat
+- ⏳ Relatórios exportáveis (PDF/CSV)
+
+---
+
+**Configuração do Stripe (produção):**
+Para ativar o Stripe em produção, configure as seguintes variáveis de ambiente:
+- `STRIPE_SECRET_KEY`: Chave secreta do Stripe
+- `STRIPE_WEBHOOK_SECRET`: Segredo do webhook
+- `NEXT_PUBLIC_BASE_URL`: URL do site em produção
 
 ---
 
 **Última atualização:** 07/04/2026  
+**Versão:** 1.1  
 **Implementado por:** Sergio Castro  
 **Mantido por:** Chiara Garcia
