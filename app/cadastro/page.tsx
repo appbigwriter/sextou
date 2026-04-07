@@ -47,22 +47,38 @@ export default function CadastroPage() {
         body: JSON.stringify(formData),
       })
 
-      const data = await res.json()
-
-      if (!res.ok) {
-        setError(data.error || "Erro ao criar conta")
+      let data: any = {}
+      try {
+        data = await res.json()
+      } catch {
+        // resposta não é JSON (ex: Next.js error page)
+        setError(`Servidor retornou ${res.status} - resposta não é JSON`)
         return
       }
 
-      await signIn("credentials", {
+      if (!res.ok) {
+        // Mostrar erro real do servidor para diagnóstico
+        const msg = data.detail
+          ? `${data.error} | Detalhe: ${data.detail} | Código: ${data.code}`
+          : data.error || `Erro ${res.status}`
+        setError(msg)
+        return
+      }
+
+      const signInResult = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
         redirect: false,
       })
 
+      if (signInResult?.error) {
+        setError("Conta criada, mas erro ao entrar: " + signInResult.error)
+        return
+      }
+
       router.push("/dashboard")
-    } catch (err) {
-      setError("Erro ao criar conta")
+    } catch (err: any) {
+      setError("Erro de conexão: " + (err?.message || String(err)))
     } finally {
       setLoading(false)
     }
