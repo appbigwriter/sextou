@@ -1,13 +1,11 @@
-import { prisma } from "@/lib/prisma"
 import Link from "next/link"
+import { getAllCategories } from "@/lib/default-categories"
 import { CategoriasManager } from "@/components/admin/categorias-manager"
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminCategoriasPage() {
-  const categories = await prisma.category.findMany({
-    orderBy: { order: "asc" },
-  })
+  const categories = await getAllCategories()
 
   return (
     <div className="min-h-screen bg-gray-50">

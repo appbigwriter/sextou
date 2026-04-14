@@ -73,6 +73,10 @@ export default function CriarAnuncioPage() {
               slug: category.slug,
             }))
         )
+
+        if (Array.isArray(data) && data.length === 0) {
+          setError("Nenhuma categoria ativa disponivel. Ative ao menos uma categoria no painel admin.")
+        }
       } catch (err) {
         const message = err instanceof Error ? err.message : "Erro ao carregar categorias"
         setError(message)

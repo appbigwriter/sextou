@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { getActiveCategories } from "@/lib/default-categories"
 import { z } from "zod"
 
 const createCategorySchema = z.object({
@@ -12,9 +13,7 @@ const createCategorySchema = z.object({
 
 export async function GET() {
   try {
-    const categories = await prisma.category.findMany({
-      orderBy: { order: "asc" },
-    })
+    const categories = await getActiveCategories()
     return NextResponse.json(categories)
   } catch (error) {
     console.error("Get categories error:", error)

@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
+import { prisma } from "@/lib/prisma"
 
 const defaultCategories = [
   { name: "Alimentacao", slug: "alimentacao", icon: "Pizza", order: 1 },
@@ -15,7 +13,7 @@ const defaultCategories = [
   { name: "Outros", slug: "outros", icon: "Package", order: 10 },
 ]
 
-async function main() {
+export async function ensureCategoriesExist() {
   const existingCount = await prisma.category.count()
 
   if (existingCount === 0) {
@@ -37,19 +35,22 @@ async function main() {
         },
       })
     }
-
-    console.log("Categorias padrao criadas com sucesso!")
-    return
   }
-
-  console.log(`Seed ignorado: ${existingCount} categorias ja existem.`)
 }
 
-main()
-  .catch((error) => {
-    console.error(error)
-    process.exit(1)
+export async function getActiveCategories() {
+  await ensureCategoriesExist()
+
+  return prisma.category.findMany({
+    where: { isActive: true },
+    orderBy: { order: "asc" },
   })
-  .finally(async () => {
-    await prisma.$disconnect()
+}
+
+export async function getAllCategories() {
+  await ensureCategoriesExist()
+
+  return prisma.category.findMany({
+    orderBy: { order: "asc" },
   })
+}

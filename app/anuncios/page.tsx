@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import { getActiveCategories } from "@/lib/default-categories"
 import { SearchFilters } from "@/components/search-filters"
 
 interface Props {
@@ -9,10 +10,7 @@ interface Props {
 export const dynamic = 'force-dynamic'
 
 export default async function AnunciosPage({ searchParams }: Props) {
-  const categories = await prisma.category.findMany({
-    where: { isActive: true },
-    orderBy: { order: "asc" },
-  })
+  const categories = await getActiveCategories()
 
   const where: any = { status: "PUBLISHED" }
 
