@@ -4,27 +4,27 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
 const createAdSchema = z.object({
-  categoryId: z.string().min(1, "Categoria é obrigatória"),
-  title: z.string().min(3, "Título deve ter pelo menos 3 caracteres"),
-  shortDescription: z.string().min(10, "Descrição curta é obrigatória"),
-  fullDescription: z.string().min(20, "Descrição completa é obrigatória"),
+  categoryId: z.string().min(1, "Categoria e obrigatoria"),
+  title: z.string().min(3, "Titulo deve ter pelo menos 3 caracteres"),
+  shortDescription: z.string().min(10, "Descricao curta e obrigatoria"),
+  fullDescription: z.string().min(20, "Descricao completa e obrigatoria"),
   offerType: z.enum(["PRODUCT", "SERVICE"]),
   price: z.number().nullable(),
   promotionText: z.string().optional(),
-  city: z.string().min(2, "Cidade é obrigatória"),
-  state: z.string().min(2, "Estado é obrigatório"),
+  city: z.string().min(2, "Cidade e obrigatoria"),
+  state: z.string().min(2, "Estado e obrigatorio"),
   deliveryType: z.enum(["LOCAL", "ONLINE", "BOTH"]),
   externalLink: z.string().url().optional().or(z.literal("")),
-  whatsappContact: z.string().min(10, "WhatsApp é obrigatório"),
+  whatsappContact: z.string().min(10, "WhatsApp e obrigatorio"),
   images: z.array(z.string().url()).optional(),
 })
 
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.email) {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+      return NextResponse.json({ error: "Nao autorizado" }, { status: 401 })
     }
 
     const user = await prisma.user.findUnique({
@@ -32,20 +32,23 @@ export async function POST(request: NextRequest) {
     })
 
     if (!user) {
-      return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 })
+      return NextResponse.json({ error: "Usuario nao encontrado" }, { status: 404 })
     }
 
     const body = await request.json()
     console.log("[ADS_POST] Payload recebido:", body)
 
     const result = createAdSchema.safeParse(body)
-    
+
     if (!result.success) {
-      console.error("[ADS_POST] Erro de validação Zod:", result.error.format())
+      console.error("[ADS_POST] Erro de validacao Zod:", result.error.format())
       return NextResponse.json(
-        { 
-          error: "Dados inválidos", 
-          details: result.error.issues.map(i => ({ path: i.path, message: i.message })) 
+        {
+          error: "Dados invalidos",
+          details: result.error.issues.map((issue) => ({
+            path: issue.path,
+            message: issue.message,
+          })),
         },
         { status: 400 }
       )
@@ -81,22 +84,20 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(ad)
   } catch (error) {
-    }
-
     console.error("Create ad error:", error)
     return NextResponse.json(
-      { error: "Erro ao criar anúncio" },
+      { error: "Erro ao criar anuncio" },
       { status: 500 }
     )
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.email) {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+      return NextResponse.json({ error: "Nao autorizado" }, { status: 401 })
     }
 
     const user = await prisma.user.findUnique({
@@ -104,7 +105,7 @@ export async function GET(request: NextRequest) {
     })
 
     if (!user) {
-      return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 })
+      return NextResponse.json({ error: "Usuario nao encontrado" }, { status: 404 })
     }
 
     const ads = await prisma.ad.findMany({
@@ -119,7 +120,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Get ads error:", error)
     return NextResponse.json(
-      { error: "Erro ao buscar anúncios" },
+      { error: "Erro ao buscar anuncios" },
       { status: 500 }
     )
   }
