@@ -68,12 +68,13 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          aria-label="Filtrar por categoria"
           className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
         >
           <option value="">Todas as categorias</option>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.slug}>
-              {cat.icon} {cat.name}
+              {cat.name}
             </option>
           ))}
         </select>
@@ -83,11 +84,15 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
           placeholder="Cidade..."
           value={city}
           onChange={(e) => setCity(e.target.value)}
+          aria-label="Filtrar por cidade"
           className="w-40"
         />
 
         {/* Price Range */}
-        <select className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm">
+        <select 
+          aria-label="Filtrar por faixa de preço"
+          className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+        >
           <option value="">Qualquer preço</option>
           <option value="0-30">Até $30</option>
           <option value="30-100">$30 - $100</option>

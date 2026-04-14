@@ -114,10 +114,7 @@ export default async function DashboardPage() {
         {/* Recent Ads */}
         <div className="bg-white rounded-xl border shadow-sm">
           <div className="p-6 border-b flex justify-between items-center">
-            <h2 className="font-heading font-semibold text-lg">Meus Anúncios</h2>
-            <Link href="/dashboard/anuncios" className="text-sm text-[#F97316] hover:underline">
-              Ver todos →
-            </Link>
+            <h2 className="font-heading font-semibold text-lg">Meus Anúncios Recentes</h2>
           </div>
           <div className="divide-y">
             {user.ads.length === 0 ? (
@@ -137,6 +134,7 @@ export default async function DashboardPage() {
                     <h3 className="font-medium text-gray-900">{ad.title}</h3>
                     <p className="text-sm text-gray-500">
                       {ad.viewsCount} visualizações •{" "}
+                      {ad.offerType} •{" "}
                       {new Date(ad.createdAt).toLocaleDateString("pt-BR")}
                     </p>
                   </div>

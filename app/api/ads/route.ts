@@ -36,7 +36,22 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const data = createAdSchema.parse(body)
+    console.log("[ADS_POST] Payload recebido:", body)
+
+    const result = createAdSchema.safeParse(body)
+    
+    if (!result.success) {
+      console.error("[ADS_POST] Erro de validação Zod:", result.error.format())
+      return NextResponse.json(
+        { 
+          error: "Dados inválidos", 
+          details: result.error.issues.map(i => ({ path: i.path, message: i.message })) 
+        },
+        { status: 400 }
+      )
+    }
+
+    const data = result.data
 
     const ad = await prisma.ad.create({
       data: {
@@ -49,6 +64,7 @@ export async function POST(request: NextRequest) {
         price: data.price,
         promotionText: data.promotionText || null,
         city: data.city,
+        state: data.state,
         deliveryType: data.deliveryType,
         externalLink: data.externalLink || null,
         whatsappContact: data.whatsappContact,
@@ -65,11 +81,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(ad)
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: error.issues[0].message },
-        { status: 400 }
-      )
     }
 
     console.error("Create ad error:", error)

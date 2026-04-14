@@ -18,7 +18,22 @@ const registerSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const data = registerSchema.parse(body)
+    console.log("[REGISTER_POST] Payload recebido:", { ...body, password: "[REDACTED]", confirmPassword: "[REDACTED]" })
+
+    const result = registerSchema.safeParse(body)
+    
+    if (!result.success) {
+      console.error("[REGISTER_POST] Erro de validação Zod:", result.error.format())
+      return NextResponse.json(
+        { 
+          error: "Dados inválidos", 
+          details: result.error.issues.map(i => ({ path: i.path, message: i.message })) 
+        },
+        { status: 400 }
+      )
+    }
+
+    const data = result.data
 
     const existingUser = await prisma.user.findUnique({
       where: { email: data.email },
