@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default async function AdDetailPage({ params }: Props) {
-  const ad = await prisma.ad.findUnique({
+  const ad = await prisma.ad.findFirst({
     where: { id: params.id, status: "PUBLISHED" },
     include: {
       category: true,

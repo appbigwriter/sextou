@@ -1,21 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
+import { Prisma } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
+const optionalTrimmedString = z.string().trim().optional()
+
 const createAdSchema = z.object({
-  categoryId: z.string().min(1, "Categoria e obrigatoria"),
-  title: z.string().min(3, "Titulo deve ter pelo menos 3 caracteres"),
-  shortDescription: z.string().min(10, "Descricao curta e obrigatoria"),
-  fullDescription: z.string().min(20, "Descricao completa e obrigatoria"),
+  categoryId: z.string().trim().min(1, "Categoria e obrigatoria"),
+  title: z.string().trim().min(3, "Titulo deve ter pelo menos 3 caracteres"),
+  shortDescription: z.string().trim().min(10, "Descricao curta e obrigatoria"),
+  fullDescription: z.string().trim().min(20, "Descricao completa e obrigatoria"),
   offerType: z.enum(["PRODUCT", "SERVICE"]),
   price: z.number().nullable(),
-  promotionText: z.string().optional(),
-  city: z.string().min(2, "Cidade e obrigatoria"),
-  state: z.string().min(2, "Estado e obrigatorio"),
+  promotionText: optionalTrimmedString,
+  city: z.string().trim().min(2, "Cidade e obrigatoria"),
+  state: z.string().trim().min(2, "Estado e obrigatorio"),
   deliveryType: z.enum(["LOCAL", "ONLINE", "BOTH"]),
-  externalLink: z.string().url().optional().or(z.literal("")),
-  whatsappContact: z.string().min(10, "WhatsApp e obrigatorio"),
+  externalLink: z.string().trim().url("Link externo invalido").optional().or(z.literal("")),
+  whatsappContact: z.string().trim().min(10, "WhatsApp e obrigatorio"),
   images: z.array(z.string().url()).optional(),
 })
 
@@ -56,10 +59,25 @@ export async function POST(request: NextRequest) {
 
     const data = result.data
 
+    const category = await prisma.category.findFirst({
+      where: {
+        id: data.categoryId,
+        isActive: true,
+      },
+      select: { id: true },
+    })
+
+    if (!category) {
+      return NextResponse.json(
+        { error: "Categoria invalida ou inativa" },
+        { status: 400 }
+      )
+    }
+
     const ad = await prisma.ad.create({
       data: {
         userId: user.id,
-        categoryId: data.categoryId,
+        categoryId: category.id,
         title: data.title,
         shortDescription: data.shortDescription,
         fullDescription: data.fullDescription,
@@ -85,6 +103,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(ad)
   } catch (error) {
     console.error("Create ad error:", error)
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return NextResponse.json(
+        {
+          error:
+            error.code === "P2003"
+              ? "Categoria invalida para este anuncio"
+              : "Erro ao criar anuncio no banco de dados",
+          code: error.code,
+        },
+        { status: 400 }
+      )
+    }
+
     return NextResponse.json(
       { error: "Erro ao criar anuncio" },
       { status: 500 }

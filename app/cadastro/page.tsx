@@ -6,7 +6,14 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default function CadastroPage() {
   const router = useRouter()
@@ -35,7 +42,7 @@ export default function CadastroPage() {
     setError("")
 
     if (formData.password !== formData.confirmPassword) {
-      setError("As senhas não conferem")
+      setError("As senhas nao conferem")
       setLoading(false)
       return
     }
@@ -47,21 +54,32 @@ export default function CadastroPage() {
         body: JSON.stringify(formData),
       })
 
-      let data: any = {}
+      let data: Record<string, unknown> = {}
       try {
         data = await res.json()
       } catch {
-        // resposta não é JSON (ex: Next.js error page)
-        setError(`Servidor retornou ${res.status} - resposta não é JSON`)
+        setError(`Servidor retornou ${res.status} e a resposta nao era JSON`)
         return
       }
 
       if (!res.ok) {
-        // Mostrar erro real do servidor para diagnóstico
-        const msg = data.detail
-          ? `${data.error} | Detalhe: ${data.detail} | Código: ${data.code}`
-          : data.error || `Erro ${res.status}`
-        setError(msg)
+        const detailMessage = Array.isArray(data.details)
+          ? data.details
+              .map((item) =>
+                typeof item === "object" && item && "message" in item ? String(item.message) : ""
+              )
+              .filter(Boolean)
+              .join(" | ")
+          : ""
+
+        const errorMessage =
+          typeof data.error === "string" ? data.error : `Erro ${res.status}`
+        const detailedError =
+          typeof data.detail === "string"
+            ? `${errorMessage} | Detalhe: ${data.detail} | Codigo: ${String(data.code ?? "UNKNOWN")}`
+            : detailMessage || errorMessage
+
+        setError(detailedError)
         return
       }
 
@@ -72,13 +90,14 @@ export default function CadastroPage() {
       })
 
       if (signInResult?.error) {
-        setError("Conta criada, mas erro ao entrar: " + signInResult.error)
+        setError(`Conta criada, mas houve erro ao entrar: ${signInResult.error}`)
         return
       }
 
       router.push("/dashboard")
-    } catch (err: any) {
-      setError("Erro de conexão: " + (err?.message || String(err)))
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      setError(`Erro de conexao: ${message}`)
     } finally {
       setLoading(false)
     }
@@ -89,7 +108,7 @@ export default function CadastroPage() {
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-heading">Crie sua Conta</CardTitle>
-          <CardDescription>Comece a publicar seus anúncios hoje</CardDescription>
+          <CardDescription>Comece a publicar seus anuncios hoje</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -98,21 +117,25 @@ export default function CadastroPage() {
                 {error}
               </div>
             )}
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label htmlFor="fullName" className="text-sm font-medium">Nome Completo</label>
+                <label htmlFor="fullName" className="text-sm font-medium">
+                  Nome Completo
+                </label>
                 <Input
                   id="fullName"
                   name="fullName"
-                  placeholder="João Silva"
+                  placeholder="Joao Silva"
                   value={formData.fullName}
                   onChange={handleChange}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="businessName" className="text-sm font-medium">Nome da Empresa</label>
+                <label htmlFor="businessName" className="text-sm font-medium">
+                  Nome da Empresa
+                </label>
                 <Input
                   id="businessName"
                   name="businessName"
@@ -125,7 +148,9 @@ export default function CadastroPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">Email</label>
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
+              </label>
               <Input
                 id="email"
                 name="email"
@@ -139,24 +164,28 @@ export default function CadastroPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium">Senha</label>
+                <label htmlFor="password" className="text-sm font-medium">
+                  Senha
+                </label>
                 <Input
                   id="password"
                   name="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Digite sua senha"
                   value={formData.password}
                   onChange={handleChange}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="text-sm font-medium">Confirmar Senha</label>
+                <label htmlFor="confirmPassword" className="text-sm font-medium">
+                  Confirmar Senha
+                </label>
                 <Input
                   id="confirmPassword"
                   name="confirmPassword"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Confirme sua senha"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
@@ -165,7 +194,9 @@ export default function CadastroPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="whatsapp" className="text-sm font-medium">WhatsApp</label>
+              <label htmlFor="whatsapp" className="text-sm font-medium">
+                WhatsApp
+              </label>
               <Input
                 id="whatsapp"
                 name="whatsapp"
@@ -179,7 +210,9 @@ export default function CadastroPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label htmlFor="city" className="text-sm font-medium">Cidade</label>
+                <label htmlFor="city" className="text-sm font-medium">
+                  Cidade
+                </label>
                 <Input
                   id="city"
                   name="city"
@@ -190,7 +223,9 @@ export default function CadastroPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="state" className="text-sm font-medium">Estado</label>
+                <label htmlFor="state" className="text-sm font-medium">
+                  Estado
+                </label>
                 <Input
                   id="state"
                   name="state"
@@ -204,7 +239,9 @@ export default function CadastroPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label htmlFor="instagram" className="text-sm font-medium">Instagram (opcional)</label>
+                <label htmlFor="instagram" className="text-sm font-medium">
+                  Instagram (opcional)
+                </label>
                 <Input
                   id="instagram"
                   name="instagram"
@@ -214,7 +251,9 @@ export default function CadastroPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="website" className="text-sm font-medium">Website (opcional)</label>
+                <label htmlFor="website" className="text-sm font-medium">
+                  Website (opcional)
+                </label>
                 <Input
                   id="website"
                   name="website"
@@ -226,15 +265,15 @@ export default function CadastroPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-[#F97316] hover:bg-[#EA580C]"
               disabled={loading}
             >
               {loading ? "Criando conta..." : "Criar Conta"}
             </Button>
             <p className="text-sm text-center text-muted-foreground">
-              Já tem conta?{" "}
+              Ja tem conta?{" "}
               <Link href="/login" className="text-[#F97316] hover:underline font-medium">
                 Entre
               </Link>
