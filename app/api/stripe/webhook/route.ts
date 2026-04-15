@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
         await prisma.ad.update({
           where: { id: adId },
           data: {
-            status: "PENDING_APPROVAL",
+            status: "UNDER_REVIEW",
             paymentStatus: "PAID",
             paymentAmount: (session.amount_total || 3000) / 100,
             paymentDate: new Date(),

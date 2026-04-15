@@ -20,7 +20,7 @@ export default async function AdminAdDetailPage({ params }: Props) {
     notFound()
   }
 
-  const canApprove = ad.status === "UNDER_REVIEW" || ad.status === "AWAITING_PAYMENT"
+  const canApprove = ad.status === "UNDER_REVIEW"
   const canReject = ad.status === "UNDER_REVIEW"
 
   return (
@@ -43,6 +43,7 @@ export default async function AdminAdDetailPage({ params }: Props) {
             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
               ad.status === "PUBLISHED" ? "bg-green-100 text-green-700" :
               ad.status === "UNDER_REVIEW" ? "bg-yellow-100 text-yellow-700" :
+              ad.status === "AWAITING_PAYMENT" ? "bg-blue-100 text-blue-700" :
               ad.status === "REJECTED" ? "bg-red-100 text-red-700" :
               "bg-gray-100 text-gray-700"
             }`}>

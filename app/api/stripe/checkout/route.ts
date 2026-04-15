@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { createCheckoutSession, PRICE_PER_AD } from "@/lib/stripe"
-import { z } from "zod"
 
 const checkoutSchema = z.object({
-  adId: z.string().min(1, "ID do anúncio é obrigatório"),
+  adId: z.string().min(1, "ID do anuncio e obrigatorio"),
   couponCode: z.string().optional(),
 })
 
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.email) {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
+      return NextResponse.json({ error: "Nao autorizado" }, { status: 401 })
     }
 
     const body = await request.json()
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!ad) {
-      return NextResponse.json({ error: "Anúncio não encontrado" }, { status: 404 })
+      return NextResponse.json({ error: "Anuncio nao encontrado" }, { status: 404 })
     }
 
     if (ad.userId !== session.user.id) {
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (ad.paymentStatus === "PAID") {
-      return NextResponse.json({ error: "Anúncio já foi pago" }, { status: 400 })
+      return NextResponse.json({ error: "Anuncio ja foi pago" }, { status: 400 })
     }
 
     let finalPrice = PRICE_PER_AD
@@ -59,15 +59,28 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+    await prisma.ad.update({
+      where: { id: ad.id },
+      data: {
+        status: "AWAITING_PAYMENT",
+        paymentStatus: "PENDING",
+        paymentAmount: finalPrice,
+      },
+    })
+
+    const baseUrl =
+      process.env.NEXTAUTH_URL ||
+      process.env.AUTH_URL ||
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      "http://localhost:3000"
 
     const checkoutSession = await createCheckoutSession({
       adId: ad.id,
       adTitle: ad.title,
       customerEmail: session.user.email,
       customerName: ad.user.fullName || session.user.name || "Cliente",
-      successUrl: `${baseUrl}/dashboard?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancelUrl: `${baseUrl}/dashboard?payment=cancelled`,
+      successUrl: `${baseUrl}/dashboard/anuncios/${ad.id}?payment=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${baseUrl}/dashboard/anuncios/${ad.id}?payment=cancelled`,
       metadata: {
         userId: session.user.id,
         finalPrice: finalPrice.toString(),
@@ -83,7 +96,8 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues[0].message }, { status: 400 })
     }
+
     console.error("Stripe checkout error:", error)
-    return NextResponse.json({ error: "Erro ao criar sessão de pagamento" }, { status: 500 })
+    return NextResponse.json({ error: "Erro ao criar sessao de pagamento" }, { status: 500 })
   }
 }

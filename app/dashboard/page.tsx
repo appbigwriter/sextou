@@ -160,6 +160,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                           ? "bg-green-100 text-green-700"
                           : ad.status === "UNDER_REVIEW"
                           ? "bg-yellow-100 text-yellow-700"
+                          : ad.status === "AWAITING_PAYMENT"
+                          ? "bg-blue-100 text-blue-700"
                           : ad.status === "REJECTED"
                           ? "bg-red-100 text-red-700"
                           : "bg-gray-100 text-gray-700"

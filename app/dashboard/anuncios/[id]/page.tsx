@@ -2,11 +2,14 @@ import Link from "next/link"
 import { redirect, notFound } from "next/navigation"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { PaymentOptions } from "@/components/payment-options"
 
 interface Props {
   params: { id: string }
   searchParams?: {
     submitted?: string
+    payment?: string
+    session_id?: string
   }
 }
 
@@ -108,6 +111,42 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
           </div>
         )}
 
+        {searchParams?.payment === "required" && (
+          <div className="mb-6 rounded-xl border border-orange-200 bg-orange-50 p-4 text-orange-900">
+            <p className="font-semibold">Falta concluir o pagamento do anuncio.</p>
+            <p className="text-sm">
+              Escolha abaixo entre cartao de credito ou Zelle para liberar o envio do anuncio para analise.
+            </p>
+          </div>
+        )}
+
+        {searchParams?.payment === "success" && (
+          <div className="mb-6 rounded-xl border border-green-200 bg-green-50 p-4 text-green-900">
+            <p className="font-semibold">Pagamento recebido com sucesso.</p>
+            <p className="text-sm">
+              Seu anuncio agora segue para analise do admin antes de aparecer na vitrine.
+            </p>
+          </div>
+        )}
+
+        {searchParams?.payment === "cancelled" && (
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-red-900">
+            <p className="font-semibold">Pagamento cancelado.</p>
+            <p className="text-sm">
+              O anuncio continua salvo, mas voce ainda precisa concluir o pagamento para prosseguir.
+            </p>
+          </div>
+        )}
+
+        {searchParams?.payment === "zelle_submitted" && (
+          <div className="mb-6 rounded-xl border border-blue-200 bg-blue-50 p-4 text-blue-900">
+            <p className="font-semibold">Codigo Zelle enviado para confirmacao.</p>
+            <p className="text-sm">
+              O admin vai validar o pagamento e, depois disso, seu anuncio entra em analise.
+            </p>
+          </div>
+        )}
+
         {(ad.status === "DRAFT" || ad.status === "REJECTED") && (
           <div className="mb-6 rounded-xl border border-orange-200 bg-orange-50 p-4 text-orange-900">
             <p className="font-semibold">
@@ -136,6 +175,12 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
               Neste momento, nenhuma acao do cliente e necessaria. Assim que o admin aprovar,
               ele passa a aparecer na vitrine publica.
             </p>
+          </div>
+        )}
+
+        {ad.status === "AWAITING_PAYMENT" && (
+          <div className="mb-6">
+            <PaymentOptions adId={ad.id} amount={ad.paymentAmount || 30} />
           </div>
         )}
 
@@ -258,6 +303,7 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
               <h2 className="text-lg font-semibold text-gray-900">Proximos passos</h2>
               <ul className="mt-4 space-y-3 text-sm text-gray-700">
                 <li>Use o dashboard para acompanhar o status do seu anuncio.</li>
+                <li>Conclua o pagamento para o anuncio seguir para analise do admin.</li>
                 <li>Quando o status mudar para Publicado, ele aparece na vitrine.</li>
                 <li>Se o anuncio estiver em Rascunho ou Rejeitado, use o botao Enviar para Analise.</li>
               </ul>
