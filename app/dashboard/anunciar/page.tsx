@@ -179,7 +179,7 @@ export default function CriarAnuncioPage() {
       }
 
       setFormData(initialFormData)
-      router.push("/dashboard?created=1")
+      router.push(`/dashboard/anuncios/${data.id}?payment=required`)
     } catch (_err) {
       setError("Erro ao criar anuncio")
     } finally {

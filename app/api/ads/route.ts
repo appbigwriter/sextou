@@ -89,8 +89,9 @@ export async function POST(request: NextRequest) {
         deliveryType: data.deliveryType,
         externalLink: data.externalLink || null,
         whatsappContact: data.whatsappContact,
-        status: "UNDER_REVIEW",
+        status: "AWAITING_PAYMENT",
         paymentStatus: "PENDING",
+        paymentAmount: 30.0,
         images: {
           create: (data.images || []).map((url, index) => ({
             imageUrl: url,
