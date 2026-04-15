@@ -3,7 +3,13 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams?: {
+    created?: string
+  }
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const session = await auth()
   
   if (!session?.user?.email) {
@@ -55,6 +61,15 @@ export default async function DashboardPage() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        {searchParams?.created === "1" && (
+          <div className="mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-yellow-900">
+            <p className="font-semibold">Anuncio enviado para analise.</p>
+            <p className="text-sm">
+              Seu anuncio foi salvo com sucesso e agora aguarda liberacao do admin antes de aparecer na vitrine.
+            </p>
+          </div>
+        )}
+
         {/* Welcome */}
         <div className="mb-8">
           <h1 className="text-2xl font-heading font-bold text-gray-900">

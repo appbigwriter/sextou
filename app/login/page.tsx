@@ -32,7 +32,7 @@ export default function LoginPage() {
       } else {
         router.push("/dashboard")
       }
-    } catch (err) {
+    } catch (_err) {
       setError("Erro ao fazer login")
     } finally {
       setLoading(false)
@@ -44,7 +44,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-heading">Bem-vindo de Volta</CardTitle>
-          <CardDescription>Entre na sua conta para continuar</CardDescription>
+          <CardDescription>Entre para acessar seu dashboard e acompanhar seus anuncios</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
@@ -69,7 +69,7 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="Digite sua senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -77,15 +77,19 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-[#F97316] hover:bg-[#EA580C]"
               disabled={loading}
             >
               {loading ? "Entrando..." : "Entrar"}
             </Button>
+            <div className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+              Depois do login, voce vai direto para o seu dashboard para ver anuncios enviados,
+              acompanhar a analise e acessar novos envios.
+            </div>
             <p className="text-sm text-center text-muted-foreground">
-              Não tem conta?{" "}
+              Nao tem conta?{" "}
               <Link href="/cadastro" className="text-[#F97316] hover:underline font-medium">
                 Cadastre-se
               </Link>

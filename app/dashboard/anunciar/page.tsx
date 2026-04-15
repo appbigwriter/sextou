@@ -179,7 +179,7 @@ export default function CriarAnuncioPage() {
       }
 
       setFormData(initialFormData)
-      router.push("/dashboard")
+      router.push("/dashboard?created=1")
     } catch (_err) {
       setError("Erro ao criar anuncio")
     } finally {
@@ -465,7 +465,7 @@ export default function CriarAnuncioPage() {
                 </Button>
               ) : (
                 <Button type="submit" className="bg-[#F97316] hover:bg-[#EA580C]" disabled={loading}>
-                  {loading ? "Criando..." : "Criar Anuncio"}
+                  {loading ? "Enviando..." : "Enviar para Analise"}
                 </Button>
               )}
             </CardFooter>

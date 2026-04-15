@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
         deliveryType: data.deliveryType,
         externalLink: data.externalLink || null,
         whatsappContact: data.whatsappContact,
-        status: "DRAFT",
+        status: "UNDER_REVIEW",
         paymentStatus: "PENDING",
         images: {
           create: (data.images || []).map((url, index) => ({
