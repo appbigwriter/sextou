@@ -5,9 +5,12 @@ import { prisma } from "@/lib/prisma"
 
 interface Props {
   params: { id: string }
+  searchParams?: {
+    submitted?: string
+  }
 }
 
-export default async function DashboardAdDetailPage({ params }: Props) {
+export default async function DashboardAdDetailPage({ params, searchParams }: Props) {
   const session = await auth()
 
   if (!session?.user?.email) {
@@ -96,11 +99,42 @@ export default async function DashboardAdDetailPage({ params }: Props) {
           </span>
         </div>
 
+        {searchParams?.submitted === "1" && (
+          <div className="mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-yellow-900">
+            <p className="font-semibold">Anuncio enviado para analise.</p>
+            <p className="text-sm">
+              Agora ele fica no seu dashboard como Em Analise ate a liberacao do admin.
+            </p>
+          </div>
+        )}
+
+        {(ad.status === "DRAFT" || ad.status === "REJECTED") && (
+          <div className="mb-6 rounded-xl border border-orange-200 bg-orange-50 p-4 text-orange-900">
+            <p className="font-semibold">
+              {ad.status === "DRAFT"
+                ? "Seu anuncio ainda nao foi enviado para analise."
+                : "Seu anuncio foi rejeitado e precisa de um novo envio para analise."}
+            </p>
+            <p className="text-sm">
+              Clique no botao abaixo para enviar este anuncio para avaliacao do admin.
+            </p>
+            <form action={`/api/ads/${ad.id}/submit`} method="POST" className="mt-4">
+              <button
+                type="submit"
+                className="rounded-lg bg-[#F97316] px-4 py-2 font-semibold text-white hover:bg-[#EA580C]"
+              >
+                Enviar para Analise
+              </button>
+            </form>
+          </div>
+        )}
+
         {ad.status === "UNDER_REVIEW" && (
           <div className="mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-yellow-900">
             <p className="font-semibold">Seu anuncio esta em analise.</p>
             <p className="text-sm">
-              Assim que o admin aprovar, ele passa a aparecer na vitrine publica.
+              Neste momento, nenhuma acao do cliente e necessaria. Assim que o admin aprovar,
+              ele passa a aparecer na vitrine publica.
             </p>
           </div>
         )}
@@ -225,7 +259,7 @@ export default async function DashboardAdDetailPage({ params }: Props) {
               <ul className="mt-4 space-y-3 text-sm text-gray-700">
                 <li>Use o dashboard para acompanhar o status do seu anuncio.</li>
                 <li>Quando o status mudar para Publicado, ele aparece na vitrine.</li>
-                <li>Se precisar ajustar dados do perfil, acesse Configuracoes.</li>
+                <li>Se o anuncio estiver em Rascunho ou Rejeitado, use o botao Enviar para Analise.</li>
               </ul>
             </div>
           </div>
