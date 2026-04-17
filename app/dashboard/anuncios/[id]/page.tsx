@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { PaymentOptions } from "@/components/payment-options"
+import { MobileMenu } from "@/components/layout/mobile-menu"
 
 interface Props {
   params: { id: string }
@@ -75,29 +76,38 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
           <Link href="/" className="font-heading font-extrabold text-2xl text-[#F97316]">
             SEXTOU.biz
           </Link>
-          <nav className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-gray-600 hover:text-[#F97316]">
-              Dashboard
-            </Link>
-            <Link href="/dashboard/anunciar" className="text-gray-600 hover:text-[#F97316]">
-              Novo Anuncio
-            </Link>
-          </nav>
+          <div className="flex items-center gap-4">
+            <nav className="hidden md:flex items-center gap-4">
+              <Link href="/dashboard" className="text-gray-600 hover:text-[#F97316]">
+                Dashboard
+              </Link>
+              <Link href="/dashboard/anunciar" className="text-gray-600 hover:text-[#F97316]">
+                Novo Anuncio
+              </Link>
+            </nav>
+            <MobileMenu links={[
+              { href: "/", label: "Home" },
+              { href: "/anuncios", label: "Ver Vitrine" },
+              { href: "/dashboard", label: "Meu Dashboard" },
+              { href: "/dashboard/configuracoes", label: "Configurações" },
+              { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
+            ]} />
+          </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-5xl">
-        <div className="mb-6 flex items-center justify-between gap-4">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <Link href="/dashboard" className="text-sm text-[#F97316] hover:underline">
-              Voltar ao dashboard
+              ← Voltar ao dashboard
             </Link>
-            <h1 className="mt-2 text-3xl font-bold text-gray-900">{ad.title}</h1>
-            <p className="mt-1 text-gray-600">
+            <h1 className="mt-2 text-2xl sm:text-3xl font-bold text-gray-900">{ad.title}</h1>
+            <p className="mt-1 text-sm sm:text-base text-gray-600">
               Acompanhe o status e os detalhes do anuncio enviado por {user.fullName}.
             </p>
           </div>
-          <span className={`rounded-full px-4 py-2 text-sm font-semibold ${statusClass}`}>
+          <span className={`inline-block self-start sm:self-center rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap ${statusClass}`}>
             {statusLabel}
           </span>
         </div>

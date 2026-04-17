@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
+import { MobileMenu } from "@/components/layout/mobile-menu"
 
 interface Props {
   params: { id: string }
@@ -38,9 +39,17 @@ export default async function AdDetailPage({ params }: Props) {
           <Link href="/" className="font-heading text-2xl font-extrabold text-[#F97316]">
             SEXTOU.biz
           </Link>
-          <Link href="/anuncios" className="font-medium text-slate-700 hover:text-[#F97316]">
-            ← Voltar para Anuncios
-          </Link>
+          <nav className="hidden md:flex items-center gap-4">
+            <Link href="/anuncios" className="font-medium text-slate-700 hover:text-[#F97316]">
+              ← Voltar para Anuncios
+            </Link>
+          </nav>
+          <MobileMenu links={[
+              { href: "/", label: "Home" },
+              { href: "/anuncios", label: "Voltar para Anuncios" },
+              { href: "/login", label: "Entrar" },
+              { href: "/cadastro", label: "Anunciar Agora", isAction: true },
+            ]} />
         </div>
       </header>
 

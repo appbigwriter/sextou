@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { MobileMenu } from "@/components/layout/mobile-menu"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -199,16 +200,25 @@ export default function CriarAnuncioPage() {
           <Link href="/" className="font-heading font-extrabold text-2xl text-[#F97316]">
             SEXTOU.biz
           </Link>
-          <Link href="/dashboard" className="text-sm text-gray-600 hover:text-[#F97316]">
-            Voltar ao Dashboard
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard" className="hidden md:block text-sm text-gray-600 hover:text-[#F97316]">
+              Voltar ao Dashboard
+            </Link>
+            <MobileMenu links={[
+              { href: "/", label: "Home" },
+              { href: "/anuncios", label: "Ver Vitrine" },
+              { href: "/dashboard", label: "Meu Dashboard" },
+              { href: "/dashboard/configuracoes", label: "Configurações" },
+              { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
+            ]} />
+          </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="mb-8">
-          <h1 className="text-2xl font-heading font-bold text-gray-900">Criar Novo Anuncio</h1>
-          <p className="text-gray-600">Passo {step} de 3</p>
+          <h1 className="text-xl sm:text-2xl font-heading font-bold text-gray-900 leading-tight">Criar Novo Anuncio</h1>
+          <p className="text-sm sm:text-base text-gray-600">Passo {step} de 3</p>
 
           <div className="flex gap-2 mt-4">
             {[1, 2, 3].map((progressStep) => (
