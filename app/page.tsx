@@ -67,8 +67,8 @@ export default async function Home() {
             </h1>
 
             <p className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Toda sexta-feira, milhares de brasileiros descobrem negocios incriveis.
-              Seu negocio pode ser o proximo.
+              Toda sexta-feira, em grupo fechado, milhares de brasileiros descobrem negócios incríveis.
+              Seu negócio pode ser o próximo.
             </p>
 
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm max-w-3xl mx-auto">

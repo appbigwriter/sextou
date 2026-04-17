@@ -16,7 +16,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: 'SEXTOU.biz - A vitrine da comunidade brasileira',
-  description: 'Toda sexta-feira, milhares de brasileiros descobrem negócios incríveis. Anuncie seu negócio por apenas US$ 30!',
+  description: 'Toda sexta-feira, em grupo fechado, milhares de brasileiros descobrem negócios incríveis. Anuncie seu negócio por apenas US$ 30!',
 }
 
 export default function RootLayout({
