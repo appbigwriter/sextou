@@ -1,4 +1,4 @@
-# Sexta do Empreendedor 🚀
+# SEXTOU.biz 🚀
 
 Sistema completo de marketplace comunitário para anunciantes empreendedores da comunidade brasileira nos Estados Unidos.
 

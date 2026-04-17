@@ -1,4 +1,4 @@
-# Design Standards — Sexta do Empreendedor
+# Design Standards — SEXTOU.biz
 
 ## Design Tokens
 

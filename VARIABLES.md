@@ -1,4 +1,4 @@
-# Variáveis de Ambiente - Sexta do Empreendedor
+# Variáveis de Ambiente - SEXTOU.biz
 
 ## Variáveis Mínimas (OBRIGATÓRIAS)
 

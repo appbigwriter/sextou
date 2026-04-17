@@ -1,4 +1,4 @@
-# Modelagem do Banco de Dados - Sexta do Empreendedor
+# Modelagem do Banco de Dados - SEXTOU.biz
 
 ## Diagrama de Entidades
 

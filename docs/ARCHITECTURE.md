@@ -1,4 +1,4 @@
-# 🏗️ Arquitetura do Sistema - Sexta do Empreendedor
+# 🏗️ Arquitetura do Sistema - SEXTOU.biz
 
 ## 📋 Visão Geral
 

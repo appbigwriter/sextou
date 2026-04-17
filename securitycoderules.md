@@ -1,4 +1,4 @@
-# Security Code Rules — Sexta do Empreendedor
+# Security Code Rules — SEXTOU.biz
 
 ## Regras Inegociáveis de Segurança
 

@@ -1,4 +1,4 @@
-# FBR Arquitetura — Sexta do Empreendedor
+# FBR Arquitetura — SEXTOU.biz
 
 ## Stack Canônica
 

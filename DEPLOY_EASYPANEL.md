@@ -1,4 +1,4 @@
-# Deploy no EasyPanel - Sexta do Empreendedor
+# Deploy no EasyPanel - SEXTOU.biz
 
 ## Pré-requisitos
 

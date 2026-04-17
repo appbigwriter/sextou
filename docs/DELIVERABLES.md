@@ -1,4 +1,4 @@
-# 📦 Entregáveis do Projeto - Sexta do Empreendedor
+# 📦 Entregáveis do Projeto - SEXTOU.biz
 
 ## 🎯 Lista Completa de Entregáveis
 
@@ -125,7 +125,7 @@
 ## 🎨 Nome e Slogan
 
 ### Nome Principal
-**Sexta do Empreendedor**
+**SEXTOU.biz**
 
 ### Slogans Oficiais (para testar no layout)
 1. "A vitrine da comunidade brasileira"

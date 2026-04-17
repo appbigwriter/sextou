@@ -59,7 +59,7 @@ onClick → {
 
 **Mensagem Personalizada:**
 ```
-Olá! Vi seu anúncio na Sexta do Empreendedor: 
+Olá! Vi seu anúncio na SEXTOU.biz: 
 "[Título do Anúncio]"
 
 Gostaria de saber mais informações.
@@ -248,7 +248,7 @@ interface Lead {
 ```javascript
 onClick → {
   const shareText = `
-🔥 *Confira este anúncio da Sexta do Empreendedor!*
+🔥 *Confira este anúncio da SEXTOU.biz!*
 
 📌 ${anuncio.titulo}
 💰 ${anuncio.preco ? `R$ ${anuncio.preco}` : 'Sob consulta'}
@@ -331,7 +331,7 @@ const shortUrl = await createShortUrl({
 
 **Open Graph / WhatsApp Preview:**
 ```html
-<meta property="og:title" content="Pizza Delivery Express | Sexta do Empreendedor" />
+<meta property="og:title" content="Pizza Delivery Express | SEXTOU.biz" />
 <meta property="og:description" content="Deliciosas pizzas artesanais com entrega rápida em Miami" />
 <meta property="og:image" content="https://sextado.com/og-images/anuncio-123.jpg" />
 <meta property="og:url" content="https://sextado.com/anuncios/pizza-delivery-express" />
@@ -341,7 +341,7 @@ const shortUrl = await createShortUrl({
 **Imagem Dinâmica:**
 - Gerada automaticamente ao publicar anúncio
 - Inclui:
-  - Logo "Sexta do Empreendedor"
+  - Logo "SEXTOU.biz"
   - Foto principal do anúncio
   - Título
   - Preço
@@ -356,7 +356,7 @@ const shortUrl = await createShortUrl({
 ```typescript
 interface WhatsAppMessage {
   greeting: string;           // "Olá!"
-  introduction: string;       // "Vi seu anúncio na Sexta do Empreendedor"
+  introduction: string;       // "Vi seu anúncio na SEXTOU.biz"
   callToAction: string;       // "Gostaria de saber mais"
   customMessage?: string;     // Campo livre
 }
@@ -366,7 +366,7 @@ interface WhatsAppMessage {
 ```
 Olá! 👋
 
-Vi seu anúncio na Sexta do Empreendedor:
+Vi seu anúncio na SEXTOU.biz:
 "Pizza Delivery Express"
 
 Gostaria de saber mais sobre o cardápio e formas de entrega.

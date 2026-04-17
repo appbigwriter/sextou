@@ -1,4 +1,4 @@
-# 🎛️ Painel Administrativo - Sexta do Empreendedor
+# 🎛️ Painel Administrativo - SEXTOU.biz
 
 ## 📋 Visão Geral
 

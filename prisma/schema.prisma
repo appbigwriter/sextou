@@ -1,4 +1,4 @@
-// Sexta do Empreendedor - Database Schema (PostgreSQL)
+// SEXTOU.biz - Database Schema (PostgreSQL)
 // Prisma ORM Schema Definition
 
 generator client {

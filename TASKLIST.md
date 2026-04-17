@@ -1,4 +1,4 @@
-# 📋 Task List - Sexta do Empreendedor
+# 📋 Task List - SEXTOU.biz
 
 **Projeto:** Sistema de Marketplace Comunitário  
 **Prazo MVP:** 02/04/2026  

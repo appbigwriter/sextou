@@ -1,8 +1,8 @@
-# 🎨 Guia de Estilo - Sexta do Empreendedor
+# 🎨 Guia de Estilo - SEXTOU.biz
 
 ## 📋 Visão Geral
 
-Este documento define a identidade visual completa do projeto **Sexta do Empreendedor**, baseado no manual oficial fornecido por M Mendes.
+Este documento define a identidade visual completa do projeto **SEXTOU.biz**, baseado no manual oficial fornecido por M Mendes.
 
 ---
 
