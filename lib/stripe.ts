@@ -51,7 +51,7 @@ export async function createCheckoutSession({
           currency: CURRENCY,
           product_data: {
             name: `Publicação de Anúncio: ${adTitle}`,
-            description: "Anúncio semanal na Sexta do Empreendedor",
+            description: "Anúncio semanal na SEXTOU.biz",
           },
           unit_amount: Math.round(PRICE_PER_AD * 100),
         },

@@ -54,7 +54,7 @@ export default function ConfiguracoesPage() {
       <div className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <a href="/" className="font-heading font-extrabold text-2xl text-[#F97316]">
-            Sexta do Empreendedor
+            SEXTOU.biz
           </a>
           <div className="flex items-center gap-4">
             <a href="/dashboard" className="text-gray-600 hover:text-[#F97316]">Dashboard</a>

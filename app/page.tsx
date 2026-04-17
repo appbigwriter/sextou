@@ -18,7 +18,7 @@ export default async function Home() {
       <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="font-heading font-extrabold text-2xl tracking-tight text-[#F97316]">
-            Sexta do Empreendedor
+            SEXTOU.biz
           </Link>
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/" className="text-slate-700 hover:text-[#F97316] transition font-medium">
@@ -214,7 +214,7 @@ export default async function Home() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h3 className="font-heading font-bold text-xl mb-4">Sexta do Empreendedor</h3>
+              <h3 className="font-heading font-bold text-xl mb-4">SEXTOU.biz</h3>
               <p className="text-slate-400">A vitrine da comunidade brasileira</p>
             </div>
             <div>
@@ -231,7 +231,7 @@ export default async function Home() {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>&copy; 2026 Sexta do Empreendedor. Todos os direitos reservados.</p>
+            <p>&copy; 2026 SEXTOU.biz. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>

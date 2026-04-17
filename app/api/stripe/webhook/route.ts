@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
                 <h1>Pagamento Confirmado</h1>
                 <p>Seu pagamento foi processado com sucesso!</p>
                 <p>O anúncio está em análise e será publicado em breve.</p>
-                <p>Obrigado por usar a Sexta do Empreendedor!</p>
+                <p>Obrigado por usar a SEXTOU.biz!</p>
               `,
             })
           }

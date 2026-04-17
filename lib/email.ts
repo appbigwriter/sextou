@@ -53,12 +53,12 @@ export function getAnuncioAprovadoTemplate(userName: string, adTitle: string) {
         </div>
         <div class="content">
           <h2>Seu anúncio foi aprovado!</h2>
-          <p>Seu anúncio "<strong>${adTitle}</strong>" foi publicado na Sexta do Empreendedor.</p>
+          <p>Seu anúncio "<strong>${adTitle}</strong>" foi publicado na SEXTOU.biz.</p>
           <p>Agora milhares de brasileiros podem ver seu negócio!</p>
           <a href="${process.env.NEXTAUTH_URL}/anuncios" class="button">Ver minha publicação</a>
         </div>
         <div class="footer">
-          <p>Sexta do Empreendedor - A vitrine da comunidade brasileira</p>
+          <p>SEXTOU.biz - A vitrine da comunidade brasileira</p>
         </div>
       </div>
     </body>
@@ -96,7 +96,7 @@ export function getAnuncioRejeitadoTemplate(userName: string, adTitle: string, r
           <a href="${process.env.NEXTAUTH_URL}/dashboard" class="button" style="background: #4B5563;">Acessar painel</a>
         </div>
         <div class="footer">
-          <p>Sexta do Empreendedor - A vitrine da comunidade brasileira</p>
+          <p>SEXTOU.biz - A vitrine da comunidade brasileira</p>
         </div>
       </div>
     </body>
@@ -131,7 +131,7 @@ export function getPagamentoConfirmadoTemplate(userName: string, adTitle: string
           <a href="${process.env.NEXTAUTH_URL}/dashboard" class="button">Ver detalhes</a>
         </div>
         <div class="footer">
-          <p>Sexta do Empreendedor - A vitrine da comunidade brasileira</p>
+          <p>SEXTOU.biz - A vitrine da comunidade brasileira</p>
         </div>
       </div>
     </body>
@@ -142,7 +142,7 @@ export function getPagamentoConfirmadoTemplate(userName: string, adTitle: string
 export async function sendAnuncioAprovadoEmail(userEmail: string, userName: string, adTitle: string) {
   return sendEmail({
     to: userEmail,
-    subject: "🎉 Seu anúncio foi aprovado! - Sexta do Empreendedor",
+    subject: "🎉 Seu anúncio foi aprovado! - SEXTOU.biz",
     html: getAnuncioAprovadoTemplate(userName, adTitle),
   })
 }
@@ -150,7 +150,7 @@ export async function sendAnuncioAprovadoEmail(userEmail: string, userName: stri
 export async function sendAnuncioRejeitadoEmail(userEmail: string, userName: string, adTitle: string, reason: string) {
   return sendEmail({
     to: userEmail,
-    subject: "😔 Seu anúncio precisa de ajustes - Sexta do Empreendedor",
+    subject: "😔 Seu anúncio precisa de ajustes - SEXTOU.biz",
     html: getAnuncioRejeitadoTemplate(userName, adTitle, reason),
   })
 }
@@ -158,7 +158,7 @@ export async function sendAnuncioRejeitadoEmail(userEmail: string, userName: str
 export async function sendPagamentoConfirmadoEmail(userEmail: string, userName: string, adTitle: string) {
   return sendEmail({
     to: userEmail,
-    subject: "✅ Pagamento confirmado! - Sexta do Empreendedor",
+    subject: "✅ Pagamento confirmado! - SEXTOU.biz",
     html: getPagamentoConfirmadoTemplate(userName, adTitle),
   })
 }

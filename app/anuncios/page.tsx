@@ -51,7 +51,7 @@ export default async function AnunciosPage({ searchParams }: Props) {
       <header className="sticky top-0 z-50 border-b bg-white shadow-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="font-heading text-2xl font-extrabold text-[#F97316]">
-            Sexta do Empreendedor
+            SEXTOU.biz
           </Link>
           <nav className="hidden items-center space-x-6 md:flex">
             <Link href="/" className="font-medium text-slate-700 transition hover:text-[#F97316]">
@@ -174,7 +174,7 @@ export default async function AnunciosPage({ searchParams }: Props) {
 
       <footer className="bg-[#101622] py-8 text-white">
         <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2026 Sexta do Empreendedor. Todos os direitos reservados.</p>
+          <p>&copy; 2026 SEXTOU.biz. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>

@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       instructions:
         data.paymentMethod === "ZELLE"
           ? {
-              name: "Sexta do Empreendedor",
+              name: "SEXTOU.biz",
               email: "pagamento@sextadoempreendedor.com",
               amount: 30.0,
               instructions:

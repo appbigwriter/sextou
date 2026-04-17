@@ -197,7 +197,7 @@ export default function CriarAnuncioPage() {
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="font-heading font-extrabold text-2xl text-[#F97316]">
-            Sexta do Empreendedor
+            SEXTOU.biz
           </Link>
           <Link href="/dashboard" className="text-sm text-gray-600 hover:text-[#F97316]">
             Voltar ao Dashboard

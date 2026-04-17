@@ -37,7 +37,7 @@ export default async function AdminDashboard() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="font-heading font-extrabold text-2xl text-[#F97316]">
-              Sexta do Empreendedor
+              SEXTOU.biz
             </Link>
             <span className="bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">
               ADMIN
