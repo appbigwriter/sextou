@@ -279,12 +279,6 @@ export default function CriarAnuncioPage() {
                     </select>
                   </div>
 
-                  <ImageUpload
-                    images={formData.images}
-                    onChange={(images) => setFormData({ ...formData, images })}
-                    maxImages={5}
-                  />
-
                   <div className="space-y-2">
                     <label htmlFor="title" className="text-sm font-medium">
                       Titulo do Anuncio
@@ -312,6 +306,12 @@ export default function CriarAnuncioPage() {
                       maxLength={100}
                     />
                   </div>
+
+                  <ImageUpload
+                    images={formData.images}
+                    onChange={(images) => setFormData({ ...formData, images })}
+                    maxImages={5}
+                  />
                 </>
               )}
 

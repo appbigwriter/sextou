@@ -68,7 +68,7 @@ export function ImageUpload({ images, onChange, maxImages = 5 }: ImageUploadProp
       </div>
 
       {/* Grid de imagens */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {images.map((url, index) => (
           <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
             <img
