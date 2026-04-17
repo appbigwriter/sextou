@@ -1,9 +1,17 @@
 import Link from "next/link"
 import { auth } from "@/lib/auth"
+import { MobileMenu } from "@/components/layout/mobile-menu"
 
 export default async function Home() {
   const session = await auth()
   const isLoggedIn = !!session?.user?.email
+
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/anuncios", label: "Anuncios" },
+    { href: isLoggedIn ? "/dashboard" : "/login", label: isLoggedIn ? "Meu Dashboard" : "Entrar" },
+    { href: isLoggedIn ? "/dashboard/anunciar" : "/cadastro", label: isLoggedIn ? "Novo Anuncio" : "Anunciar Agora", isAction: true },
+  ]
 
   return (
     <main className="min-h-screen">
@@ -32,6 +40,7 @@ export default async function Home() {
               {isLoggedIn ? "Novo Anuncio" : "Anunciar Agora"}
             </Link>
           </nav>
+          <MobileMenu links={navLinks} />
         </div>
       </header>
 
@@ -73,23 +82,23 @@ export default async function Home() {
               <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
                   href={isLoggedIn ? "/dashboard" : "/login"}
-                  className="rounded-lg bg-white text-slate-900 px-5 py-3 font-semibold hover:bg-slate-100 transition"
+                  className="rounded-lg bg-white text-slate-900 px-5 py-3 font-semibold hover:bg-slate-100 transition w-full sm:w-auto text-center"
                 >
                   {isLoggedIn ? "Abrir Meu Dashboard" : "Entrar para ver meu dashboard"}
                 </Link>
                 <Link
                   href={isLoggedIn ? "/dashboard/anunciar" : "/cadastro"}
-                  className="rounded-lg border border-white/30 text-white px-5 py-3 font-semibold hover:bg-white/10 transition"
+                  className="rounded-lg border border-white/30 text-white px-5 py-3 font-semibold hover:bg-white/10 transition w-full sm:w-auto text-center"
                 >
                   {isLoggedIn ? "Enviar novo anuncio" : "Criar conta e anunciar"}
                 </Link>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 pt-4">
               <Link
                 href="/anuncios"
-                className="group bg-[#F97316] hover:bg-[#EA580C] text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2"
+                className="group bg-[#F97316] hover:bg-[#EA580C] text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center space-x-2 w-full sm:w-auto"
               >
                 <span>Ver Anuncios</span>
                 <svg className="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,13 +107,13 @@ export default async function Home() {
               </Link>
               <Link
                 href={isLoggedIn ? "/dashboard" : "/login"}
-                className="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition backdrop-blur-sm"
+                className="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition backdrop-blur-sm w-full sm:w-auto text-center"
               >
                 {isLoggedIn ? "Meu Dashboard" : "Entrar"}
               </Link>
             </div>
 
-            <div className="grid grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
               <div className="text-center">
                 <div className="font-heading font-bold text-4xl text-white">1000+</div>
                 <div className="text-slate-400 text-sm mt-1">Anuncios</div>

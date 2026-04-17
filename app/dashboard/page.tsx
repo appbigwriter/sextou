@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { MobileMenu } from "@/components/layout/mobile-menu"
 
 interface DashboardPageProps {
   searchParams?: {
@@ -49,13 +50,22 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             Sexta do Empreendedor
           </Link>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">Olá, {user.fullName}</span>
-            <Link
-              href="/dashboard/anunciar"
-              className="bg-[#F97316] hover:bg-[#EA580C] text-white px-4 py-2 rounded-lg font-medium text-sm"
-            >
-              + Novo Anúncio
-            </Link>
+            <div className="hidden md:flex items-center gap-4">
+              <span className="text-sm text-gray-600">Olá, {user.fullName}</span>
+              <Link
+                href="/dashboard/anunciar"
+                className="bg-[#F97316] hover:bg-[#EA580C] text-white px-4 py-2 rounded-lg font-medium text-sm"
+              >
+                + Novo Anúncio
+              </Link>
+            </div>
+            <MobileMenu links={[
+              { href: "/", label: "Home" },
+              { href: "/anuncios", label: "Ver Vitrine" },
+              { href: "/dashboard", label: "Meu Dashboard" },
+              { href: "/dashboard/configuracoes", label: "Configurações" },
+              { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
+            ]} />
           </div>
         </div>
       </header>
@@ -144,7 +154,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               </div>
             ) : (
               user.ads.map((ad: any) => (
-                <div key={ad.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
+                <div key={ad.id} className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:bg-gray-50 gap-4 sm:gap-0">
                   <div>
                     <h3 className="font-medium text-gray-900">{ad.title}</h3>
                     <p className="text-sm text-gray-500">

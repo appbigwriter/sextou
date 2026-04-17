@@ -2,6 +2,7 @@ import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { getActiveCategories } from "@/lib/default-categories"
 import { SearchFilters } from "@/components/search-filters"
+import { MobileMenu } from "@/components/layout/mobile-menu"
 
 interface Props {
   searchParams: { search?: string; category?: string; city?: string }
@@ -66,6 +67,14 @@ export default async function AnunciosPage({ searchParams }: Props) {
               Anunciar Agora
             </Link>
           </nav>
+          <MobileMenu 
+            links={[
+              { href: "/", label: "Home" },
+              { href: "/anuncios", label: "Anuncios" },
+              { href: "/login", label: "Entrar" },
+              { href: "/cadastro", label: "Anunciar Agora", isAction: true },
+            ]}
+          />
         </div>
       </header>
 

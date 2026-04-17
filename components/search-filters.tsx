@@ -63,7 +63,7 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col sm:flex-row flex-wrap gap-2">
         {/* Category */}
         <select
           value={category}
@@ -85,7 +85,7 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
           value={city}
           onChange={(e) => setCity(e.target.value)}
           aria-label="Filtrar por cidade"
-          className="w-40"
+          className="w-full sm:w-40"
         />
 
         {/* Price Range */}
