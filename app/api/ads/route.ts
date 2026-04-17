@@ -9,8 +9,8 @@ const optionalTrimmedString = z.string().trim().optional()
 const createAdSchema = z.object({
   categoryId: z.string().trim().min(1, "Categoria e obrigatoria"),
   title: z.string().trim().min(3, "Titulo deve ter pelo menos 3 caracteres"),
-  shortDescription: z.string().trim().min(10, "Descricao curta e obrigatoria"),
-  fullDescription: z.string().trim().min(20, "Descricao completa e obrigatoria"),
+  shortDescription: z.string().trim().min(10, "Descricao curta deve ter no minimo 10 caracteres"),
+  fullDescription: z.string().trim().min(20, "Descricao completa deve ter no minimo 20 caracteres"),
   offerType: z.enum(["PRODUCT", "SERVICE"]),
   price: z.number().nullable(),
   promotionText: optionalTrimmedString,

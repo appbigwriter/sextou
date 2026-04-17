@@ -44,7 +44,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="relative h-[600px] md:h-[700px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[650px] md:min-h-[700px] flex items-center justify-center overflow-hidden py-20">
         <div className="absolute inset-0 bg-gradient-to-br from-[#101622] via-slate-900 to-[#0F172A]">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGOTczMTYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDEzNEgxNHYtMWgyMXYxem0wLTVIMTR2LTFoMjJ2MXoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
         </div>

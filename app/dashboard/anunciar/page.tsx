@@ -140,6 +140,11 @@ export default function CriarAnuncioPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (step < 3) {
+      nextStep()
+      return
+    }
+
     const validationError = validateCurrentStep()
     if (validationError) {
       setError(validationError)
