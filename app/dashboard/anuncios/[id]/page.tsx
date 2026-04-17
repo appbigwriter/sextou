@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { PaymentOptions } from "@/components/payment-options"
 import { MobileMenu } from "@/components/layout/mobile-menu"
+import { DeleteAdButton } from "@/components/delete-ad-button"
 
 interface Props {
   params: { id: string }
@@ -107,9 +108,12 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
               Acompanhe o status e os detalhes do anuncio enviado por {user.fullName}.
             </p>
           </div>
-          <span className={`inline-block self-start sm:self-center rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap ${statusClass}`}>
-            {statusLabel}
-          </span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <span className={`inline-block rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap ${statusClass}`}>
+              {statusLabel}
+            </span>
+            <DeleteAdButton adId={ad.id} adTitle={ad.title} variant="full" />
+          </div>
         </div>
 
         {searchParams?.submitted === "1" && (

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { MobileMenu } from "@/components/layout/mobile-menu"
+import { DeleteAdButton } from "@/components/delete-ad-button"
 
 interface DashboardPageProps {
   searchParams?: {
@@ -185,10 +186,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     </span>
                     <Link
                       href={`/dashboard/anuncios/${ad.id}`}
-                      className="text-gray-400 hover:text-[#F97316]"
+                      className="text-gray-400 hover:text-[#F97316] p-2"
                     >
-                      →
+                      <span className="text-xl">→</span>
                     </Link>
+                    <DeleteAdButton adId={ad.id} adTitle={ad.title} variant="icon" />
                   </div>
                 </div>
               ))
