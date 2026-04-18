@@ -17,8 +17,8 @@ export default async function Home() {
     <main className="min-h-screen">
       <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="font-heading font-extrabold text-2xl tracking-tight text-[#F97316]">
-            SEXTOU.biz
+          <Link href="/" className="flex items-center">
+            <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-10 w-auto object-contain" />
           </Link>
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/" className="text-slate-700 hover:text-[#F97316] transition font-medium">
@@ -214,7 +214,9 @@ export default async function Home() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h3 className="font-heading font-bold text-xl mb-4">SEXTOU.biz</h3>
+              <div className="mb-4">
+                <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-8 w-auto object-contain brightness-0 invert" />
+              </div>
               <p className="text-slate-400">A vitrine da comunidade brasileira</p>
             </div>
             <div>

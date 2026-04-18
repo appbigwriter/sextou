@@ -50,8 +50,8 @@ export default async function AnunciosPage({ searchParams }: Props) {
     <div className="min-h-screen bg-gray-50">
       <header className="sticky top-0 z-50 border-b bg-white shadow-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/" className="font-heading text-2xl font-extrabold text-[#F97316]">
-            SEXTOU.biz
+          <Link href="/" className="flex items-center">
+            <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-10 w-auto object-contain" />
           </Link>
           <nav className="hidden items-center space-x-6 md:flex">
             <Link href="/" className="font-medium text-slate-700 transition hover:text-[#F97316]">

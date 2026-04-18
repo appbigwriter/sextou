@@ -42,8 +42,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#101622] via-slate-900 to-[#0F172A] p-4">
       <div className="mb-8">
-        <Link href="/" className="font-heading font-extrabold text-3xl tracking-tight text-[#F97316]">
-          SEXTOU.biz
+        <Link href="/" className="flex items-center">
+          <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-12 w-auto object-contain" />
         </Link>
       </div>
       <Card className="w-full max-w-md">

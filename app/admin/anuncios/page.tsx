@@ -39,8 +39,8 @@ export default async function AdminAnunciosPage({ searchParams }: Props) {
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="font-heading font-extrabold text-2xl text-[#F97316]">
-              SEXTOU.biz
+            <Link href="/" className="flex items-center">
+              <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-8 w-auto object-contain" />
             </Link>
             <span className="bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">ADMIN</span>
           </div>
