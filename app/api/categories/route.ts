@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 import { getActiveCategories } from "@/lib/default-categories"
-import { z } from "zod"
+
+export const dynamic = "force-dynamic"
 
 const createCategorySchema = z.object({
-  name: z.string().min(2, "Nome é obrigatório"),
-  slug: z.string().min(2, "Slug é obrigatório"),
+  name: z.string().min(2, "Nome e obrigatorio"),
+  slug: z.string().min(2, "Slug e obrigatorio"),
   description: z.string().optional(),
   icon: z.string().optional(),
   order: z.number().optional(),
@@ -17,7 +19,13 @@ export async function GET() {
     return NextResponse.json(categories)
   } catch (error) {
     console.error("Get categories error:", error)
-    return NextResponse.json({ error: "Erro ao buscar categorias" }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: "Erro ao buscar categorias",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
+    )
   }
 }
 
@@ -31,7 +39,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (existing) {
-      return NextResponse.json({ error: "Slug já existe" }, { status: 400 })
+      return NextResponse.json({ error: "Slug ja existe" }, { status: 400 })
     }
 
     const maxOrder = await prisma.category.aggregate({
@@ -54,7 +62,14 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues[0].message }, { status: 400 })
     }
+
     console.error("Create category error:", error)
-    return NextResponse.json({ error: "Erro ao criar categoria" }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: "Erro ao criar categoria",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 }
+    )
   }
 }
