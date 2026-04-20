@@ -1,27 +1,26 @@
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireAdminApi } from "@/lib/admin"
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  try {
-    const session = await auth()
-    
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
-    }
+  const adminCheck = await requireAdminApi()
 
+  if (!adminCheck.ok) {
+    return adminCheck.response
+  }
+
+  try {
     const ad = await prisma.ad.findUnique({
       where: { id: params.id },
     })
 
     if (!ad) {
-      return NextResponse.json({ error: "Anúncio não encontrado" }, { status: 404 })
+      return NextResponse.json({ error: "Anuncio nao encontrado" }, { status: 404 })
     }
 
-    // Aprovar e publicar
     const updatedAd = await prisma.ad.update({
       where: { id: params.id },
       data: {
@@ -33,9 +32,6 @@ export async function POST(
     return NextResponse.json(updatedAd)
   } catch (error) {
     console.error("Approve ad error:", error)
-    return NextResponse.json(
-      { error: "Erro ao aprovar anúncio" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Erro ao aprovar anuncio" }, { status: 500 })
   }
 }

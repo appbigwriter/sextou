@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { prisma } from "@/lib/prisma"
+import { requireAdminApi } from "@/lib/admin"
 
 const createCouponSchema = z.object({
-  code: z.string().min(3, "Código deve ter pelo menos 3 caracteres"),
+  code: z.string().min(3, "Codigo deve ter pelo menos 3 caracteres"),
   discountType: z.enum(["PERCENTAGE", "FIXED_AMOUNT", "FREE"]),
   discountValue: z.number().positive("Valor deve ser positivo"),
   validFrom: z.string(),
@@ -12,6 +13,12 @@ const createCouponSchema = z.object({
 })
 
 export async function GET() {
+  const adminCheck = await requireAdminApi()
+
+  if (!adminCheck.ok) {
+    return adminCheck.response
+  }
+
   try {
     const coupons = await prisma.coupon.findMany({
       orderBy: { createdAt: "desc" },
@@ -24,6 +31,12 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  const adminCheck = await requireAdminApi()
+
+  if (!adminCheck.ok) {
+    return adminCheck.response
+  }
+
   try {
     const body = await request.json()
     const data = createCouponSchema.parse(body)
@@ -33,7 +46,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (existing) {
-      return NextResponse.json({ error: "Código já existe" }, { status: 400 })
+      return NextResponse.json({ error: "Codigo ja existe" }, { status: 400 })
     }
 
     const coupon = await prisma.coupon.create({
@@ -53,6 +66,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues[0].message }, { status: 400 })
     }
+
     console.error("Create coupon error:", error)
     return NextResponse.json({ error: "Erro ao criar cupom" }, { status: 500 })
   }

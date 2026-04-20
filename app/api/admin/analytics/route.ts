@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { requireAdminApi } from "@/lib/admin"
 
 export async function GET(request: NextRequest) {
+  const adminCheck = await requireAdminApi()
+
+  if (!adminCheck.ok) {
+    return adminCheck.response
+  }
+
   try {
     const { searchParams } = new URL(request.url)
     const period = searchParams.get("period") || "30"
 
-    const daysAgo = parseInt(period)
+    const daysAgo = parseInt(period, 10)
     const startDate = new Date()
     startDate.setDate(startDate.getDate() - daysAgo)
 
@@ -51,19 +58,15 @@ export async function GET(request: NextRequest) {
       }),
     ])
 
-    const dailyAds = await prisma.ad.groupBy({
-      by: ["status"],
-      _count: { id: true },
-    })
-
     const categoryStats = await Promise.all(
-      topCategories.map(async (cat) => {
+      topCategories.map(async (categoryStat) => {
         const category = await prisma.category.findUnique({
-          where: { id: cat.categoryId },
+          where: { id: categoryStat.categoryId },
         })
+
         return {
           name: category?.name || "Unknown",
-          count: cat._count.id,
+          count: categoryStat._count.id,
         }
       })
     )
@@ -78,7 +81,7 @@ export async function GET(request: NextRequest) {
         totalPayments,
         revenue: revenue._sum.amount || 0,
       },
-      recentAds: recentAds.map(ad => ({
+      recentAds: recentAds.map((ad) => ({
         id: ad.id,
         title: ad.title,
         businessName: ad.user.businessName,

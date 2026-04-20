@@ -2,9 +2,11 @@ import NextAuth, { User } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { compare } from "bcryptjs"
 import { prisma } from "@/lib/prisma"
+import { isConfiguredAdminEmail } from "@/lib/admin"
 
 interface ExtendedUser extends User {
   businessName?: string
+  isAdmin?: boolean
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -51,6 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           name: user.fullName,
           businessName: user.businessName,
+          isAdmin: Boolean((user as any).isAdmin) || isConfiguredAdminEmail(user.email),
         }
       }
     })
@@ -60,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id
         token.businessName = (user as any).businessName
+        token.isAdmin = Boolean((user as any).isAdmin)
       }
       return token
     },
@@ -67,6 +71,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string
         session.user.businessName = token.businessName as string
+        session.user.isAdmin = Boolean(token.isAdmin)
       }
       return session
     }

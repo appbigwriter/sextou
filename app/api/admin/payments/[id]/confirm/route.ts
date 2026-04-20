@@ -1,25 +1,25 @@
 import { NextRequest, NextResponse } from "next/server"
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireAdminApi } from "@/lib/admin"
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  try {
-    const session = await auth()
-    
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
-    }
+  const adminCheck = await requireAdminApi()
 
+  if (!adminCheck.ok) {
+    return adminCheck.response
+  }
+
+  try {
     const payment = await prisma.payment.findUnique({
       where: { id: params.id },
       include: { ad: true },
     })
 
     if (!payment) {
-      return NextResponse.json({ error: "Pagamento não encontrado" }, { status: 404 })
+      return NextResponse.json({ error: "Pagamento nao encontrado" }, { status: 404 })
     }
 
     const updatedPayment = await prisma.payment.update({
@@ -27,7 +27,7 @@ export async function POST(
       data: {
         status: "CONFIRMED",
         confirmedAt: new Date(),
-        confirmedBy: session.user.email,
+        confirmedBy: adminCheck.session.user.email,
       },
     })
 
