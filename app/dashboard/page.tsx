@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth"
+import { auth, isAdmin } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { redirect } from "next/navigation"
@@ -34,6 +34,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   if (!user) {
     redirect("/login")
   }
+
+  const userIsAdmin = user.isAdmin || await isAdmin(session.user.email)
 
   const stats = {
     totalAds: user._count.ads,
@@ -127,14 +129,24 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Ver Vitrine</h3>
             <p className="text-sm text-gray-600">Veja todos os anúncios</p>
           </Link>
-          <Link
+<Link
             href="/dashboard/configuracoes"
             className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
           >
             <div className="text-4xl mb-3">⚙️</div>
-            <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Configurações</h3>
+            <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Configuracoes</h3>
             <p className="text-sm text-gray-600">Edite seu perfil</p>
           </Link>
+          {userIsAdmin && (
+            <Link
+              href="/dashboard/admin/usuarios"
+              className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+            >
+              <div className="text-4xl mb-3">👥</div>
+              <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Gerenciar Usuarios</h3>
+              <p className="text-sm text-gray-600">Admin: ver e editar</p>
+            </Link>
+          )}
         </div>
 
         {/* Recent Ads */}
