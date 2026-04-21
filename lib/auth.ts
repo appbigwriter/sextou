@@ -9,6 +9,14 @@ interface ExtendedUser extends User {
   isAdmin?: boolean
 }
 
+export async function isAdmin(email: string) {
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: { isAdmin: true },
+  })
+  return user?.isAdmin || isConfiguredAdminEmail(email)
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // trustHost faz o NextAuth detectar o host automaticamente da requisição
   // sem precisar de NEXTAUTH_URL configurado corretamente

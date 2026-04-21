@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
+import { hash } from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { requireAdminApi } from "@/lib/admin"
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const adminCheck = await requireAdminApi()
 
   if (!adminCheck.ok) {
@@ -10,60 +11,50 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const searchParams = request.nextUrl.searchParams
-    const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "20")
-    const search = searchParams.get("search") || ""
+    const { email, password, fullName, businessName, whatsapp, city, state, isAdmin: isUserAdmin, isVip } = await request.json()
 
-    const where = search
-      ? {
-          OR: [
-            { email: { contains: search, mode: "insensitive" as const } },
-            { fullName: { contains: search, mode: "insensitive" as const } },
-            { businessName: { contains: search, mode: "insensitive" as const } },
-          ],
-        }
-      : {}
+    if (!email || !password || !fullName) {
+      return NextResponse.json(
+        { error: "Email, senha e nome sao obrigatorios" },
+        { status: 400 }
+      )
+    }
 
-    const [users, total] = await Promise.all([
-      prisma.user.findMany({
-        where,
-        select: {
-          id: true,
-          email: true,
-          fullName: true,
-          businessName: true,
-          whatsapp: true,
-          city: true,
-          state: true,
-          isAdmin: true,
-          isVip: true,
-          status: true,
-          createdAt: true,
-          _count: {
-            select: {
-              ads: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      prisma.user.count({ where }),
-    ])
+    const existingUser = await prisma.user.findUnique({
+      where: { email }
+    })
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "Ja existe um usuario com este email" },
+        { status: 400 }
+      )
+    }
+
+    const passwordHash = await hash(password, 12)
+
+    const user = await prisma.user.create({
+      data: {
+        email,
+        passwordHash,
+        fullName,
+        businessName: businessName || fullName,
+        whatsapp: whatsapp || "",
+        city: city || "",
+        state: state || "",
+        isAdmin: isUserAdmin || false,
+        isVip: isVip || false,
+      }
+    })
 
     return NextResponse.json({
-      users,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      isAdmin: user.isAdmin,
     })
   } catch (error) {
-    console.error("List users error:", error)
-    return NextResponse.json({ error: "Erro ao listar usuarios" }, { status: 500 })
+    console.error("Create user error:", error)
+    return NextResponse.json({ error: "Erro ao criar usuario" }, { status: 500 })
   }
 }
