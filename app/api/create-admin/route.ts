@@ -4,29 +4,20 @@ import { prisma } from "@/lib/prisma"
 
 export const runtime = 'nodejs'
 
-export async function GET() {
-  return NextResponse.json({ message: "Admin create endpoint" })
-}
-
 export async function POST(request: NextRequest) {
+  const body = await request.json()
+  const { secret, email, password, name } = body
+
+  if (secret !== "ADMIN_CREATE_SECRET") {
+    return NextResponse.json({ error: "Invalid secret" }, { status: 401 })
+  }
+
   try {
-    const body = await request.json()
-    console.log("Received body:", body)
-    const { secret, email, password, name } = body
-
-    console.log("secret check:", secret === "ADMIN_CREATE_SECRET")
-
-    if (secret !== "ADMIN_CREATE_SECRET") {
-      return NextResponse.json({ error: "Invalid secret" }, { status: 401 })
-    }
-
     const passwordHash = await hash(password, 12)
 
     const existingUser = await prisma.user.findUnique({
       where: { email }
     })
-
-    console.log("existingUser:", existingUser)
 
     if (existingUser) {
       const updated = await prisma.user.update({
@@ -34,13 +25,9 @@ export async function POST(request: NextRequest) {
         data: { 
           passwordHash,
           isAdmin: true,
-          fullName: name,
         }
       })
-      return NextResponse.json({ 
-        message: "Admin atualizado", 
-        email: updated.email 
-      })
+      return NextResponse.json({ message: "Admin atualizado", email: updated.email })
     }
 
     const user = await prisma.user.create({
@@ -56,10 +43,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ 
-      message: "Admin criado", 
-      email: user.email 
-    })
+    return NextResponse.json({ message: "Admin criado", email: user.email })
   } catch (error) {
     console.error("Create admin error:", error)
     return NextResponse.json({ error: "Erro ao criar admin" }, { status: 500 })
