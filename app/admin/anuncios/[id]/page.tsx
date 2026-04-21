@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { ApproveButton } from "@/components/approve-button"
+import { RejectButton } from "@/components/reject-button"
 
 interface Props {
   params: { id: string }
@@ -21,11 +22,9 @@ export default async function AdminAdDetailPage({ params }: Props) {
   }
 
   const canApprove = ad.status === "UNDER_REVIEW"
-  const canReject = ad.status === "UNDER_REVIEW"
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -57,7 +56,6 @@ export default async function AdminAdDetailPage({ params }: Props) {
           </div>
 
           <h1 className="text-3xl font-bold text-gray-900 mb-4">{ad.title}</h1>
-          
           <p className="text-gray-600 mb-6">{ad.shortDescription}</p>
 
           <div className="prose max-w-none mb-6">
@@ -97,7 +95,6 @@ export default async function AdminAdDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Anunciante */}
         <div className="bg-white rounded-xl border shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4">Informações do Anunciante</h2>
           <div className="grid md:grid-cols-2 gap-4">
@@ -120,22 +117,13 @@ export default async function AdminAdDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Ações */}
         {canApprove && (
           <div className="bg-white rounded-xl border shadow-sm p-6">
             <h2 className="text-lg font-semibold mb-4">Aprovar Anúncio</h2>
-            <form action={`/api/admin/ads/${ad.id}/approve`} method="POST" className="inline mr-4">
-              <Button type="submit" className="bg-green-600 hover:bg-green-700">
-                ✓ Aprovar e Publicar
-              </Button>
-            </form>
-            {canReject && (
-              <form action={`/api/admin/ads/${ad.id}/reject`} method="POST" className="inline">
-                <Button type="submit" variant="destructive" className="bg-red-600 hover:bg-red-700">
-                  ✕ Rejeitar
-                </Button>
-              </form>
-            )}
+            <div className="flex gap-4">
+              <ApproveButton adId={ad.id} />
+              <RejectButton adId={ad.id} />
+            </div>
           </div>
         )}
       </main>

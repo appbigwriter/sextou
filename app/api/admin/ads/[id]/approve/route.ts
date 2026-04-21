@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { requireAdminApi } from "@/lib/admin"
 
+export const runtime = 'nodejs'
+
 export async function POST(
   _request: NextRequest,
   { params }: { params: { id: string } }
