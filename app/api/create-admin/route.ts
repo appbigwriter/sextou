@@ -10,7 +10,11 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { secret, email, password, name } = await request.json()
+    const body = await request.json()
+    console.log("Received body:", body)
+    const { secret, email, password, name } = body
+
+    console.log("secret check:", secret === "ADMIN_CREATE_SECRET")
 
     if (secret !== "ADMIN_CREATE_SECRET") {
       return NextResponse.json({ error: "Invalid secret" }, { status: 401 })
@@ -21,6 +25,8 @@ export async function POST(request: NextRequest) {
     const existingUser = await prisma.user.findUnique({
       where: { email }
     })
+
+    console.log("existingUser:", existingUser)
 
     if (existingUser) {
       const updated = await prisma.user.update({
