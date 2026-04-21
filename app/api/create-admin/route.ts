@@ -4,6 +4,10 @@ import { prisma } from "@/lib/prisma"
 
 export const runtime = 'nodejs'
 
+export async function GET() {
+  return NextResponse.json({ message: "Admin create endpoint" })
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { secret, email, password, name } = await request.json()
