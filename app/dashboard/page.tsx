@@ -37,19 +37,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   const userIsAdmin = user.isAdmin || await isAdmin(session.user.email)
 
-  const pendingAds = userIsAdmin 
-    ? await prisma.ad.findMany({
-        where: { 
-          OR: [
-            { status: "UNDER_REVIEW", paymentStatus: "PAID" },
-            { status: "AWAITING_PAYMENT", paymentStatus: "PENDING" }
-          ]
-        },
-        select: { id: true, title: true, status: true, paymentStatus: true },
-        take: 5
-      })
-    : []
-
   const stats = {
     totalAds: user._count.ads,
     publishedAds: user.ads.filter((ad: any) => ad.status === "PUBLISHED").length,
@@ -160,25 +147,17 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               <p className="text-sm text-gray-600">Admin: ver e editar</p>
             </Link>
           )}
-          {userIsAdmin && pendingAds.length > 0 && (
-            <div className="bg-white rounded-xl p-6 border-2 border-yellow-400 shadow-sm">
+          {userIsAdmin && (
+            <Link
+              href="/admin/anuncios"
+              className="bg-white rounded-xl p-6 border-2 border-yellow-400 shadow-sm hover:border-yellow-500 transition group"
+            >
               <div className="flex items-center gap-2 mb-3">
                 <div className="text-4xl">⚠️</div>
                 <h3 className="font-semibold text-gray-900">Anuncios Pendentes</h3>
               </div>
-              <p className="text-sm text-gray-600 mb-3">{pendingAds.length}/anuncio(s) aguardando aprovacao</p>
-              <div className="space-y-2">
-                {pendingAds.map((ad: any) => (
-                  <Link
-                    key={ad.id}
-                    href={`/dashboard/anuncios/${ad.id}`}
-                    className="block p-2 bg-yellow-50 rounded text-sm hover:bg-yellow-100"
-                  >
-                    {ad.title} <span className="text-xs text-gray-500">({ad.status})</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
+              <p className="text-sm text-gray-600">Revisar anuncios aguardando aprovacao</p>
+            </Link>
           )}
         </div>
 
