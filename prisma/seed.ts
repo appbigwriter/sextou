@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import { hash } from "bcryptjs"
 
 const prisma = new PrismaClient()
 
@@ -16,6 +17,34 @@ const defaultCategories = [
 ]
 
 async function main() {
+  const adminPasswordHash = await hash("12345", 12)
+  
+  const existingAdmin = await prisma.user.findUnique({
+    where: { email: "admin@admin.com" }
+  })
+
+  if (!existingAdmin) {
+    await prisma.user.create({
+      data: {
+        email: "admin@admin.com",
+        passwordHash: adminPasswordHash,
+        fullName: "Administrador",
+        businessName: "Admin",
+        whatsapp: "0000000000",
+        city: "Admin",
+        state: "Admin",
+        isAdmin: true,
+      }
+    })
+    console.log("Admin padrão criado: admin@admin.com / 12345")
+  } else {
+    await prisma.user.update({
+      where: { email: "admin@admin.com" },
+      data: { isAdmin: true }
+    })
+    console.log("Admin atualizado: admin@admin.com")
+  }
+
   const existingCount = await prisma.category.count()
 
   if (existingCount === 0) {
