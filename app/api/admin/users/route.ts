@@ -3,6 +3,8 @@ import { hash } from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { requireAdminApi } from "@/lib/admin"
 
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   const adminCheck = await requireAdminApi()
 

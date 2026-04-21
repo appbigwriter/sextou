@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { AdminToggleButton } from "@/components/admin-toggle-button"
 import { LogoutButton } from "@/components/logout-button"
+import { Prisma } from "@prisma/client"
 
 interface UsersPageProps {
   searchParams?: {
@@ -30,12 +31,12 @@ export default async function AdminUsersPage({ searchParams }: UsersPageProps) {
   const limit = 20
   const search = searchParams?.search || ""
 
-  const where = search
+  const where: Prisma.UserWhereInput = search
     ? {
         OR: [
-          { email: { contains: search, mode: "insensitive" } },
-          { fullName: { contains: search, mode: "insensitive" } },
-          { businessName: { contains: search, mode: "insensitive" } },
+          { email: { contains: search, mode: Prisma.QueryMode.insensitive } },
+          { fullName: { contains: search, mode: Prisma.QueryMode.insensitive } },
+          { businessName: { contains: search, mode: Prisma.QueryMode.insensitive } },
         ],
       }
     : {}
