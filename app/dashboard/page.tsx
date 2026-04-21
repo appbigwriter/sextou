@@ -40,10 +40,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const pendingAds = userIsAdmin 
     ? await prisma.ad.findMany({
         where: { 
-          status: "UNDER_REVIEW",
-          paymentStatus: "PAID"
+          OR: [
+            { status: "UNDER_REVIEW", paymentStatus: "PAID" },
+            { status: "AWAITING_PAYMENT", paymentStatus: "PENDING" }
+          ]
         },
-        select: { id: true, title: true },
+        select: { id: true, title: true, status: true, paymentStatus: true },
         take: 5
       })
     : []
@@ -172,7 +174,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     href={`/dashboard/anuncios/${ad.id}`}
                     className="block p-2 bg-yellow-50 rounded text-sm hover:bg-yellow-100"
                   >
-                    {ad.title}
+                    {ad.title} <span className="text-xs text-gray-500">({ad.status})</span>
                   </Link>
                 ))}
               </div>
