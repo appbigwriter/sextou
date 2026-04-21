@@ -21,7 +21,7 @@ export default async function AdminAdDetailPage({ params }: Props) {
     notFound()
   }
 
-  const canApprove = ad.status === "UNDER_REVIEW"
+  const canApprove = ad.status === "UNDER_REVIEW" || ad.status === "AWAITING_PAYMENT"
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -46,7 +46,10 @@ export default async function AdminAdDetailPage({ params }: Props) {
               ad.status === "REJECTED" ? "bg-red-100 text-red-700" :
               "bg-gray-100 text-gray-700"
             }`}>
-              {ad.status}
+              {ad.status === "UNDER_REVIEW" ? "Em Analise" :
+               ad.status === "AWAITING_PAYMENT" ? "Aguardando Pagamento" :
+               ad.status === "PUBLISHED" ? "Publicado" :
+               ad.status === "REJECTED" ? "Rejeitado" : ad.status}
             </span>
             {ad.category && (
               <span className="text-sm text-gray-600">
@@ -119,7 +122,7 @@ export default async function AdminAdDetailPage({ params }: Props) {
 
         {canApprove && (
           <div className="bg-white rounded-xl border shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">Aprovar Anúncio</h2>
+            <h2 className="text-lg font-semibold mb-4">Revisar Anuncio</h2>
             <div className="flex gap-4">
               <ApproveButton adId={ad.id} />
               <RejectButton adId={ad.id} />

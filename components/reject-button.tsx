@@ -39,7 +39,7 @@ export function RejectButton({ adId }: RejectButtonProps) {
       disabled={loading}
       className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium disabled:opacity-60"
     >
-      {loading ? "Salvando..." : "✕ Rejeitar"}
+      {loading ? "Salvando..." : "Recusar"}
     </button>
   )
 }

@@ -34,7 +34,7 @@ export function ApproveButton({ adId }: ApproveButtonProps) {
       disabled={loading}
       className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-60"
     >
-      {loading ? "Salvando..." : "✓ Aprovar e Publicar"}
+      {loading ? "Salvando..." : "Publicar"}
     </button>
   )
 }
