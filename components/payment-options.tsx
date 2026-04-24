@@ -12,6 +12,7 @@ export function PaymentOptions({ adId, amount }: PaymentOptionsProps) {
   const router = useRouter()
   const [couponCode, setCouponCode] = useState("")
   const [zelleCode, setZelleCode] = useState("")
+  const [zelleDate, setZelleDate] = useState("")
   const [error, setError] = useState("")
   const [loadingMethod, setLoadingMethod] = useState<"card" | "zelle" | "">("")
 
@@ -56,6 +57,7 @@ export function PaymentOptions({ adId, amount }: PaymentOptionsProps) {
           adId,
           paymentMethod: "ZELLE",
           transactionId: zelleCode.trim(),
+          transactionDate: zelleDate,
         }),
       })
 
@@ -116,8 +118,14 @@ export function PaymentOptions({ adId, amount }: PaymentOptionsProps) {
           <h3 className="text-lg font-semibold text-gray-900">Zelle</h3>
           <p className="mt-2 text-sm text-gray-600">
             Envie o pagamento para <strong>pagamento@sextadoempreendedor.com</strong> e informe abaixo o codigo da
-            transacao para o admin confirmar.
+            transacao e a data do pagamento para o admin confirmar.
           </p>
+          <input
+            type="date"
+            value={zelleDate}
+            onChange={(event) => setZelleDate(event.target.value)}
+            className="mt-4 h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm"
+          />
           <input
             value={zelleCode}
             onChange={(event) => setZelleCode(event.target.value)}
@@ -127,7 +135,7 @@ export function PaymentOptions({ adId, amount }: PaymentOptionsProps) {
           <button
             type="button"
             onClick={handleZelleSubmit}
-            disabled={loadingMethod !== "" || zelleCode.trim().length < 4}
+            disabled={loadingMethod !== "" || zelleCode.trim().length < 4 || !zelleDate}
             className="mt-4 w-full rounded-lg border border-[#F97316] px-4 py-3 font-semibold text-[#F97316] hover:bg-[#F97316]/5 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loadingMethod === "zelle" ? "Enviando codigo..." : "Informar codigo Zelle"}

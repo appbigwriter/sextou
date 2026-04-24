@@ -79,6 +79,11 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="text-right">
+                <Link href="/esqueci-senha" className="text-sm font-medium text-[#F97316] hover:underline">
+                  Esqueci minha senha
+                </Link>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">

@@ -2,7 +2,7 @@ import nodemailer from "nodemailer"
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "587"),
+  port: parseInt(process.env.SMTP_PORT || "587", 10),
   secure: process.env.SMTP_SECURE === "true",
   auth: {
     user: process.env.SMTP_USER,
@@ -49,13 +49,13 @@ export function getAnuncioAprovadoTemplate(userName: string, adTitle: string) {
     <body>
       <div class="container">
         <div class="header">
-          <h1>🎉 Parabéns, ${userName}!</h1>
+          <h1>Parabens, ${userName}!</h1>
         </div>
         <div class="content">
-          <h2>Seu anúncio foi aprovado!</h2>
-          <p>Seu anúncio "<strong>${adTitle}</strong>" foi publicado na SEXTOU.biz.</p>
-          <p>Agora milhares de brasileiros podem ver seu negócio!</p>
-          <a href="${process.env.NEXTAUTH_URL}/anuncios" class="button">Ver minha publicação</a>
+          <h2>Seu anuncio foi aprovado!</h2>
+          <p>Seu anuncio "<strong>${adTitle}</strong>" foi publicado na SEXTOU.biz.</p>
+          <p>Agora milhares de brasileiros podem ver seu negocio.</p>
+          <a href="${process.env.NEXTAUTH_URL}/anuncios" class="button">Ver minha publicacao</a>
         </div>
         <div class="footer">
           <p>SEXTOU.biz - A vitrine da comunidade brasileira</p>
@@ -78,22 +78,23 @@ export function getAnuncioRejeitadoTemplate(userName: string, adTitle: string, r
         .header { background: #dc2626; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
         .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
         .reason { background: #fee2e2; padding: 15px; border-left: 4px solid #dc2626; margin: 15px 0; }
+        .button { display: inline-block; background: #4B5563; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 20px; }
         .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
       </style>
     </head>
     <body>
       <div class="container">
         <div class="header">
-          <h1>😔 Informe sobre seu anúncio</h1>
+          <h1>Informe sobre seu anuncio</h1>
         </div>
         <div class="content">
-          <h2>Olá, ${userName}!</h2>
-          <p>Seu anúncio "<strong>${adTitle}</strong>" não foi aprovado nesta edição.</p>
+          <h2>Ola, ${userName}!</h2>
+          <p>Seu anuncio "<strong>${adTitle}</strong>" nao foi aprovado nesta edicao.</p>
           <div class="reason">
             <strong>Motivo:</strong> ${reason}
           </div>
-          <p>Você pode corrigir e enviar novamente. Emitimos o reembolso de $30.</p>
-          <a href="${process.env.NEXTAUTH_URL}/dashboard" class="button" style="background: #4B5563;">Acessar painel</a>
+          <p>Voce pode corrigir e enviar novamente. Emitimos o reembolso de $30.</p>
+          <a href="${process.env.NEXTAUTH_URL}/dashboard" class="button">Acessar painel</a>
         </div>
         <div class="footer">
           <p>SEXTOU.biz - A vitrine da comunidade brasileira</p>
@@ -122,13 +123,50 @@ export function getPagamentoConfirmadoTemplate(userName: string, adTitle: string
     <body>
       <div class="container">
         <div class="header">
-          <h1>✅ Pagamento Confirmado!</h1>
+          <h1>Pagamento Confirmado!</h1>
         </div>
         <div class="content">
-          <h2>Olá, ${userName}!</h2>
-          <p>Recebemos o pagamento de <strong>$30</strong> para o anúncio "<strong>${adTitle}</strong>".</p>
-          <p>Seu anúncio está em análise e será publicado na próxima sexta-feira!</p>
+          <h2>Ola, ${userName}!</h2>
+          <p>Recebemos o pagamento de <strong>$30</strong> para o anuncio "<strong>${adTitle}</strong>".</p>
+          <p>Seu anuncio esta em analise e sera publicado na proxima sexta-feira.</p>
           <a href="${process.env.NEXTAUTH_URL}/dashboard" class="button">Ver detalhes</a>
+        </div>
+        <div class="footer">
+          <p>SEXTOU.biz - A vitrine da comunidade brasileira</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `
+}
+
+export function getPasswordResetTemplate(userName: string, resetUrl: string) {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #F97316, #EA580C); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+        .button { display: inline-block; background: #F97316; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+        .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>Recuperacao de senha</h1>
+        </div>
+        <div class="content">
+          <h2>Ola, ${userName}!</h2>
+          <p>Recebemos um pedido para redefinir a senha da sua conta na SEXTOU.biz.</p>
+          <p>Se foi voce, clique no botao abaixo para criar uma nova senha:</p>
+          <a href="${resetUrl}" class="button">Redefinir senha</a>
+          <p>Este link expira em 1 hora.</p>
+          <p>Se voce nao solicitou esta alteracao, ignore este email.</p>
         </div>
         <div class="footer">
           <p>SEXTOU.biz - A vitrine da comunidade brasileira</p>
@@ -142,15 +180,20 @@ export function getPagamentoConfirmadoTemplate(userName: string, adTitle: string
 export async function sendAnuncioAprovadoEmail(userEmail: string, userName: string, adTitle: string) {
   return sendEmail({
     to: userEmail,
-    subject: "🎉 Seu anúncio foi aprovado! - SEXTOU.biz",
+    subject: "Seu anuncio foi aprovado! - SEXTOU.biz",
     html: getAnuncioAprovadoTemplate(userName, adTitle),
   })
 }
 
-export async function sendAnuncioRejeitadoEmail(userEmail: string, userName: string, adTitle: string, reason: string) {
+export async function sendAnuncioRejeitadoEmail(
+  userEmail: string,
+  userName: string,
+  adTitle: string,
+  reason: string
+) {
   return sendEmail({
     to: userEmail,
-    subject: "😔 Seu anúncio precisa de ajustes - SEXTOU.biz",
+    subject: "Seu anuncio precisa de ajustes - SEXTOU.biz",
     html: getAnuncioRejeitadoTemplate(userName, adTitle, reason),
   })
 }
@@ -158,7 +201,15 @@ export async function sendAnuncioRejeitadoEmail(userEmail: string, userName: str
 export async function sendPagamentoConfirmadoEmail(userEmail: string, userName: string, adTitle: string) {
   return sendEmail({
     to: userEmail,
-    subject: "✅ Pagamento confirmado! - SEXTOU.biz",
+    subject: "Pagamento confirmado! - SEXTOU.biz",
     html: getPagamentoConfirmadoTemplate(userName, adTitle),
+  })
+}
+
+export async function sendPasswordResetEmail(userEmail: string, userName: string, resetUrl: string) {
+  return sendEmail({
+    to: userEmail,
+    subject: "Recuperacao de senha - SEXTOU.biz",
+    html: getPasswordResetTemplate(userName, resetUrl),
   })
 }

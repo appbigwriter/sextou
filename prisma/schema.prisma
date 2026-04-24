@@ -37,6 +37,7 @@ model User {
   ads           Ad[]
   payments      Payment[]
   notifications Notification[]
+  passwordResetTokens PasswordResetToken[]
 
   @@map("users")
 }
@@ -146,6 +147,7 @@ model Payment {
   amount          Float
   paymentMethod   String    @default("ZELLE") @map("payment_method")
   transactionId   String?   @map("transaction_id")
+  transactionDate DateTime? @map("transaction_date")
   status          String    @default("PENDING")
   paymentProofUrl String?   @map("payment_proof_url")
   confirmedBy     String?   @map("confirmed_by")
@@ -254,6 +256,20 @@ model Notification {
 
   @@index([userId])
   @@map("notifications")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
 }
 
 // ========================================

@@ -7,6 +7,7 @@ const createPaymentSchema = z.object({
   adId: z.string().min(1, "ID do anuncio e obrigatorio"),
   paymentMethod: z.enum(["ZELLE", "STRIPE", "PAYPAL"]),
   transactionId: z.string().trim().optional(),
+  transactionDate: z.string().trim().optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -41,6 +42,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Informe o codigo da transacao Zelle" }, { status: 400 })
     }
 
+    if (data.paymentMethod === "ZELLE" && !data.transactionDate) {
+      return NextResponse.json({ error: "Informe a data do pagamento Zelle" }, { status: 400 })
+    }
+
+    const parsedTransactionDate =
+      data.transactionDate && data.paymentMethod === "ZELLE"
+        ? new Date(`${data.transactionDate}T12:00:00`)
+        : null
+
     const existingPayment = await prisma.payment.findFirst({
       where: {
         adId: data.adId,
@@ -56,7 +66,8 @@ export async function POST(request: NextRequest) {
           data: {
             amount: 30.0,
             transactionId: data.transactionId || existingPayment.transactionId,
-          },
+            transactionDate: parsedTransactionDate || (existingPayment as any).transactionDate || null,
+          } as any,
         })
       : await prisma.payment.create({
           data: {
@@ -65,8 +76,9 @@ export async function POST(request: NextRequest) {
             amount: 30.0,
             paymentMethod: data.paymentMethod,
             transactionId: data.transactionId || null,
+            transactionDate: parsedTransactionDate,
             status: "PENDING",
-          },
+          } as any,
         })
 
     await prisma.ad.update({
@@ -87,7 +99,7 @@ export async function POST(request: NextRequest) {
               email: "pagamento@sextadoempreendedor.com",
               amount: 30.0,
               instructions:
-                "Envie o pagamento via Zelle, informe o codigo da transacao no painel e aguarde a confirmacao do admin.",
+                "Envie o pagamento via Zelle, informe o codigo e a data do pagamento no painel e aguarde a confirmacao do admin.",
             }
           : null,
     })

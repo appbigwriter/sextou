@@ -22,6 +22,16 @@ export async function POST(
       return NextResponse.json({ error: "Pagamento nao encontrado" }, { status: 404 })
     }
 
+    if (
+      payment.paymentMethod === "ZELLE" &&
+      (!payment.transactionId || !(payment as any).transactionDate)
+    ) {
+      return NextResponse.json(
+        { error: "Informe codigo e data do pagamento Zelle antes de confirmar." },
+        { status: 400 }
+      )
+    }
+
     const updatedPayment = await prisma.payment.update({
       where: { id: params.id },
       data: {
