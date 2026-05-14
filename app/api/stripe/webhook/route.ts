@@ -59,6 +59,15 @@ export async function POST(request: NextRequest) {
 
         if (userId) {
           const user = await prisma.user.findUnique({ where: { id: userId } })
+
+          if (user?.affiliateId) {
+            const commissionAmount = ((session.amount_total || 3000) / 100) * 0.5
+            await prisma.user.update({
+              where: { id: user.affiliateId },
+              data: { balance: { increment: commissionAmount } },
+            })
+          }
+
           if (user?.email) {
             await sendEmail({
               to: user.email,

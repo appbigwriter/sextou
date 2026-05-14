@@ -66,6 +66,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               { href: "/", label: "Home" },
               { href: "/anuncios", label: "Ver Vitrine" },
               { href: "/dashboard", label: "Meu Dashboard" },
+              { href: "/dashboard/afiliados", label: "Meus Afiliados" },
               { href: "/dashboard/configuracoes", label: "Configurações" },
               { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
             ]} />
@@ -129,12 +130,20 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Ver Vitrine</h3>
             <p className="text-sm text-gray-600">Veja todos os anúncios</p>
           </Link>
-<Link
+          <Link
+            href="/dashboard/afiliados"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+          >
+            <div className="text-4xl mb-3">🤝</div>
+            <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Meus Afiliados</h3>
+            <p className="text-sm text-gray-600">Compartilhe e ganhe comissões</p>
+          </Link>
+          <Link
             href="/dashboard/configuracoes"
             className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
           >
             <div className="text-4xl mb-3">⚙️</div>
-            <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Configuracoes</h3>
+            <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Configurações</h3>
             <p className="text-sm text-gray-600">Edite seu perfil</p>
           </Link>
           {userIsAdmin && (

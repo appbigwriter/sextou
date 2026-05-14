@@ -31,6 +31,8 @@ model User {
   status        String   @default("ACTIVE")
   isVip         Boolean  @default(false) @map("is_vip")
   isAdmin       Boolean  @default(false) @map("is_admin")
+  balance       Float    @default(0)
+  affiliateId   String?  @map("affiliate_id")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
@@ -38,6 +40,9 @@ model User {
   payments      Payment[]
   notifications Notification[]
   passwordResetTokens PasswordResetToken[]
+
+  affiliate     User?    @relation("UserAffiliates", fields: [affiliateId], references: [id])
+  affiliates    User[]   @relation("UserAffiliates")
 
   @@map("users")
 }

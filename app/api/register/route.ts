@@ -16,6 +16,7 @@ const registerSchema = z.object({
   state: z.string().trim().min(2, "Estado e obrigatorio"),
   instagram: optionalTrimmedString,
   website: optionalTrimmedString,
+  affiliateId: optionalTrimmedString,
 })
 
 export async function POST(request: NextRequest) {
@@ -69,6 +70,7 @@ export async function POST(request: NextRequest) {
         state: data.state,
         instagram: data.instagram || null,
         website: data.website || null,
+        affiliateId: data.affiliateId || null,
       },
     })
 

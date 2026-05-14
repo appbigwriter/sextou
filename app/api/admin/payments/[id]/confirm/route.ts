@@ -15,7 +15,7 @@ export async function POST(
   try {
     const payment = await prisma.payment.findUnique({
       where: { id: params.id },
-      include: { ad: true },
+      include: { ad: true, user: true },
     })
 
     if (!payment) {
@@ -40,6 +40,14 @@ export async function POST(
         confirmedBy: adminCheck.session.user.email,
       },
     })
+
+    if (payment.user?.affiliateId) {
+      const commissionAmount = payment.amount * 0.5
+      await prisma.user.update({
+        where: { id: payment.user.affiliateId },
+        data: { balance: { increment: commissionAmount } },
+      })
+    }
 
     await prisma.ad.update({
       where: { id: payment.adId },
