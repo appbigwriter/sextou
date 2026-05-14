@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { MobileMenu } from "@/components/layout/mobile-menu"
-import { formatCurrency } from "@/lib/utils"
+
 
 export default async function AfiliadosPage() {
   const session = await auth()
