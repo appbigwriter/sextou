@@ -37,7 +37,6 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder /app/node_modules/undici ./node_modules/undici
 
 # Copy schema and migrations for startup migrate deploy.
 COPY --from=builder /app/prisma ./prisma
