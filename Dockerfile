@@ -12,8 +12,12 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Generate Prisma Client with the correct binary for Alpine + OpenSSL 3.
+# Generate Prisma Client
 RUN npx prisma generate
+
+# Sincronizar banco durante a build (requer DATABASE_URL nos build-args)
+ARG DATABASE_URL
+RUN if [ -n "$DATABASE_URL" ]; then npx prisma db push --accept-data-loss; fi
 
 # Build the Next.js standalone output.
 RUN npm run build
