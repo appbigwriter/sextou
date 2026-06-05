@@ -41,7 +41,7 @@ export default async function AfiliadosPage() {
             <div className="hidden md:flex items-center gap-4">
               <span className="text-sm text-gray-600">Olá, {user.fullName}</span>
               <a
-                href="/sextou_afiliados.pdf"
+                href="/Manual_Afiliado_SEXTOU.pdf"
                 download="Manual_Afiliado_SEXTOU.pdf"
                 className="flex items-center gap-1.5 border border-[#F97316] text-[#F97316] hover:bg-[#F97316]/10 px-4 py-2 rounded-lg font-medium text-sm transition-colors"
               >
@@ -64,7 +64,7 @@ export default async function AfiliadosPage() {
               { href: "/anuncios", label: "Ver Vitrine" },
               { href: "/dashboard", label: "Meu Dashboard" },
               { href: "/dashboard/afiliados", label: "Meus Afiliados" },
-              { href: "/sextou_afiliados.pdf", label: "📄 Manual do Afiliado" },
+              { href: "/Manual_Afiliado_SEXTOU.pdf", label: "📄 Manual do Afiliado" },
               { href: "/dashboard/configuracoes", label: "Configurações" },
               { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
             ]} />
@@ -86,7 +86,7 @@ export default async function AfiliadosPage() {
             </div>
           </div>
           <a
-            href="/sextou_afiliados.pdf"
+            href="/Manual_Afiliado_SEXTOU.pdf"
             download="Manual_Afiliado_SEXTOU.pdf"
             className="flex items-center gap-2 bg-orange-50 border border-[#F97316] text-[#F97316] hover:bg-[#F97316] hover:text-white px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200"
           >
