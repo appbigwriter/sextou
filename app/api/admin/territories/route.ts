@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
-import { isAdmin } from "@/lib/auth"
+import { auth, isAdmin } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
 export async function GET(request: NextRequest) {
   try {
-    const adminAuth = await isAdmin()
+    const session = await auth()
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Nao autorizado" }, { status: 401 })
+    }
+
+    const adminAuth = await isAdmin(session.user.email)
     if (!adminAuth) {
       return NextResponse.json({ error: "Nao autorizado" }, { status: 401 })
     }
@@ -34,7 +39,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const adminAuth = await isAdmin()
+    const session = await auth()
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Nao autorizado" }, { status: 401 })
+    }
+
+    const adminAuth = await isAdmin(session.user.email)
     if (!adminAuth) {
       return NextResponse.json({ error: "Nao autorizado" }, { status: 401 })
     }
