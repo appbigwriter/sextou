@@ -81,6 +81,8 @@ model Ad {
   promotionText     String?   @map("promotion_text")
   city              String
   state             String?
+  latitude          Float?
+  longitude         Float?
   deliveryType      String    @default("LOCAL") @map("delivery_type")
   externalLink      String?   @map("external_link")
   whatsappContact   String    @map("whatsapp_contact")
