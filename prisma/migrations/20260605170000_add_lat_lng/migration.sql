@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "ads" ADD COLUMN "latitude" DOUBLE PRECISION;
+ALTER TABLE "ads" ADD COLUMN "longitude" DOUBLE PRECISION;
