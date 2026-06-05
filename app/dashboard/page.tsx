@@ -55,6 +55,18 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center gap-4">
               <span className="text-sm text-gray-600">Olá, {user.fullName}</span>
+              <a
+                href="/sextou_afiliados.pdf"
+                download="Manual_Afiliado_SEXTOU.pdf"
+                className="flex items-center gap-1.5 border border-[#F97316] text-[#F97316] hover:bg-[#F97316]/10 px-4 py-2 rounded-lg font-medium text-sm transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Manual do Afiliado
+              </a>
               <Link
                 href="/dashboard/anunciar"
                 className="bg-[#F97316] hover:bg-[#EA580C] text-white px-4 py-2 rounded-lg font-medium text-sm"
@@ -67,6 +79,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               { href: "/anuncios", label: "Ver Vitrine" },
               { href: "/dashboard", label: "Meu Dashboard" },
               { href: "/dashboard/afiliados", label: "Meus Afiliados" },
+              { href: "/sextou_afiliados.pdf", label: "📄 Manual do Afiliado" },
               { href: "/dashboard/configuracoes", label: "Configurações" },
               { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
             ]} />
