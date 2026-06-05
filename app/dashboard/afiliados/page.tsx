@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { MobileMenu } from "@/components/layout/mobile-menu"
+import { CopyAffiliateLink } from "@/components/copy-affiliate-link"
 
 
 export default async function AfiliadosPage() {
@@ -75,14 +76,7 @@ export default async function AfiliadosPage() {
           {/* Card de Link e Saldo */}
           <div className="bg-white rounded-xl border shadow-sm p-6">
             <h2 className="font-semibold text-lg mb-4 text-gray-900">Seu Link de Afiliado</h2>
-            <div className="flex items-center gap-2 mb-6">
-              <input 
-                type="text" 
-                readOnly 
-                value={affiliateLink} 
-                className="w-full border rounded-lg px-3 py-2 text-sm bg-gray-50 text-gray-700"
-              />
-            </div>
+            <CopyAffiliateLink link={affiliateLink} />
             <p className="text-sm text-gray-600 mb-6">
               Compartilhe este link com outros empresários. Você receberá <strong>50% de comissão</strong> sobre os pagamentos de anúncios dos usuários indicados!
             </p>
