@@ -3,8 +3,10 @@ import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { AdminToggleButton } from "@/components/admin-toggle-button"
+import { DeleteUserButton } from "@/components/delete-user-button"
 import { LogoutButton } from "@/components/logout-button"
 import { Prisma } from "@prisma/client"
+import { isConfiguredAdminEmail } from "@/lib/admin"
 
 interface UsersPageProps {
   searchParams?: {
@@ -147,8 +149,14 @@ export default async function AdminUsersPage({ searchParams }: UsersPageProps) {
                       {user.businessName} • {user.city}/{user.state} • {user._count.ads} anúncio(s)
                     </p>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <AdminToggleButton userId={user.id} isAdmin={user.isAdmin} />
+                    <DeleteUserButton
+                      userId={user.id}
+                      userName={user.fullName}
+                      userEmail={user.email}
+                      isAdmin={Boolean(user.isAdmin) || isConfiguredAdminEmail(user.email)}
+                    />
                   </div>
                 </div>
               ))
