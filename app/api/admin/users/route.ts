@@ -5,6 +5,30 @@ import { requireAdminApi } from "@/lib/admin"
 
 export const runtime = 'nodejs'
 
+export async function GET(request: NextRequest) {
+  const adminCheck = await requireAdminApi()
+
+  if (!adminCheck.ok) {
+    return adminCheck.response
+  }
+
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+      },
+      orderBy: { fullName: "asc" },
+    })
+
+    return NextResponse.json(users)
+  } catch (error) {
+    console.error("GET users error:", error)
+    return NextResponse.json({ error: "Erro ao buscar usuarios" }, { status: 500 })
+  }
+}
+
 export async function POST(request: NextRequest) {
   const adminCheck = await requireAdminApi()
 
