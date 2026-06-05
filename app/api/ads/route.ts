@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { geocodeAddress } from "@/lib/geoapify"
 
 const optionalTrimmedString = z.string().trim().optional()
 
@@ -74,6 +75,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Busca as coordenadas da cidade informada
+    const coords = await geocodeAddress(data.city, data.state || "")
+
     const ad = await prisma.ad.create({
       data: {
         userId: user.id,
@@ -86,6 +90,8 @@ export async function POST(request: NextRequest) {
         promotionText: data.promotionText || null,
         city: data.city,
         state: data.state,
+        latitude: coords?.lat || null,
+        longitude: coords?.lon || null,
         deliveryType: data.deliveryType,
         externalLink: data.externalLink || null,
         whatsappContact: data.whatsappContact,

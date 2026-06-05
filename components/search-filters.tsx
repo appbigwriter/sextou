@@ -23,6 +23,9 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
   const [search, setSearch] = useState(searchParams.get("search") || "")
   const [category, setCategory] = useState(searchParams.get("category") || "")
   const [city, setCity] = useState(searchParams.get("city") || "")
+  const [lat, setLat] = useState(searchParams.get("lat") || "")
+  const [lng, setLng] = useState(searchParams.get("lng") || "")
+  const [isLocating, setIsLocating] = useState(false)
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,17 +33,56 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
     if (search) params.set("search", search)
     if (category) params.set("category", category)
     if (city) params.set("city", city)
+    if (lat) params.set("lat", lat)
+    if (lng) params.set("lng", lng)
     router.push(`/anuncios?${params.toString()}`)
+  }
+
+  const handleNearMe = () => {
+    if (!navigator.geolocation) {
+      alert("Seu navegador não suporta geolocalização.")
+      return
+    }
+
+    setIsLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const currentLat = position.coords.latitude.toString()
+        const currentLng = position.coords.longitude.toString()
+        setLat(currentLat)
+        setLng(currentLng)
+        
+        const params = new URLSearchParams(window.location.search)
+        params.set("lat", currentLat)
+        params.set("lng", currentLng)
+        
+        // Remove 'city' se estiver usando as coordenadas para evitar conflito
+        if (params.has("city")) {
+          params.delete("city")
+          setCity("")
+        }
+
+        router.push(`/anuncios?${params.toString()}`)
+        setIsLocating(false)
+      },
+      (error) => {
+        console.error(error)
+        alert("Não foi possível obter sua localização. Verifique as permissões do navegador.")
+        setIsLocating(false)
+      }
+    )
   }
 
   const clearFilters = () => {
     setSearch("")
     setCategory("")
     setCity("")
+    setLat("")
+    setLng("")
     router.push("/anuncios")
   }
 
-  const hasFilters = search || category || city
+  const hasFilters = search || category || city || lat || lng
 
   return (
     <form onSubmit={handleSearch} className="space-y-4">
@@ -54,6 +96,16 @@ export function SearchFilters({ categories }: SearchFiltersProps) {
         />
         <Button type="submit" className="bg-[#F97316] hover:bg-[#EA580C]">
           🔍 Buscar
+        </Button>
+        <Button 
+          type="button" 
+          variant="secondary" 
+          onClick={handleNearMe}
+          disabled={isLocating}
+          className="bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200"
+          title="Buscar anúncios próximos a mim"
+        >
+          {isLocating ? "⏳" : "📍"} Perto de mim
         </Button>
         {hasFilters && (
           <Button type="button" variant="outline" onClick={clearFilters}>
