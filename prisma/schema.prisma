@@ -52,16 +52,31 @@ model User {
 // TERRITÓRIOS DE AFILIADOS
 // ========================================
 
-model AffiliateTerritory {
+model MasterTerritory {
   id          String   @id @default(uuid())
-  affiliateId String   @map("affiliate_id")
   city        String
   state       String
+  isActive    Boolean  @default(true) @map("is_active")
   createdAt   DateTime @default(now()) @map("created_at")
 
-  affiliate   User     @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  affiliates  AffiliateTerritory[]
 
+  @@unique([city, state])
+  @@map("master_territories")
+}
+
+model AffiliateTerritory {
+  id            String   @id @default(uuid())
+  affiliateId   String   @map("affiliate_id")
+  territoryId   String   @map("territory_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  affiliate     User            @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  territory     MasterTerritory @relation(fields: [territoryId], references: [id], onDelete: Cascade)
+
+  @@unique([affiliateId, territoryId])
   @@index([affiliateId])
+  @@index([territoryId])
   @@map("affiliate_territories")
 }
 

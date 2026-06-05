@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
             email: true,
           },
         },
+        territory: true,
       },
       orderBy: { createdAt: "desc" },
     })
@@ -50,11 +51,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { affiliateId, city, state } = body
+    const { affiliateId, territoryId } = body
 
-    if (!affiliateId || !city || !state) {
+    if (!affiliateId || !territoryId) {
       return NextResponse.json(
-        { error: "Dados incompletos. Informe affiliateId, city e state." },
+        { error: "Dados incompletos. Informe affiliateId e territoryId." },
         { status: 400 }
       )
     }
@@ -72,14 +73,13 @@ export async function POST(request: NextRequest) {
     const existing = await prisma.affiliateTerritory.findFirst({
       where: {
         affiliateId,
-        city: city.trim(),
-        state: state.trim(),
+        territoryId,
       },
     })
 
     if (existing) {
       return NextResponse.json(
-        { error: "Este afiliado ja esta designado para esta cidade/estado." },
+        { error: "Este afiliado ja esta designado para este territorio." },
         { status: 400 }
       )
     }
@@ -87,8 +87,7 @@ export async function POST(request: NextRequest) {
     const territory = await prisma.affiliateTerritory.create({
       data: {
         affiliateId,
-        city: city.trim(),
-        state: state.trim(),
+        territoryId,
       },
       include: {
         affiliate: {
@@ -98,6 +97,7 @@ export async function POST(request: NextRequest) {
             email: true,
           },
         },
+        territory: true,
       },
     })
 
