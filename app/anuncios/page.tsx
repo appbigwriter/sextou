@@ -5,7 +5,7 @@ import { SearchFilters } from "@/components/search-filters"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 
 interface Props {
-  searchParams: { search?: string; category?: string; city?: string }
+  searchParams: { search?: string; category?: string; city?: string; lat?: string; lng?: string }
 }
 
 export const dynamic = "force-dynamic"
@@ -33,18 +33,63 @@ export default async function AnunciosPage({ searchParams }: Props) {
     where.city = { contains: searchParams.city }
   }
 
-  const ads = await prisma.ad.findMany({
-    where,
-    include: {
-      category: true,
-      images: {
-        orderBy: { order: "asc" },
-        take: 1,
+  let ads: any[] = []
+  let adDistances: Record<string, number> = {}
+
+  if (searchParams.lat && searchParams.lng) {
+    const userLat = parseFloat(searchParams.lat)
+    const userLng = parseFloat(searchParams.lng)
+
+    const adsWithCoords = await prisma.ad.findMany({
+      where: {
+        ...where,
+        latitude: { not: null },
+        longitude: { not: null },
       },
-    },
-    orderBy: { publishedAt: "desc" },
-    take: 50,
-  })
+      include: {
+        category: true,
+        images: {
+          orderBy: { order: "asc" },
+          take: 1,
+        },
+      },
+      take: 200,
+    })
+
+    const toRad = (value: number) => (value * Math.PI) / 180
+    const R = 6371 // Raio da Terra em km
+
+    adsWithCoords.forEach((ad) => {
+      const dLat = toRad(ad.latitude! - userLat)
+      const dLon = toRad(ad.longitude! - userLng)
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(userLat)) *
+          Math.cos(toRad(ad.latitude!)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2)
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+      const distance = R * c
+      adDistances[ad.id] = distance
+    })
+
+    ads = adsWithCoords
+      .sort((a, b) => adDistances[a.id] - adDistances[b.id])
+      .slice(0, 50)
+  } else {
+    ads = await prisma.ad.findMany({
+      where,
+      include: {
+        category: true,
+        images: {
+          orderBy: { order: "asc" },
+          take: 1,
+        },
+      },
+      orderBy: { publishedAt: "desc" },
+      take: 50,
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -135,9 +180,16 @@ export default async function AnunciosPage({ searchParams }: Props) {
 
                 <div className="p-6">
                   <div className="mb-2 flex items-center justify-between gap-3">
-                    <span className="rounded bg-[#F97316]/10 px-2 py-1 text-xs font-bold text-[#F97316]">
-                      {ad.category?.name || "Geral"}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="rounded bg-[#F97316]/10 px-2 py-1 text-xs font-bold text-[#F97316]">
+                        {ad.category?.name || "Geral"}
+                      </span>
+                      {adDistances[ad.id] !== undefined && (
+                        <span className="rounded bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800">
+                          📍 a {adDistances[ad.id] < 1 ? "< 1" : adDistances[ad.id].toFixed(1)} km
+                        </span>
+                      )}
+                    </div>
                     {ad.price && ad.price > 0 && (
                       <span className="text-2xl font-bold text-[#F97316]">${ad.price.toFixed(2)}</span>
                     )}
