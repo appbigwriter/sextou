@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { AdminToggleButton } from "@/components/admin-toggle-button"
+import { DeleteUserButton } from "@/components/delete-user-button"
 import { isConfiguredAdminEmail } from "@/lib/admin"
 
 export const dynamic = "force-dynamic"
@@ -128,10 +129,20 @@ export default async function AdminUsuariosPage() {
                       </span>
                     </td>
                     <td className="p-4">
-                      <AdminToggleButton userId={user.id} isAdmin={user.isAdmin} />
-                      {isConfiguredAdminEmail(user.email) && (
-                        <p className="mt-2 text-xs text-gray-500">Admin tambem liberado por ADMIN_EMAILS.</p>
-                      )}
+                      <div className="flex flex-col gap-2">
+                        <AdminToggleButton userId={user.id} isAdmin={user.isAdmin} />
+                        {isConfiguredAdminEmail(user.email) && (
+                          <p className="text-xs text-gray-500">Admin tambem liberado por ADMIN_EMAILS.</p>
+                        )}
+                        <div className="border-t pt-2">
+                          <DeleteUserButton
+                            userId={user.id}
+                            userName={user.fullName}
+                            userEmail={user.email}
+                            isAdmin={isAdmin}
+                          />
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 )
