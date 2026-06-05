@@ -43,8 +43,26 @@ model User {
 
   affiliate     User?    @relation("UserAffiliates", fields: [affiliateId], references: [id])
   affiliates    User[]   @relation("UserAffiliates")
+  territories   AffiliateTerritory[]
 
   @@map("users")
+}
+
+// ========================================
+// TERRITÓRIOS DE AFILIADOS
+// ========================================
+
+model AffiliateTerritory {
+  id          String   @id @default(uuid())
+  affiliateId String   @map("affiliate_id")
+  city        String
+  state       String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  affiliate   User     @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+
+  @@index([affiliateId])
+  @@map("affiliate_territories")
 }
 
 // ========================================
