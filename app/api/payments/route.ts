@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         data.paymentMethod === "ZELLE"
           ? {
               name: "SEXTOU.biz",
-              email: "pagamento@sextadoempreendedor.com",
+              email: "marco@facebrasil.com",
               amount: 30.0,
               instructions:
                 "Envie o pagamento via Zelle, informe o codigo e a data do pagamento no painel e aguarde a confirmacao do admin.",

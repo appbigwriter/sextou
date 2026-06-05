@@ -117,7 +117,7 @@ export function PaymentOptions({ adId, amount }: PaymentOptionsProps) {
         <div className="rounded-xl border bg-white p-5">
           <h3 className="text-lg font-semibold text-gray-900">Zelle</h3>
           <p className="mt-2 text-sm text-gray-600">
-            Envie o pagamento para <strong>pagamento@sextadoempreendedor.com</strong> e informe abaixo o codigo da
+            Envie o pagamento para <strong>marco@facebrasil.com</strong> e informe abaixo o codigo da
             transacao e a data do pagamento para o admin confirmar.
           </p>
           <input
