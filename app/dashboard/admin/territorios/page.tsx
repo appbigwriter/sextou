@@ -9,26 +9,32 @@ interface User {
   email: string
 }
 
+interface MasterTerritory {
+  id: string
+  city: string
+  state: string
+}
+
 interface Territory {
   id: string
   affiliateId: string
-  city: string
-  state: string
+  territoryId: string
   createdAt: string
   affiliate: User
+  territory: MasterTerritory
 }
 
 export default function TerritoriosAdminPage() {
   const [territories, setTerritories] = useState<Territory[]>([])
   const [users, setUsers] = useState<User[]>([])
+  const [masterTerritories, setMasterTerritories] = useState<MasterTerritory[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   
   const [formData, setFormData] = useState({
     affiliateId: "",
-    city: "",
-    state: "",
+    territoryId: "",
   })
 
   useEffect(() => {
@@ -37,16 +43,21 @@ export default function TerritoriosAdminPage() {
 
   const fetchData = async () => {
     try {
-      const [territoriesRes, usersRes] = await Promise.all([
+      const [territoriesRes, usersRes, masterRes] = await Promise.all([
         fetch("/api/admin/territories"),
         fetch("/api/admin/users"),
+        fetch("/api/admin/master-territories"),
       ])
 
-      if (territoriesRes.ok && usersRes.ok) {
+      if (territoriesRes.ok && usersRes.ok && masterRes.ok) {
         const territoriesData = await territoriesRes.json()
         const usersData = await usersRes.json()
+        const masterData = await masterRes.json()
+        
         setTerritories(territoriesData)
         setUsers(usersData)
+        // Apenas territórios ativos para o cadastro
+        setMasterTerritories(masterData.filter((t: any) => t.isActive))
       }
     } catch (error) {
       console.error("Failed to fetch data", error)
@@ -90,7 +101,7 @@ export default function TerritoriosAdminPage() {
       if (res.ok) {
         setTerritories([data, ...territories])
         setIsModalOpen(false)
-        setFormData({ affiliateId: "", city: "", state: "" })
+        setFormData({ affiliateId: "", territoryId: "" })
       } else {
         alert(data.error || "Erro ao salvar")
       }
@@ -148,10 +159,10 @@ export default function TerritoriosAdminPage() {
                       <div className="font-medium text-gray-900">{territory.affiliate.fullName}</div>
                       <div className="text-xs text-gray-500">{territory.affiliate.email}</div>
                     </td>
-                    <td className="px-6 py-4 font-medium text-gray-900">{territory.city}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">{territory.territory.city}</td>
                     <td className="px-6 py-4">
                       <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-semibold">
-                        {territory.state}
+                        {territory.territory.state}
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -199,28 +210,23 @@ export default function TerritoriosAdminPage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
-                <input
+                <label className="block text-sm font-medium text-gray-700 mb-1">Selecione a Cidade (Território)</label>
+                <select
                   required
-                  type="text"
-                  placeholder="Ex: Orlando"
-                  value={formData.city}
-                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                  value={formData.territoryId}
+                  onChange={(e) => setFormData({ ...formData, territoryId: e.target.value })}
                   className="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#F97316] focus:ring-[#F97316]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Estado (Sigla)</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="Ex: FL"
-                  maxLength={2}
-                  value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value.toUpperCase() })}
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#F97316] focus:ring-[#F97316] uppercase"
-                />
+                >
+                  <option value="">-- Escolha uma cidade pré-cadastrada --</option>
+                  {masterTerritories.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.city} - {t.state}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-2">
+                  Não achou a cidade? Adicione primeiro em "Cidades de Atuação".
+                </p>
               </div>
 
               <div className="mt-6 flex justify-end gap-3">

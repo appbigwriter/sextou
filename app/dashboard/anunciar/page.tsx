@@ -22,13 +22,13 @@ interface Category {
   slug: string
 }
 
-const states = [
-  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-  "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-  "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-  "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-  "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
-]
+interface MasterTerritory {
+  id: string
+  city: string
+  state: string
+}
+
+
 
 const initialFormData = {
   categoryId: "",
@@ -52,21 +52,25 @@ export default function CriarAnuncioPage() {
   const [loading, setLoading] = useState(false)
   const [categoriesLoading, setCategoriesLoading] = useState(true)
   const [categories, setCategories] = useState<Category[]>([])
+  const [territories, setTerritories] = useState<MasterTerritory[]>([])
   const [error, setError] = useState("")
   const [formData, setFormData] = useState(initialFormData)
 
   useEffect(() => {
-    const loadCategories = async () => {
+    const loadData = async () => {
       try {
-        const res = await fetch("/api/categories", { cache: "no-store" })
-        const data = await res.json()
+        const [catRes, terRes] = await Promise.all([
+          fetch("/api/categories", { cache: "no-store" }),
+          fetch("/api/territories", { cache: "no-store" })
+        ])
+        
+        const catData = await catRes.json()
+        const terData = await terRes.json()
 
-        if (!res.ok) {
-          throw new Error(data.error || "Erro ao carregar categorias")
-        }
+        if (!catRes.ok) throw new Error(catData.error || "Erro ao carregar categorias")
 
         setCategories(
-          data
+          catData
             .filter((category: { isActive?: boolean }) => category.isActive !== false)
             .map((category: Category) => ({
               id: category.id,
@@ -74,19 +78,23 @@ export default function CriarAnuncioPage() {
               slug: category.slug,
             }))
         )
+        
+        if (terRes.ok) {
+          setTerritories(terData)
+        }
 
-        if (Array.isArray(data) && data.length === 0) {
+        if (Array.isArray(catData) && catData.length === 0) {
           setError("Nenhuma categoria ativa disponivel. Ative ao menos uma categoria no painel admin.")
         }
       } catch (err) {
-        const message = err instanceof Error ? err.message : "Erro ao carregar categorias"
+        const message = err instanceof Error ? err.message : "Erro ao carregar dados"
         setError(message)
       } finally {
         setCategoriesLoading(false)
       }
     }
 
-    loadCategories()
+    loadData()
   }, [])
 
   const handleChange = (
@@ -115,8 +123,7 @@ export default function CriarAnuncioPage() {
 
     if (step === 3) {
       if (formData.whatsappContact.trim().length < 10) return "Informe um WhatsApp valido"
-      if (formData.city.trim().length < 2) return "Informe a cidade"
-      if (formData.state.trim().length < 2) return "Informe o estado"
+      if (!formData.city || !formData.state) return "Selecione a sua cidade na lista"
     }
 
     return ""
@@ -407,40 +414,34 @@ export default function CriarAnuncioPage() {
                       required
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label htmlFor="city" className="text-sm font-medium">
-                        Cidade
-                      </label>
-                      <Input
-                        id="city"
-                        name="city"
-                        placeholder="Miami"
-                        value={formData.city}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="state" className="text-sm font-medium">
-                        Estado
-                      </label>
-                      <select
-                        id="state"
-                        name="state"
-                        value={formData.state}
-                        onChange={handleChange}
-                        required
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      >
-                        <option value="">Selecione</option>
-                        {states.map((stateCode) => (
-                          <option key={stateCode} value={stateCode}>
-                            {stateCode}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                  <div className="space-y-2">
+                    <label htmlFor="territorySelect" className="text-sm font-medium">
+                      Sua Localização (Cidade - Estado)
+                    </label>
+                    <select
+                      id="territorySelect"
+                      required
+                      value={formData.city ? `${formData.city}|${formData.state}` : ""}
+                      onChange={(e) => {
+                        if (!e.target.value) {
+                          setFormData({ ...formData, city: "", state: "" })
+                          return
+                        }
+                        const [c, s] = e.target.value.split("|")
+                        setFormData({ ...formData, city: c, state: s })
+                      }}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    >
+                      <option value="">Selecione sua cidade...</option>
+                      {territories.map((t) => (
+                        <option key={t.id} value={`${t.city}|${t.state}`}>
+                          {t.city} - {t.state}
+                        </option>
+                      ))}
+                    </select>
+                    {territories.length === 0 && (
+                      <p className="text-xs text-orange-500 mt-1">Carregando cidades disponíveis...</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="deliveryType" className="text-sm font-medium">
