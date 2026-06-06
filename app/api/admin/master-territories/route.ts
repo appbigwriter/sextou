@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const territoryCountry = country?.trim() || "United States"
+    const territoryCountry = country?.trim() || ""
 
     const existing = await prisma.masterTerritory.findFirst({
       where: {
@@ -68,9 +68,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(territory)
   } catch (error) {
-    console.error("POST master-territories error:", error)
     return NextResponse.json(
-      { error: "Erro ao criar cidade" },
+      { error: error instanceof Error ? error.message : "Erro ao criar cidade" },
       { status: 500 }
     )
   }
