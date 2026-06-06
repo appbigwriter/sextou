@@ -131,15 +131,14 @@ export default function CidadesAdminPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Estado (Sigla)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Estado (Sigla ou Nome)</label>
                 <input
                   required
                   type="text"
-                  placeholder="Ex: FL"
-                  maxLength={2}
+                  placeholder="Ex: FL ou Florida"
                   value={formData.state}
-                  onChange={(e) => setFormData({ ...formData, state: e.target.value.toUpperCase() })}
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#F97316] focus:ring-[#F97316] uppercase"
+                  onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#F97316] focus:ring-[#F97316]"
                 />
               </div>
 
