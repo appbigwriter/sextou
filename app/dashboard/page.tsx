@@ -107,19 +107,19 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-xl p-6 border shadow-sm">
+          <div className="bg-white rounded-xl p-6 border shadow-sm text-center flex flex-col items-center justify-center">
             <div className="text-3xl font-bold text-[#F97316]">{stats.totalAds}</div>
             <div className="text-sm text-gray-600">Total Anúncios</div>
           </div>
-          <div className="bg-white rounded-xl p-6 border shadow-sm">
+          <div className="bg-white rounded-xl p-6 border shadow-sm text-center flex flex-col items-center justify-center">
             <div className="text-3xl font-bold text-green-600">{stats.publishedAds}</div>
             <div className="text-sm text-gray-600">Publicados</div>
           </div>
-          <div className="bg-white rounded-xl p-6 border shadow-sm">
+          <div className="bg-white rounded-xl p-6 border shadow-sm text-center flex flex-col items-center justify-center">
             <div className="text-3xl font-bold text-yellow-600">{stats.pendingAds}</div>
             <div className="text-sm text-gray-600">Pendentes</div>
           </div>
-          <div className="bg-white rounded-xl p-6 border shadow-sm">
+          <div className="bg-white rounded-xl p-6 border shadow-sm text-center flex flex-col items-center justify-center">
             <div className="text-3xl font-bold text-blue-600">{stats.totalViews}</div>
             <div className="text-sm text-gray-600">Total Visualizações</div>
           </div>
@@ -129,7 +129,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         <div className="grid md:grid-cols-3 gap-4 mb-8">
           <Link
             href="/dashboard/anunciar"
-            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
           >
             <div className="text-4xl mb-3">📝</div>
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Criar Anúncio</h3>
@@ -137,7 +137,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </Link>
           <Link
             href="/anuncios"
-            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
           >
             <div className="text-4xl mb-3">👁️</div>
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Ver Vitrine</h3>
@@ -145,7 +145,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </Link>
           <Link
             href="/dashboard/treinamento"
-            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group relative overflow-hidden"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group relative overflow-hidden flex flex-col items-center text-center"
           >
             <div className="absolute top-0 right-0 p-2 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-xl">⭐</div>
             <div className="text-4xl mb-3">🎓</div>
@@ -154,7 +154,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </Link>
           <Link
             href="/dashboard/afiliados"
-            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
           >
             <div className="text-4xl mb-3">🤝</div>
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Meus Afiliados</h3>
@@ -162,7 +162,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </Link>
           <Link
             href="/dashboard/configuracoes"
-            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
           >
             <div className="text-4xl mb-3">⚙️</div>
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Configurações</h3>
@@ -171,7 +171,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           {userIsAdmin && (
             <Link
               href="/dashboard/admin/usuarios"
-              className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+              className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
             >
               <div className="text-4xl mb-3">👥</div>
               <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Gerenciar Usuarios</h3>
@@ -181,7 +181,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           {userIsAdmin && (
             <Link
               href="/dashboard/admin/territorios"
-              className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+              className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
             >
               <div className="text-4xl mb-3">🗺️</div>
               <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Territórios</h3>
@@ -191,7 +191,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           {userIsAdmin && (
             <Link
               href="/dashboard/admin/cidades"
-              className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
+              className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
             >
               <div className="text-4xl mb-3">📍</div>
               <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Cidades</h3>
@@ -201,12 +201,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           {userIsAdmin && (
             <Link
               href="/admin/anuncios"
-              className="bg-white rounded-xl p-6 border-2 border-yellow-400 shadow-sm hover:border-yellow-500 transition group"
+              className="bg-white rounded-xl p-6 border-2 border-yellow-400 shadow-sm hover:border-yellow-500 transition group flex flex-col items-center text-center"
             >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="text-4xl">⚠️</div>
-                <h3 className="font-semibold text-gray-900">Anuncios Pendentes</h3>
-              </div>
+              <div className="text-4xl mb-3">⚠️</div>
+              <h3 className="font-semibold text-gray-900">Anuncios Pendentes</h3>
               <p className="text-sm text-gray-600">Revisar anuncios aguardando aprovacao</p>
             </Link>
           )}

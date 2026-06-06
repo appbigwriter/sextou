@@ -108,7 +108,7 @@ export default function SextouTrainningPage() {
                 <h3 className="text-xl font-bold font-heading text-gray-900 mb-3 leading-tight">
                   {tip.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed text-sm flex-1">
+                <p className="text-gray-600 leading-relaxed text-sm flex-1 text-justify">
                   {tip.content.split('*').map((part, i) => i % 2 === 1 ? <em key={i} className="font-semibold text-gray-800">{part}</em> : part)}
                 </p>
               </div>
