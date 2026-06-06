@@ -144,6 +144,15 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <p className="text-sm text-gray-600">Veja todos os anúncios</p>
           </Link>
           <Link
+            href="/dashboard/treinamento"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 p-2 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-xl">⭐</div>
+            <div className="text-4xl mb-3">🎓</div>
+            <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">SextouTrainning</h3>
+            <p className="text-sm text-gray-600">Dicas para fazer um anuncio matador</p>
+          </Link>
+          <Link
             href="/dashboard/afiliados"
             className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group"
           >

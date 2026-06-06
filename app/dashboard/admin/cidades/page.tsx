@@ -6,6 +6,7 @@ interface MasterTerritory {
   id: string
   city: string
   state: string
+  country: string
   isActive: boolean
   createdAt: string
 }
@@ -18,6 +19,7 @@ export default function CidadesAdminPage() {
   const [formData, setFormData] = useState({
     city: "",
     state: "",
+    country: "United States",
   })
 
   useEffect(() => {
@@ -92,7 +94,7 @@ export default function CidadesAdminPage() {
         // Ordena a nova lista localmente para manter UX
         const newList = [data, ...territories].sort((a, b) => a.state.localeCompare(b.state) || a.city.localeCompare(b.city))
         setTerritories(newList)
-        setFormData({ city: "", state: "" })
+        setFormData({ city: "", state: "", country: "United States" })
       } else {
         alert(data.error || "Erro ao salvar")
       }
@@ -141,6 +143,18 @@ export default function CidadesAdminPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">País</label>
+                <input
+                  required
+                  type="text"
+                  placeholder="Ex: United States"
+                  value={formData.country}
+                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:border-[#F97316] focus:ring-[#F97316]"
+                />
+              </div>
+
               <button
                 type="submit"
                 disabled={isSaving}
@@ -159,6 +173,7 @@ export default function CidadesAdminPage() {
               <table className="w-full text-left text-sm text-gray-600">
                 <thead className="bg-gray-50 border-b text-gray-900">
                   <tr>
+                    <th className="px-6 py-4 font-semibold">País</th>
                     <th className="px-6 py-4 font-semibold">Estado</th>
                     <th className="px-6 py-4 font-semibold">Cidade</th>
                     <th className="px-6 py-4 font-semibold">Status</th>
@@ -181,6 +196,7 @@ export default function CidadesAdminPage() {
                   ) : (
                     territories.map((territory) => (
                       <tr key={territory.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 font-medium text-gray-900">{territory.country}</td>
                         <td className="px-6 py-4 font-medium text-gray-900">{territory.state}</td>
                         <td className="px-6 py-4 font-medium text-gray-900">{territory.city}</td>
                         <td className="px-6 py-4">

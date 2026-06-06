@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { city, state } = body
+    const { city, state, country } = body
 
     if (!city || !state) {
       return NextResponse.json(
@@ -41,10 +41,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const territoryCountry = country?.trim() || "United States"
+
     const existing = await prisma.masterTerritory.findFirst({
       where: {
         city: city.trim(),
         state: state.trim(),
+        country: territoryCountry,
       },
     })
 
@@ -59,6 +62,7 @@ export async function POST(request: NextRequest) {
       data: {
         city: city.trim(),
         state: state.trim(),
+        country: territoryCountry,
       },
     })
 
