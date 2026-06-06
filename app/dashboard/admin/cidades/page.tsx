@@ -19,7 +19,7 @@ export default function CidadesAdminPage() {
   const [formData, setFormData] = useState({
     city: "",
     state: "",
-    country: "United States",
+    country: "",
   })
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function CidadesAdminPage() {
         // Ordena a nova lista localmente para manter UX
         const newList = [data, ...territories].sort((a, b) => a.state.localeCompare(b.state) || a.city.localeCompare(b.city))
         setTerritories(newList)
-        setFormData({ city: "", state: "", country: "United States" })
+        setFormData({ city: "", state: "", country: "" })
       } else {
         alert(data.error || "Erro ao salvar")
       }
