@@ -104,7 +104,7 @@ export default function SextouTrainningPage() {
               </div>
 
               {/* Card Body */}
-              <div className="p-6 flex-1 flex flex-col">
+              <div className="p-6 flex-1 flex flex-col items-center text-center">
                 <h3 className="text-xl font-bold font-heading text-gray-900 mb-3 leading-tight">
                   {tip.title}
                 </h3>
