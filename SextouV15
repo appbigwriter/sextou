@@ -1,0 +1,20 @@
+# Conclusão da V1.5
+
+A versão 1.5 implementou a troca do banco de dados para a infraestrutura do Supabase sem perder nenhum registro, e a criação da plataforma educacional SextouTrainning.
+
+## O que mudou:
+
+### 1. Migração Perfeita de Banco de Dados
+Os usuários e tabelas que estavam no banco local do Easypanel foram 100% transferidos para o Supabase. Optamos por manter o "NextAuth" (Login por Senha/E-mail atual) em vez de refazer toda a infraestrutura de login. Isso poupou dores de cabeça e manteve a experiência do usuário intocada. 
+
+### 2. Campo "País" nas Cidades
+Foi adicionado o atributo "País" na tabela `MasterTerritory`. 
+- **Onde ver:** Acesse [Admin > Cidades](/dashboard/admin/cidades). Lá, agora você verá um campo adicional de País ao cadastrar uma nova cidade (que vem preenchido por padrão com `United States`).
+
+### 3. SextouTrainning (Painel de Dicas)
+Adicionamos um novo card educativo no Dashboard.
+- **Onde ver:** Na página inicial do `/dashboard`, sob o nome `SextouTrainning`.
+- **Experiência:** A tela foi construída em um formato moderno. As 10 dicas fornecidas se encontram em formato de "cards flutuantes" interativos. Cada card usa ícones grandes na parte de cima, reservando esse espaço para manter a elegância (como nas cartas de baralho) e garantir que o usuário leia o título com atenção. Ao final das dicas, inserimos um botão para levar o anunciante direto para a criação do anúncio.
+
+> [!TIP]
+> Todo o seu painel de controle continua igualzinho em termos de código, e o Supabase está agora no comando das querys do Prisma. O último passo é dar um **git commit e push**, e você só precisa mandar um deploy no Easypanel.
