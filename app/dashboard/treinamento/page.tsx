@@ -5,61 +5,71 @@ const tips = [
     number: "1",
     title: "Seja o rosto do seu negócio",
     content: "Câmera no celular, você falando direto. Pequeno empresário que aparece converte mais do que logo bonito. A comunidade brasileira compra de *quem*, não de *o quê*. 30 segundos olhando na câmera e dizendo o que você faz vale mais que qualquer arte no Canva.",
-    emoji: "📱"
+    emoji: "📱",
+    image: "/images/austin-distel-wD1LRb9OeEo-unsplash.jpg"
   },
   {
     number: "2",
     title: "Diga o problema antes de dizer o serviço",
     content: "Não comece com \"Sou eletricista com 10 anos de experiência.\" Comece com \"Sua conta de luz veio absurda? Pode ser fiação antiga.\" Quem tem o problema para e lê. Quem não tem, não é seu cliente de qualquer forma.",
-    emoji: "💡"
+    emoji: "💡",
+    image: "/images/bruce-mars-8YG31Xn4dSw-unsplash.jpg"
   },
   {
     number: "3",
     title: "Uma oferta, um botão, uma ação",
     content: "O maior erro do pequeno empresário: colocar telefone, e-mail, site, Instagram e endereço no mesmo anúncio. Escolha um único caminho — geralmente WhatsApp — e coloque só ele. Quanto mais opções, menos cliques.",
-    emoji: "🎯"
+    emoji: "🎯",
+    image: "/images/austin-distel-TluMvvrZ57g-unsplash.jpg"
   },
   {
     number: "4",
     title: "Fale o preço ou fale o resultado — nunca fique no meio",
     content: "\"Preços a partir de X\" não converte. Ou você ancora o preço (\"a partir de US$ 80\") ou ancora o resultado (\"3 clientes novos por semana sem gastar com Google Ads\"). O meio-termo gera curiosidade zero e compromisso zero.",
-    emoji: "💰"
+    emoji: "💰",
+    image: "/images/bruce-mars-FWVMhUa_wbY-unsplash.jpg"
   },
   {
     number: "5",
     title: "Renove o anúncio toda semana — mesmo que seja só a foto",
     content: "O algoritmo e a comunidade cansam rápido. Não precisa reescrever tudo: troca a imagem, muda a primeira frase, atualiza com algo da semana (\"essa semana com 20% off\"). Anúncio parado é anúncio invisível.",
-    emoji: "🔄"
+    emoji: "🔄",
+    image: "/images/disruptivo-G9nuywoBMcc-unsplash.jpg"
   },
   {
     number: "6",
     title: "Preço é o que custa. Valor é o que resolve.",
     content: "Nunca entre em guerra de preço com concorrente mais barato — você sempre perde. Em vez de \"cobro menos\", diga \"resolvo mais rápido, sem dor de cabeça, com garantia.\" O cliente brasileiro nos EUA já aprendeu que barato sai caro. Mostre o que ele não vai ter que lidar se escolher você. O preço fecha o contrato. O valor abre a conversa.",
-    emoji: "💎"
+    emoji: "💎",
+    image: "/images/hunters-race-MYbhN8KaaEc-unsplash.jpg"
   },
   {
     number: "7",
     title: "Quanto mais perto, mais fácil de comprar.",
     content: "\"Atendo toda a Flórida\" não diz nada. \"Atendo Orlando, região de Kissimmee e arredores — chego até você\" fecha negócio. Proximidade geográfica cria confiança instantânea na comunidade imigrante — as pessoas querem saber que você está do lado delas, literalmente. Coloque a cidade, o bairro, a referência. Específico converte. Genérico confunde.",
-    emoji: "📍"
+    emoji: "📍",
+    image: "/images/microsoft-365-TLiWhlDEJwA-unsplash.jpg"
   },
   {
     number: "8",
     title: "Pergunte antes de oferecer.",
     content: "A abordagem proativa que mais converte não começa com \"te ofereço\" — começa com \"você já teve esse problema?\" Uma pergunta simples no anúncio ou na abordagem direta ativa o cérebro do cliente e faz ele se identificar antes de você gastar uma palavra vendendo. \"Você paga imposto aqui nos EUA e não sabe se está pagando certo?\" — o contador que abre assim não precisa se apresentar. O cliente já chegou com a mão levantada.",
-    emoji: "❓"
+    emoji: "❓",
+    image: "/images/microsoft-365-oUbzU87d1Gc-unsplash.jpg"
   },
   {
     number: "9",
     title: "Mostre o depois, não o durante.",
     content: "Ninguém quer ver a obra — todo mundo quer ver a casa pronta. Ninguém quer ver a consulta — quer ver a pessoa bem. Troque fotos de processo por fotos de resultado. Antes e depois. Depoimento real de cliente. Print de mensagem de agradecimento. A prova do resultado é o anúncio mais barato e mais poderoso que existe — e custa zero.",
-    emoji: "✨"
+    emoji: "✨",
+    image: "/images/the-jopwell-collection-4WTb4tR45JQ-unsplash.jpg"
   },
   {
     number: "10",
     title: "Volte. De novo. E de novo.",
     content: "A venda raramente acontece no primeiro contato — acontece no quinto. A maioria dos pequenos empresários desiste no segundo. Ter um anúncio ativo no Sextou.biz significa que você está presente toda semana, toda vez que alguém da comunidade procura o que você oferece. Consistência não é persistência chata — é autoridade sendo construída em silêncio. Quem some, perde. Quem fica, vende.",
-    emoji: "🚀"
+    emoji: "🚀",
+    image: "/images/thisisengineering-TXxiFuQLBKQ-unsplash.jpg"
   }
 ]
 
@@ -93,12 +103,25 @@ export default function SextouTrainningPage() {
               key={tip.number} 
               className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden flex flex-col h-full"
             >
-              {/* Card Header area - simulated space for image */}
-              <div className="h-40 bg-gradient-to-br from-gray-50 to-orange-50/50 flex items-center justify-center relative border-b border-gray-100">
-                <span className="text-6xl filter drop-shadow-sm transition-transform duration-300 group-hover:scale-110">
-                  {tip.emoji}
-                </span>
-                <div className="absolute top-4 left-4 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center font-heading font-bold text-lg text-[#F97316] shadow-sm border border-white/50">
+              {/* Card Header area - agora com imagem de fundo ilustrativa */}
+              <div className="h-48 bg-slate-100 flex items-center justify-center relative border-b border-gray-100 overflow-hidden group-hover:h-52 transition-all duration-300">
+                {/* Imagem de fundo */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" 
+                  style={{ backgroundImage: `url('${tip.image}')` }}
+                />
+                {/* Overlay escuro para dar contraste ao emoji/numero */}
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
+                
+                {/* Emoji centralizado com efeito glassmorphism */}
+                <div className="relative z-10 w-20 h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-lg border border-white/30 transform transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                  <span className="text-4xl filter drop-shadow-md">
+                    {tip.emoji}
+                  </span>
+                </div>
+                
+                {/* Badge com o numero da dica */}
+                <div className="absolute top-4 left-4 z-10 w-10 h-10 bg-[#F97316] rounded-full flex items-center justify-center font-heading font-bold text-lg text-white shadow-md border-2 border-white/20">
                   {tip.number}
                 </div>
               </div>
