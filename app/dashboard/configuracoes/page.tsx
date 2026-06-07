@@ -6,11 +6,13 @@ import { signOut } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { PhoneInput } from "@/components/phone-input"
 
 export default function ConfiguracoesPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState({ type: "", text: "" })
+  const [whatsapp, setWhatsapp] = useState("")
 
   const handleLogout = async () => {
     await signOut({ redirect: true, callbackUrl: "/" })
@@ -23,7 +25,7 @@ export default function ConfiguracoesPage() {
 
     const formData = new FormData(e.currentTarget)
     const data = {
-      whatsapp: formData.get("whatsapp"),
+      whatsapp: whatsapp || formData.get("whatsapp"),
       instagram: formData.get("instagram"),
       website: formData.get("website"),
       city: formData.get("city"),
@@ -80,10 +82,17 @@ export default function ConfiguracoesPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">WhatsApp</label>
-                  <Input name="whatsapp" placeholder="+1 (555) 123-4567" />
+                  <label className="text-sm font-medium">
+                    WhatsApp
+                    <span className="ml-2 text-xs font-normal text-gray-500">(inclua o código do país)</span>
+                  </label>
+                  <PhoneInput
+                    name="whatsapp"
+                    value={whatsapp}
+                    onChange={setWhatsapp}
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Instagram</label>

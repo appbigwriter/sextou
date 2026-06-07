@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { ImageUpload } from "@/components/image-upload"
+import { PhoneInput } from "@/components/phone-input"
 
 interface Category {
   id: string
@@ -507,14 +508,13 @@ export default function CriarAnuncioPage() {
                   <div className="space-y-2">
                     <label htmlFor="whatsappContact" className="text-sm font-medium">
                       WhatsApp para Contato
+                      <span className="ml-2 text-xs font-normal text-gray-500">(inclua o código do país)</span>
                     </label>
-                    <Input
+                    <PhoneInput
                       id="whatsappContact"
                       name="whatsappContact"
-                      type="tel"
-                      placeholder="+1 (555) 123-4567"
                       value={formData.whatsappContact}
-                      onChange={handleChange}
+                      onChange={(val) => setFormData({ ...formData, whatsappContact: val })}
                       required
                     />
                   </div>

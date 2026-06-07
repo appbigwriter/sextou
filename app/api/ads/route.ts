@@ -19,7 +19,7 @@ const createAdSchema = z.object({
   state: z.string().trim().min(2, "Estado e obrigatorio"),
   deliveryType: z.enum(["LOCAL", "ONLINE", "BOTH"]),
   externalLink: z.string().trim().url("Link externo invalido").optional().or(z.literal("")),
-  whatsappContact: z.string().trim().min(10, "WhatsApp e obrigatorio"),
+  whatsappContact: z.string().trim().min(8, "Informe um WhatsApp valido com codigo do pais (ex: +1 5551234567)"),
   images: z.array(z.string().url()).optional(),
   imageOrientation: z.enum(["VERTICAL", "HORIZONTAL"]).default("VERTICAL"),
 })

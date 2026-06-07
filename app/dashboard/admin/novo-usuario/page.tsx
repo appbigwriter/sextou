@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { LogoutButton } from "@/components/logout-button"
+import { PhoneInput } from "@/components/phone-input"
 
 export default function NovoUsuarioPage() {
   const router = useRouter()
@@ -132,12 +133,11 @@ export default function NovoUsuarioPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 WhatsApp
+                <span className="ml-2 text-xs font-normal text-gray-500">(inclua o código do país)</span>
               </label>
-              <input
-                type="text"
+              <PhoneInput
                 value={form.whatsapp}
-                onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg text-sm"
+                onChange={(val) => setForm({ ...form, whatsapp: val })}
               />
             </div>
 

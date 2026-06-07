@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PhoneInput } from "@/components/phone-input"
 import {
   Card,
   CardContent,
@@ -211,15 +212,14 @@ export default function CadastroPage() {
 
             <div className="space-y-2">
               <label htmlFor="whatsapp" className="text-sm font-medium">
-                WhatsApp
+                WhatsApp <span className="text-[#F97316]">*</span>
+                <span className="ml-2 text-xs font-normal text-gray-500">(inclua o código do país)</span>
               </label>
-              <Input
+              <PhoneInput
                 id="whatsapp"
                 name="whatsapp"
-                type="tel"
-                placeholder="+1 (555) 123-4567"
                 value={formData.whatsapp}
-                onChange={handleChange}
+                onChange={(val) => setFormData({ ...formData, whatsapp: val })}
                 required
               />
             </div>

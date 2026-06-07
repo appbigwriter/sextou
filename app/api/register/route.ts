@@ -11,7 +11,7 @@ const registerSchema = z.object({
   password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
   fullName: z.string().trim().min(2, "Nome completo e obrigatorio"),
   businessName: z.string().trim().min(2, "Nome da empresa e obrigatorio"),
-  whatsapp: z.string().trim().min(10, "WhatsApp e obrigatorio"),
+  whatsapp: z.string().trim().min(8, "Informe um WhatsApp valido com codigo do pais (ex: +1 5551234567)"),
   city: z.string().trim().min(2, "Cidade e obrigatoria"),
   state: z.string().trim().min(2, "Estado e obrigatorio"),
   instagram: optionalTrimmedString,
