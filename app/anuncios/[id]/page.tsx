@@ -55,85 +55,172 @@ export default async function AdDetailPage({ params }: Props) {
 
       <div className="container mx-auto px-4 py-12">
         <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
-          <div className="grid gap-8 md:grid-cols-2">
-            {ad.images.length > 0 ? (
-              <div className="bg-slate-100">
-                <img src={ad.images[0].imageUrl} alt={ad.title} className="h-96 w-full object-cover md:h-full" />
-              </div>
-            ) : (
-              <div className="flex h-96 items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 md:h-full">
-                <span className="text-9xl">🏪</span>
-              </div>
-            )}
 
-            <div className="p-8">
-              {ad.isFeatured && (
-                <div className="mb-4 inline-block rounded-lg bg-gradient-to-r from-[#F97316] to-[#EA580C] px-4 py-2 font-bold text-white">
-                  Anuncio em destaque
+          {ad.imageOrientation === "HORIZONTAL" ? (
+            /* ── Layout Horizontal (16:9): imagem no topo, texto abaixo ── */
+            <div className="flex flex-col">
+              {ad.images.length > 0 ? (
+                <div className="w-full overflow-hidden bg-slate-100" style={{ aspectRatio: "16/9" }}>
+                  <img
+                    src={ad.images[0].imageUrl}
+                    alt={ad.title}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
-              )}
-
-              {ad.category && (
-                <div className="mb-4 inline-block rounded bg-[#F97316]/10 px-3 py-1 text-sm font-bold text-[#F97316]">
-                  {ad.category.name}
-                </div>
-              )}
-
-              <h1 className="mb-4 text-4xl font-extrabold text-gray-900">{ad.title}</h1>
-
-              <div className="mb-4 text-lg font-medium text-gray-600">{ad.user.businessName}</div>
-
-              <div className="mb-6 text-lg text-gray-600">
-                {ad.city}, {ad.state || "USA"}
-              </div>
-
-              {ad.price && ad.price > 0 && (
-                <div className="mb-6">
-                  <span className="text-sm text-gray-600">Preco</span>
-                  <div className="text-5xl font-bold text-[#F97316]">${ad.price.toFixed(2)}</div>
-                  {ad.promotionText && <div className="mt-2 font-semibold text-green-600">{ad.promotionText}</div>}
-                </div>
-              )}
-
-              <div className="mb-8">
-                <h2 className="mb-3 text-2xl font-bold text-gray-900">Sobre o servico</h2>
-                <p className="whitespace-pre-wrap text-lg leading-relaxed text-gray-700">{ad.fullDescription}</p>
-              </div>
-
-              <div className="space-y-4">
-                <a
-                  href={`https://wa.me/${whatsappNumber}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full rounded-lg bg-green-500 py-4 text-center text-lg font-bold text-white transition hover:bg-green-600"
+              ) : (
+                <div
+                  className="flex w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200"
+                  style={{ aspectRatio: "16/9" }}
                 >
-                  Falar no WhatsApp
-                </a>
+                  <span className="text-9xl">🏪</span>
+                </div>
+              )}
 
-                {ad.externalLink && (
-                  <a
-                    href={ad.externalLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full rounded-lg bg-[#F97316] py-4 text-center text-lg font-bold text-white transition hover:bg-[#EA580C]"
-                  >
-                    Visitar Site
-                  </a>
+              <div className="p-8 md:p-12">
+                {ad.isFeatured && (
+                  <div className="mb-4 inline-block rounded-lg bg-gradient-to-r from-[#F97316] to-[#EA580C] px-4 py-2 font-bold text-white">
+                    Anuncio em destaque
+                  </div>
+                )}
+                {ad.category && (
+                  <div className="mb-4 inline-block rounded bg-[#F97316]/10 px-3 py-1 text-sm font-bold text-[#F97316]">
+                    {ad.category.name}
+                  </div>
+                )}
+                <h1 className="mb-4 text-4xl font-extrabold text-gray-900">{ad.title}</h1>
+                <div className="mb-2 text-lg font-medium text-gray-600">{ad.user.businessName}</div>
+                <div className="mb-6 text-lg text-gray-600">{ad.city}, {ad.state || "USA"}</div>
+
+                {ad.price && ad.price > 0 && (
+                  <div className="mb-6">
+                    <span className="text-sm text-gray-600">Preco</span>
+                    <div className="text-5xl font-bold text-[#F97316]">${ad.price.toFixed(2)}</div>
+                    {ad.promotionText && <div className="mt-2 font-semibold text-green-600">{ad.promotionText}</div>}
+                  </div>
                 )}
 
-                {ad.user.instagram && (
+                <div className="mb-8 max-w-3xl">
+                  <h2 className="mb-3 text-2xl font-bold text-gray-900">Sobre o servico</h2>
+                  <p className="whitespace-pre-wrap text-lg leading-relaxed text-gray-700">{ad.fullDescription}</p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4">
                   <a
-                    href={`https://instagram.com/${ad.user.instagram.replace("@", "")}`}
+                    href={`https://wa.me/${whatsappNumber}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full rounded-lg bg-gradient-to-r from-pink-500 to-orange-500 py-4 text-center text-lg font-bold text-white transition hover:opacity-90"
+                    className="flex-1 rounded-lg bg-green-500 py-4 text-center text-lg font-bold text-white transition hover:bg-green-600"
                   >
-                    Instagram
+                    Falar no WhatsApp
                   </a>
-                )}
+                  {ad.externalLink && (
+                    <a
+                      href={ad.externalLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 rounded-lg bg-[#F97316] py-4 text-center text-lg font-bold text-white transition hover:bg-[#EA580C]"
+                    >
+                      Visitar Site
+                    </a>
+                  )}
+                  {ad.user.instagram && (
+                    <a
+                      href={`https://instagram.com/${ad.user.instagram.replace("@", "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 rounded-lg bg-gradient-to-r from-pink-500 to-orange-500 py-4 text-center text-lg font-bold text-white transition hover:opacity-90"
+                    >
+                      Instagram
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            /* ── Layout Vertical (9:16 / 1:1): imagem à esquerda, texto à direita ── */
+            <div className="flex flex-col md:flex-row">
+              {ad.images.length > 0 ? (
+                <div
+                  className="overflow-hidden bg-slate-100 flex-shrink-0 w-full md:w-auto"
+                  style={{ width: undefined }}
+                >
+                  <img
+                    src={ad.images[0].imageUrl}
+                    alt={ad.title}
+                    className="w-full md:w-72 lg:w-80 object-cover"
+                    style={{ aspectRatio: "9/16", maxHeight: "600px" }}
+                  />
+                </div>
+              ) : (
+                <div
+                  className="flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 flex-shrink-0 w-full md:w-72 lg:w-80"
+                  style={{ aspectRatio: "9/16", maxHeight: "600px" }}
+                >
+                  <span className="text-9xl">🏪</span>
+                </div>
+              )}
+
+              <div className="p-8 flex flex-col flex-1">
+                {ad.isFeatured && (
+                  <div className="mb-4 inline-block rounded-lg bg-gradient-to-r from-[#F97316] to-[#EA580C] px-4 py-2 font-bold text-white">
+                    Anuncio em destaque
+                  </div>
+                )}
+                {ad.category && (
+                  <div className="mb-4 inline-block rounded bg-[#F97316]/10 px-3 py-1 text-sm font-bold text-[#F97316]">
+                    {ad.category.name}
+                  </div>
+                )}
+                <h1 className="mb-4 text-4xl font-extrabold text-gray-900">{ad.title}</h1>
+                <div className="mb-4 text-lg font-medium text-gray-600">{ad.user.businessName}</div>
+                <div className="mb-6 text-lg text-gray-600">{ad.city}, {ad.state || "USA"}</div>
+
+                {ad.price && ad.price > 0 && (
+                  <div className="mb-6">
+                    <span className="text-sm text-gray-600">Preco</span>
+                    <div className="text-5xl font-bold text-[#F97316]">${ad.price.toFixed(2)}</div>
+                    {ad.promotionText && <div className="mt-2 font-semibold text-green-600">{ad.promotionText}</div>}
+                  </div>
+                )}
+
+                <div className="mb-8 flex-1">
+                  <h2 className="mb-3 text-2xl font-bold text-gray-900">Sobre o servico</h2>
+                  <p className="whitespace-pre-wrap text-lg leading-relaxed text-gray-700">{ad.fullDescription}</p>
+                </div>
+
+                <div className="space-y-4">
+                  <a
+                    href={`https://wa.me/${whatsappNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full rounded-lg bg-green-500 py-4 text-center text-lg font-bold text-white transition hover:bg-green-600"
+                  >
+                    Falar no WhatsApp
+                  </a>
+                  {ad.externalLink && (
+                    <a
+                      href={ad.externalLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full rounded-lg bg-[#F97316] py-4 text-center text-lg font-bold text-white transition hover:bg-[#EA580C]"
+                    >
+                      Visitar Site
+                    </a>
+                  )}
+                  {ad.user.instagram && (
+                    <a
+                      href={`https://instagram.com/${ad.user.instagram.replace("@", "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full rounded-lg bg-gradient-to-r from-pink-500 to-orange-500 py-4 text-center text-lg font-bold text-white transition hover:opacity-90"
+                    >
+                      Instagram
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {ad.images.length > 1 && (
             <div className="border-t bg-white p-8">

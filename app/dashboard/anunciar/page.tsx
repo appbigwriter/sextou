@@ -44,6 +44,7 @@ const initialFormData = {
   externalLink: "",
   whatsappContact: "",
   images: [] as string[],
+  imageOrientation: "VERTICAL" as "VERTICAL" | "HORIZONTAL",
 }
 
 export default function CriarAnuncioPage() {
@@ -319,6 +320,98 @@ export default function CriarAnuncioPage() {
                     onChange={(images) => setFormData({ ...formData, images })}
                     maxImages={5}
                   />
+
+                  {/* Seletor de orientação */}
+                  <div className="space-y-3">
+                    <label className="text-sm font-medium block">
+                      Formato do Anúncio
+                    </label>
+                    <p className="text-xs text-gray-500">
+                      Escolha o formato com base na sua imagem principal
+                    </p>
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Vertical */}
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, imageOrientation: "VERTICAL" })}
+                        className={`relative border-2 rounded-xl p-4 flex flex-col items-center gap-3 transition-all ${
+                          formData.imageOrientation === "VERTICAL"
+                            ? "border-[#F97316] bg-orange-50 shadow-md"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        {/* Preview 9:16 */}
+                        <div className="flex gap-2 items-start w-full">
+                          <div
+                            style={{ aspectRatio: "9/16", width: "36px" }}
+                            className={`rounded-md flex-shrink-0 ${
+                              formData.imageOrientation === "VERTICAL"
+                                ? "bg-[#F97316]"
+                                : "bg-gray-300"
+                            }`}
+                          />
+                          <div className="flex flex-col gap-1 flex-1 pt-1">
+                            <div className={`h-2 rounded-full ${ formData.imageOrientation === "VERTICAL" ? "bg-[#F97316]/60" : "bg-gray-200" }`} />
+                            <div className={`h-1.5 rounded-full w-3/4 ${ formData.imageOrientation === "VERTICAL" ? "bg-[#F97316]/40" : "bg-gray-200" }`} />
+                            <div className={`h-1.5 rounded-full w-1/2 ${ formData.imageOrientation === "VERTICAL" ? "bg-[#F97316]/40" : "bg-gray-200" }`} />
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <p className={`text-sm font-semibold ${ formData.imageOrientation === "VERTICAL" ? "text-[#F97316]" : "text-gray-700" }`}>
+                            Vertical
+                          </p>
+                          <p className="text-xs text-gray-500">9:16 · Stories/Reels</p>
+                        </div>
+                        {formData.imageOrientation === "VERTICAL" && (
+                          <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[#F97316] flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                        )}
+                      </button>
+
+                      {/* Horizontal */}
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, imageOrientation: "HORIZONTAL" })}
+                        className={`relative border-2 rounded-xl p-4 flex flex-col items-center gap-3 transition-all ${
+                          formData.imageOrientation === "HORIZONTAL"
+                            ? "border-[#F97316] bg-orange-50 shadow-md"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        {/* Preview 16:9 */}
+                        <div className="flex flex-col gap-2 w-full">
+                          <div
+                            style={{ aspectRatio: "16/9", width: "100%" }}
+                            className={`rounded-md ${
+                              formData.imageOrientation === "HORIZONTAL"
+                                ? "bg-[#F97316]"
+                                : "bg-gray-300"
+                            }`}
+                          />
+                          <div className="flex flex-col gap-1">
+                            <div className={`h-2 rounded-full ${ formData.imageOrientation === "HORIZONTAL" ? "bg-[#F97316]/60" : "bg-gray-200" }`} />
+                            <div className={`h-1.5 rounded-full w-2/3 ${ formData.imageOrientation === "HORIZONTAL" ? "bg-[#F97316]/40" : "bg-gray-200" }`} />
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <p className={`text-sm font-semibold ${ formData.imageOrientation === "HORIZONTAL" ? "text-[#F97316]" : "text-gray-700" }`}>
+                            Horizontal
+                          </p>
+                          <p className="text-xs text-gray-500">16:9 · Paisagem</p>
+                        </div>
+                        {formData.imageOrientation === "HORIZONTAL" && (
+                          <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[#F97316] flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </>
               )}
 

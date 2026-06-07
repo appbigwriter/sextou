@@ -21,6 +21,7 @@ const createAdSchema = z.object({
   externalLink: z.string().trim().url("Link externo invalido").optional().or(z.literal("")),
   whatsappContact: z.string().trim().min(10, "WhatsApp e obrigatorio"),
   images: z.array(z.string().url()).optional(),
+  imageOrientation: z.enum(["VERTICAL", "HORIZONTAL"]).default("VERTICAL"),
 })
 
 export async function POST(request: NextRequest) {
@@ -95,6 +96,7 @@ export async function POST(request: NextRequest) {
         deliveryType: data.deliveryType,
         externalLink: data.externalLink || null,
         whatsappContact: data.whatsappContact,
+        imageOrientation: data.imageOrientation,
         status: "AWAITING_PAYMENT",
         paymentStatus: "PENDING",
         paymentAmount: 30.0,

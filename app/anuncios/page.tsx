@@ -158,55 +158,115 @@ export default async function AnunciosPage({ searchParams }: Props) {
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {ads.map((ad) => (
-              <Link
-                key={ad.id}
-                href={`/anuncios/${ad.id}`}
-                className="group overflow-hidden rounded-xl border-2 border-gray-200 bg-white transition-all hover:border-[#F97316] hover:shadow-xl"
-              >
-                {ad.images[0] ? (
-                  <div className="h-48 overflow-hidden bg-slate-100">
-                    <img
-                      src={ad.images[0].imageUrl}
-                      alt={ad.title}
-                      className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex h-48 items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 transition group-hover:from-[#F97316]/10 group-hover:to-[#EA580C]/10">
-                    <span className="text-6xl">🏪</span>
-                  </div>
-                )}
+            {ads.map((ad) => {
+              const isHorizontal = ad.imageOrientation === "HORIZONTAL"
 
-                <div className="p-6">
-                  <div className="mb-2 flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
-                      <span className="rounded bg-[#F97316]/10 px-2 py-1 text-xs font-bold text-[#F97316]">
+              if (isHorizontal) {
+                // Layout Horizontal (16:9) — imagem no topo, texto abaixo
+                return (
+                  <Link
+                    key={ad.id}
+                    href={`/anuncios/${ad.id}`}
+                    className="group overflow-hidden rounded-xl border-2 border-gray-200 bg-white transition-all hover:border-[#F97316] hover:shadow-xl flex flex-col"
+                  >
+                    {ad.images[0] ? (
+                      <div className="overflow-hidden bg-slate-100" style={{ aspectRatio: "16/9" }}>
+                        <img
+                          src={ad.images[0].imageUrl}
+                          alt={ad.title}
+                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 transition group-hover:from-[#F97316]/10 group-hover:to-[#EA580C]/10"
+                        style={{ aspectRatio: "16/9" }}
+                      >
+                        <span className="text-6xl">🏪</span>
+                      </div>
+                    )}
+
+                    <div className="p-5 flex flex-col flex-1">
+                      <div className="mb-2 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="rounded bg-[#F97316]/10 px-2 py-1 text-xs font-bold text-[#F97316]">
+                            {ad.category?.name || "Geral"}
+                          </span>
+                          {adDistances[ad.id] !== undefined && (
+                            <span className="rounded bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800">
+                              📍 a {adDistances[ad.id] < 1 ? "< 1" : adDistances[ad.id].toFixed(1)} km
+                            </span>
+                          )}
+                        </div>
+                        {ad.price && ad.price > 0 && (
+                          <span className="text-xl font-bold text-[#F97316] whitespace-nowrap">${ad.price.toFixed(2)}</span>
+                        )}
+                      </div>
+                      <h3 className="mb-1 text-lg font-bold text-gray-900 transition group-hover:text-[#F97316] line-clamp-2">
+                        {ad.title}
+                      </h3>
+                      <p className="mb-3 line-clamp-2 text-sm text-gray-600 flex-1">{ad.shortDescription}</p>
+                      <div className="flex items-center justify-between text-sm text-gray-500">
+                        <span>{ad.city}, {ad.state || "USA"}</span>
+                        <span className="font-bold text-[#F97316] group-hover:underline">Ver detalhes →</span>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              }
+
+              // Layout Vertical (9:16 ou 1:1) — imagem lateral esquerda, texto à direita
+              return (
+                <Link
+                  key={ad.id}
+                  href={`/anuncios/${ad.id}`}
+                  className="group overflow-hidden rounded-xl border-2 border-gray-200 bg-white transition-all hover:border-[#F97316] hover:shadow-xl flex flex-row"
+                >
+                  {ad.images[0] ? (
+                    <div className="overflow-hidden bg-slate-100 flex-shrink-0" style={{ width: "110px" }}>
+                      <img
+                        src={ad.images[0].imageUrl}
+                        alt={ad.title}
+                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        style={{ minHeight: "160px" }}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 transition group-hover:from-[#F97316]/10 group-hover:to-[#EA580C]/10 flex-shrink-0"
+                      style={{ width: "110px", minHeight: "160px" }}
+                    >
+                      <span className="text-4xl">🏪</span>
+                    </div>
+                  )}
+
+                  <div className="p-4 flex flex-col flex-1 min-w-0">
+                    <div className="mb-1 flex flex-wrap gap-1">
+                      <span className="rounded bg-[#F97316]/10 px-2 py-0.5 text-xs font-bold text-[#F97316]">
                         {ad.category?.name || "Geral"}
                       </span>
                       {adDistances[ad.id] !== undefined && (
-                        <span className="rounded bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800">
-                          📍 a {adDistances[ad.id] < 1 ? "< 1" : adDistances[ad.id].toFixed(1)} km
+                        <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-800">
+                          📍 {adDistances[ad.id] < 1 ? "< 1" : adDistances[ad.id].toFixed(1)} km
                         </span>
                       )}
                     </div>
-                    {ad.price && ad.price > 0 && (
-                      <span className="text-2xl font-bold text-[#F97316]">${ad.price.toFixed(2)}</span>
-                    )}
+                    <h3 className="mb-1 text-base font-bold text-gray-900 transition group-hover:text-[#F97316] line-clamp-2">
+                      {ad.title}
+                    </h3>
+                    <p className="mb-2 line-clamp-2 text-xs text-gray-600 flex-1">{ad.shortDescription}</p>
+                    <div className="flex items-center justify-between mt-auto">
+                      {ad.price && ad.price > 0 ? (
+                        <span className="text-base font-bold text-[#F97316]">${ad.price.toFixed(2)}</span>
+                      ) : (
+                        <span className="text-xs text-gray-500">{ad.city}, {ad.state || "USA"}</span>
+                      )}
+                      <span className="text-xs font-bold text-[#F97316] group-hover:underline">Ver →</span>
+                    </div>
                   </div>
-                  <h3 className="mb-2 text-xl font-bold text-gray-900 transition group-hover:text-[#F97316]">
-                    {ad.title}
-                  </h3>
-                  <p className="mb-4 line-clamp-2 text-gray-600">{ad.shortDescription}</p>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <span>
-                      {ad.city}, {ad.state || "USA"}
-                    </span>
-                    <span className="font-bold text-[#F97316] group-hover:underline">Ver detalhes →</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              )
+            })}
           </div>
         )}
       </section>

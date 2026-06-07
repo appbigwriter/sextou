@@ -129,6 +129,7 @@ model Ad {
   expiresAt         DateTime? @map("expires_at")
   viewsCount        Int       @default(0) @map("views_count")
   clicksCount       Int       @default(0) @map("clicks_count")
+  imageOrientation  String    @default("VERTICAL") @map("image_orientation")
   isFeatured        Boolean   @default(false) @map("is_featured")
   rejectionReason   String?   @map("rejection_reason")
   adminNotes        String?   @map("admin_notes")
