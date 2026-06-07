@@ -21,6 +21,12 @@ export default async function AdminAdDetailPage({ params }: Props) {
     notFound()
   }
 
+  let whatsappNumber = ad.whatsappContact.replace(/\D/g, "")
+  if (!ad.whatsappContact.startsWith("+")) {
+    if (whatsappNumber.length === 10) whatsappNumber = "1" + whatsappNumber
+    else if (whatsappNumber.length === 11) whatsappNumber = "55" + whatsappNumber
+  }
+
   const canApprove = ad.status === "UNDER_REVIEW" || ad.status === "AWAITING_PAYMENT"
 
   return (
@@ -83,7 +89,7 @@ export default async function AdminAdDetailPage({ params }: Props) {
             </div>
             <div>
               <h3 className="text-sm font-medium text-gray-600 mb-1">WhatsApp</h3>
-              <a href={`https://wa.me/${ad.whatsappContact.replace(/\D/g, "")}`} className="text-[#F97316] hover:underline">
+              <a href={`https://wa.me/${whatsappNumber}`} className="text-[#F97316] hover:underline">
                 {ad.whatsappContact}
               </a>
             </div>

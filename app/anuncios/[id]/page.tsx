@@ -39,7 +39,11 @@ export default async function AdDetailPage({ params }: Props) {
     (session?.user?.email && isConfiguredAdminEmail(session.user.email))
   )
 
-  const whatsappNumber = ad.whatsappContact.replace(/\D/g, "")
+  let whatsappNumber = ad.whatsappContact.replace(/\D/g, "")
+  if (!ad.whatsappContact.startsWith("+")) {
+    if (whatsappNumber.length === 10) whatsappNumber = "1" + whatsappNumber // EUA
+    else if (whatsappNumber.length === 11) whatsappNumber = "55" + whatsappNumber // BR
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
