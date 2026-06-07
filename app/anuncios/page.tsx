@@ -223,12 +223,11 @@ export default async function AnunciosPage({ searchParams }: Props) {
                   className="group overflow-hidden rounded-xl border-2 border-gray-200 bg-white transition-all hover:border-[#F97316] hover:shadow-xl flex flex-row"
                 >
                   {ad.images[0] ? (
-                    <div className="overflow-hidden bg-slate-100 flex-shrink-0" style={{ width: "110px" }}>
+                    <div className="bg-slate-100 flex-shrink-0 self-stretch" style={{ width: "110px" }}>
                       <img
                         src={ad.images[0].imageUrl}
                         alt={ad.title}
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                        style={{ minHeight: "160px" }}
+                        className="w-full h-full object-contain block"
                       />
                     </div>
                   ) : (

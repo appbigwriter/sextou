@@ -56,6 +56,11 @@ export default function CriarAnuncioPage() {
   const [territories, setTerritories] = useState<MasterTerritory[]>([])
   const [error, setError] = useState("")
   const [formData, setFormData] = useState(initialFormData)
+  const [showCustomCity, setShowCustomCity] = useState(false)
+  const [customCity, setCustomCity] = useState("")
+  const [customState, setCustomState] = useState("")
+  const [savingCity, setSavingCity] = useState(false)
+  const [citySaved, setCitySaved] = useState(false)
 
   useEffect(() => {
     const loadData = async () => {
@@ -124,7 +129,13 @@ export default function CriarAnuncioPage() {
 
     if (step === 3) {
       if (formData.whatsappContact.trim().length < 10) return "Informe um WhatsApp valido"
-      if (!formData.city || !formData.state) return "Selecione a sua cidade na lista"
+      if (!formData.city || !formData.state) {
+        if (showCustomCity) {
+          if (!citySaved) return "Clique em \"Confirmar Cidade\" antes de continuar"
+        } else {
+          return "Selecione a sua cidade na lista"
+        }
+      }
     }
 
     return ""
@@ -511,29 +522,134 @@ export default function CriarAnuncioPage() {
                     <label htmlFor="territorySelect" className="text-sm font-medium">
                       Sua Localização (Cidade - Estado)
                     </label>
-                    <select
-                      id="territorySelect"
-                      required
-                      value={formData.city ? `${formData.city}|${formData.state}` : ""}
-                      onChange={(e) => {
-                        if (!e.target.value) {
-                          setFormData({ ...formData, city: "", state: "" })
-                          return
-                        }
-                        const [c, s] = e.target.value.split("|")
-                        setFormData({ ...formData, city: c, state: s })
-                      }}
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    >
-                      <option value="">Selecione sua cidade...</option>
-                      {territories.map((t) => (
-                        <option key={t.id} value={`${t.city}|${t.state}`}>
-                          {t.city} - {t.state}
-                        </option>
-                      ))}
-                    </select>
-                    {territories.length === 0 && (
-                      <p className="text-xs text-orange-500 mt-1">Carregando cidades disponíveis...</p>
+
+                    {!showCustomCity ? (
+                      <>
+                        <select
+                          id="territorySelect"
+                          required
+                          value={formData.city ? `${formData.city}|${formData.state}` : ""}
+                          onChange={(e) => {
+                            if (!e.target.value) {
+                              setFormData({ ...formData, city: "", state: "" })
+                              return
+                            }
+                            if (e.target.value === "OUTRA") {
+                              setShowCustomCity(true)
+                              setFormData({ ...formData, city: "", state: "" })
+                              setCitySaved(false)
+                              return
+                            }
+                            const [c, s] = e.target.value.split("|")
+                            setFormData({ ...formData, city: c, state: s })
+                          }}
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        >
+                          <option value="">Selecione sua cidade...</option>
+                          {territories.map((t) => (
+                            <option key={t.id} value={`${t.city}|${t.state}`}>
+                              {t.city} - {t.state}
+                            </option>
+                          ))}
+                          <option value="OUTRA">➕ Outra cidade (não listada)</option>
+                        </select>
+                        {territories.length === 0 && (
+                          <p className="text-xs text-orange-500 mt-1">Carregando cidades disponíveis...</p>
+                        )}
+                      </>
+                    ) : (
+                      <div className="space-y-3 rounded-lg border-2 border-orange-200 bg-orange-50 p-4">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-semibold text-orange-700">📍 Cadastrar nova cidade</p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowCustomCity(false)
+                              setCustomCity("")
+                              setCustomState("")
+                              setCitySaved(false)
+                              setFormData({ ...formData, city: "", state: "" })
+                            }}
+                            className="text-xs text-gray-500 hover:text-gray-700 underline"
+                          >
+                            ← Voltar à lista
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <label className="text-xs font-medium text-gray-700">Cidade</label>
+                            <Input
+                              id="customCity"
+                              placeholder="Ex: Miami"
+                              value={customCity}
+                              onChange={(e) => {
+                                setCustomCity(e.target.value)
+                                setCitySaved(false)
+                              }}
+                              className="text-sm"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-xs font-medium text-gray-700">Estado (sigla)</label>
+                            <Input
+                              id="customState"
+                              placeholder="Ex: FL"
+                              value={customState}
+                              maxLength={3}
+                              onChange={(e) => {
+                                setCustomState(e.target.value.toUpperCase())
+                                setCitySaved(false)
+                              }}
+                              className="text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        {citySaved ? (
+                          <div className="flex items-center gap-2 rounded-md bg-green-100 px-3 py-2 text-sm text-green-700 font-medium">
+                            <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                            </svg>
+                            {formData.city} - {formData.state} confirmada!
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled={savingCity || customCity.trim().length < 2 || customState.trim().length < 2}
+                            onClick={async () => {
+                              setSavingCity(true)
+                              setError("")
+                              try {
+                                const res = await fetch("/api/territories/suggest", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({
+                                    city: customCity.trim(),
+                                    state: customState.trim(),
+                                  }),
+                                })
+                                const data = await res.json()
+                                if (!res.ok) throw new Error(data.error || "Erro ao salvar cidade")
+                                setFormData({ ...formData, city: data.city, state: data.state })
+                                setCitySaved(true)
+                                // Adiciona à lista local para reutilização
+                                setTerritories((prev) => {
+                                  const exists = prev.some((t) => t.id === data.id)
+                                  return exists ? prev : [...prev, { id: data.id, city: data.city, state: data.state }]
+                                })
+                              } catch (err) {
+                                setError(err instanceof Error ? err.message : "Erro ao salvar cidade")
+                              } finally {
+                                setSavingCity(false)
+                              }
+                            }}
+                            className="w-full rounded-lg bg-[#F97316] py-2.5 text-sm font-bold text-white transition hover:bg-[#EA580C] disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {savingCity ? "Salvando..." : "Confirmar Cidade"}
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                   <div className="space-y-2">

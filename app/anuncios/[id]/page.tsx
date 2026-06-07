@@ -54,13 +54,13 @@ export default async function AdDetailPage({ params }: Props) {
       </header>
 
       <div className="container mx-auto px-4 py-12">
-        <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
+        <div className="rounded-2xl bg-white shadow-xl">
 
           {ad.imageOrientation === "HORIZONTAL" ? (
             /* ── Layout Horizontal (16:9): imagem no topo, texto abaixo ── */
             <div className="flex flex-col">
               {ad.images.length > 0 ? (
-                <div className="w-full overflow-hidden bg-slate-100" style={{ aspectRatio: "16/9" }}>
+                <div className="w-full overflow-hidden bg-slate-100 rounded-t-2xl" style={{ aspectRatio: "16/9" }}>
                   <img
                     src={ad.images[0].imageUrl}
                     alt={ad.title}
@@ -140,15 +140,11 @@ export default async function AdDetailPage({ params }: Props) {
             /* ── Layout Vertical (9:16 / 1:1): imagem à esquerda, texto à direita ── */
             <div className="flex flex-col md:flex-row">
               {ad.images.length > 0 ? (
-                <div
-                  className="overflow-hidden bg-slate-100 flex-shrink-0 w-full md:w-auto"
-                  style={{ width: undefined }}
-                >
+                <div className="bg-slate-100 flex-shrink-0 w-full md:w-72 lg:w-80 overflow-hidden rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
                   <img
                     src={ad.images[0].imageUrl}
                     alt={ad.title}
-                    className="w-full md:w-72 lg:w-80 object-cover"
-                    style={{ aspectRatio: "9/16", maxHeight: "600px" }}
+                    className="w-full h-auto block"
                   />
                 </div>
               ) : (
