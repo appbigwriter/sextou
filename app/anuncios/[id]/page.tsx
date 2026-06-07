@@ -1,7 +1,10 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { prisma } from "@/lib/prisma"
+import { auth } from "@/lib/auth"
+import { isConfiguredAdminEmail } from "@/lib/admin"
 import { MobileMenu } from "@/components/layout/mobile-menu"
+import { DeleteAdButton } from "@/components/delete-ad-button"
 
 interface Props {
   params: { id: string }
@@ -29,6 +32,12 @@ export default async function AdDetailPage({ params }: Props) {
   if (!ad) {
     notFound()
   }
+
+  const session = await auth()
+  const userIsAdmin = Boolean(
+    (session?.user as any)?.isAdmin ||
+    (session?.user?.email && isConfiguredAdminEmail(session.user.email))
+  )
 
   const whatsappNumber = ad.whatsappContact.replace(/\D/g, "")
 
@@ -134,6 +143,17 @@ export default async function AdDetailPage({ params }: Props) {
                     </a>
                   )}
                 </div>
+
+                {/* Botão de exclusão — somente admin */}
+                {userIsAdmin && (
+                  <div className="mt-6 border-t border-dashed border-red-200 pt-5">
+                    <div className="mb-2 flex items-center gap-2">
+                      <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600">ADMIN</span>
+                      <span className="text-xs text-gray-500">Painel de Moderação</span>
+                    </div>
+                    <DeleteAdButton adId={ad.id} adTitle={ad.title} variant="full" />
+                  </div>
+                )}
               </div>
             </div>
           ) : (
@@ -214,6 +234,17 @@ export default async function AdDetailPage({ params }: Props) {
                     </a>
                   )}
                 </div>
+
+                {/* Botão de exclusão — somente admin */}
+                {userIsAdmin && (
+                  <div className="mt-6 border-t border-dashed border-red-200 pt-5">
+                    <div className="mb-2 flex items-center gap-2">
+                      <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600">ADMIN</span>
+                      <span className="text-xs text-gray-500">Painel de Moderação</span>
+                    </div>
+                    <DeleteAdButton adId={ad.id} adTitle={ad.title} variant="full" />
+                  </div>
+                )}
               </div>
             </div>
           )}
