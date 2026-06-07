@@ -13,9 +13,17 @@ export function ApproveButton({ adId }: ApproveButtonProps) {
 
   const handleClick = async () => {
     if (!confirm("Tem certeza que deseja APROVAR este anúncio?")) return
+    
+    const receiptNumber = prompt("Insira o número do comprovante de pagamento (ou deixe em branco se não aplicável):")
+    if (receiptNumber === null) return // Canceled
+
     setLoading(true)
     try {
-      const res = await fetch(`/api/admin/ads/${adId}/approve`, { method: "POST" })
+      const res = await fetch(`/api/admin/ads/${adId}/approve`, { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ receiptNumber: receiptNumber.trim() })
+      })
       if (res.ok) {
         alert("Anúncio aprovado com sucesso!")
         router.push("/admin/anuncios")
