@@ -60,6 +60,7 @@ export default async function AdDetailPage({ params }: Props) {
           <MobileMenu links={[
               { href: "/", label: "Home" },
               { href: "/anuncios", label: "Voltar para Anuncios" },
+              { href: "/como-funciona", label: "Como Funciona" },
               { href: "/login", label: "Entrar" },
               { href: "/cadastro", label: "Anunciar Agora", isAction: true },
             ]} />

@@ -6,9 +6,9 @@ export default async function Home() {
   const session = await auth()
   const isLoggedIn = !!session?.user?.email
 
-  const navLinks = [
     { href: "/", label: "Home" },
     { href: "/anuncios", label: "Anuncios" },
+    { href: "/como-funciona", label: "Como Funciona" },
     { href: isLoggedIn ? "/dashboard" : "/login", label: isLoggedIn ? "Meu Dashboard" : "Entrar" },
     { href: isLoggedIn ? "/dashboard/anunciar" : "/cadastro", label: isLoggedIn ? "Novo Anuncio" : "Anunciar Agora", isAction: true },
   ]
@@ -26,6 +26,9 @@ export default async function Home() {
             </Link>
             <Link href="/anuncios" className="text-slate-700 hover:text-[#F97316] transition font-medium">
               Anuncios
+            </Link>
+            <Link href="/como-funciona" className="text-slate-700 hover:text-[#F97316] transition font-medium">
+              Como Funciona
             </Link>
             <Link
               href={isLoggedIn ? "/dashboard" : "/login"}
@@ -223,6 +226,7 @@ export default async function Home() {
               <h4 className="font-heading font-semibold mb-4">Links</h4>
               <ul className="space-y-2 text-slate-400">
                 <li><Link href="/anuncios" className="hover:text-[#F97316] transition">Anuncios</Link></li>
+                <li><Link href="/como-funciona" className="hover:text-[#F97316] transition">Como Funciona</Link></li>
                 <li><Link href={isLoggedIn ? "/dashboard" : "/login"} className="hover:text-[#F97316] transition">{isLoggedIn ? "Meu Dashboard" : "Entrar"}</Link></li>
                 <li><Link href={isLoggedIn ? "/dashboard/anunciar" : "/cadastro"} className="hover:text-[#F97316] transition">{isLoggedIn ? "Novo Anuncio" : "Anunciar"}</Link></li>
               </ul>
