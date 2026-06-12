@@ -155,21 +155,19 @@ export default async function Home() {
             </div>
 
           </div>
-        </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
-              <div className="text-center">
-                <div className="font-heading font-bold text-4xl text-white">1000+</div>
-                <div className="text-slate-400 text-sm mt-1">Anuncios</div>
-              </div>
-              <div className="text-center">
-                <div className="font-heading font-bold text-4xl text-white">US$ 30</div>
-                <div className="text-slate-400 text-sm mt-1">Por Publicacao</div>
-              </div>
-              <div className="text-center">
-                <div className="font-heading font-bold text-4xl text-white">24h</div>
-                <div className="text-slate-400 text-sm mt-1">Aprovacao</div>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
+            <div className="text-center">
+              <div className="font-heading font-bold text-4xl text-white">1000+</div>
+              <div className="text-slate-400 text-sm mt-1">Anuncios</div>
+            </div>
+            <div className="text-center">
+              <div className="font-heading font-bold text-4xl text-white">US$ 30</div>
+              <div className="text-slate-400 text-sm mt-1">Por Publicacao</div>
+            </div>
+            <div className="text-center">
+              <div className="font-heading font-bold text-4xl text-white">24h</div>
+              <div className="text-slate-400 text-sm mt-1">Aprovacao</div>
             </div>
           </div>
         </div>
