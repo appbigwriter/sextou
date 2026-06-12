@@ -1,0 +1,36 @@
+import Link from "next/link"
+import { VideoForm } from "@/components/admin/video-form"
+
+export default function NovoVideoPage() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center">
+              <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-8 w-auto object-contain" />
+            </Link>
+            <span className="bg-red-500 text-white text-xs px-2 py-1 rounded font-bold">ADMIN</span>
+          </div>
+          <nav className="flex items-center gap-4">
+            <Link href="/admin" className="text-gray-600 hover:text-[#F97316]">Dashboard</Link>
+            <Link href="/admin/videos" className="text-[#F97316] font-medium">Vídeos</Link>
+          </nav>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8 max-w-2xl">
+        <div className="mb-6">
+          <Link href="/admin/videos" className="text-gray-500 hover:text-gray-900 flex items-center gap-2">
+            ← Voltar para vídeos
+          </Link>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8">
+          <h1 className="text-2xl font-bold text-gray-900 mb-6">Novo Vídeo</h1>
+          <VideoForm />
+        </div>
+      </main>
+    </div>
+  )
+}

@@ -105,6 +105,9 @@ export default async function AnunciosPage({ searchParams }: Props) {
             <Link href="/anuncios" className="font-medium text-[#F97316]">
               Anuncios
             </Link>
+            <Link href="/videos" className="font-medium text-slate-700 transition hover:text-[#F97316]">
+              Vídeos
+            </Link>
             <Link href="/como-funciona" className="font-medium text-slate-700 transition hover:text-[#F97316]">
               Como Funciona
             </Link>
@@ -119,6 +122,7 @@ export default async function AnunciosPage({ searchParams }: Props) {
             links={[
               { href: "/", label: "Home" },
               { href: "/anuncios", label: "Anuncios" },
+              { href: "/videos", label: "Vídeos" },
               { href: "/como-funciona", label: "Como Funciona" },
               { href: "/login", label: "Entrar" },
               { href: "/cadastro", label: "Anunciar Agora", isAction: true },

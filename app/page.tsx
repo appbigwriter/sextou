@@ -1,13 +1,31 @@
 import Link from "next/link"
 import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
 import { MobileMenu } from "@/components/layout/mobile-menu"
+
+const getYoutubeVideoId = (url: string) => {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/);
+  return match ? match[1] : null;
+};
 
 export default async function Home() {
   const session = await auth()
   const isLoggedIn = !!session?.user?.email
 
+  const featuredVideo = await prisma.video.findFirst({
+    where: { isFeatured: true, isActive: true },
+    orderBy: { createdAt: "desc" },
+  }) || await prisma.video.findFirst({
+    where: { isActive: true },
+    orderBy: { createdAt: "desc" },
+  })
+
+  const videoId = featuredVideo?.youtubeUrl ? getYoutubeVideoId(featuredVideo.youtubeUrl) : null;
+
+  const navLinks = [
     { href: "/", label: "Home" },
     { href: "/anuncios", label: "Anuncios" },
+    { href: "/videos", label: "Vídeos" },
     { href: "/como-funciona", label: "Como Funciona" },
     { href: isLoggedIn ? "/dashboard" : "/login", label: isLoggedIn ? "Meu Dashboard" : "Entrar" },
     { href: isLoggedIn ? "/dashboard/anunciar" : "/cadastro", label: isLoggedIn ? "Novo Anuncio" : "Anunciar Agora", isAction: true },
@@ -26,6 +44,9 @@ export default async function Home() {
             </Link>
             <Link href="/anuncios" className="text-slate-700 hover:text-[#F97316] transition font-medium">
               Anuncios
+            </Link>
+            <Link href="/videos" className="text-slate-700 hover:text-[#F97316] transition font-medium">
+              Vídeos
             </Link>
             <Link href="/como-funciona" className="text-slate-700 hover:text-[#F97316] transition font-medium">
               Como Funciona
@@ -52,69 +73,89 @@ export default async function Home() {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNGOTczMTYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDEzNEgxNHYtMWgyMXYxem0wLTVIMTR2LTFoMjJ2MXoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="inline-flex items-center space-x-2 bg-[#F97316]/10 border border-[#F97316]/20 rounded-full px-4 py-2">
-              <span className="text-[#FCD34D] text-2xl">🔥</span>
-              <span className="text-white/90 font-medium text-sm">
-                Alcance milhares de brasileiros toda sexta-feira
-              </span>
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+            
+            {/* Vídeo à esquerda */}
+            <div className="w-full lg:w-[500px] xl:w-[600px] flex-shrink-0 order-2 lg:order-1">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 md:p-6 backdrop-blur-md shadow-2xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
+                {videoId ? (
+                  <div className="relative rounded-xl overflow-hidden shadow-inner bg-black" style={{ aspectRatio: '16/9' }}>
+                    <iframe
+                      src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1`}
+                      title="Vídeo em Destaque"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute top-0 left-0 w-full h-full border-0"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative rounded-xl overflow-hidden shadow-inner bg-slate-800 flex items-center justify-center" style={{ aspectRatio: '16/9' }}>
+                    <p className="text-slate-400">Vídeo não disponível</p>
+                  </div>
+                )}
+                
+                <div className="mt-6 text-center">
+                  <p className="text-white font-semibold">
+                    Ja tem conta? Entre para acessar seu dashboard.
+                  </p>
+                  <p className="text-slate-300 text-sm mt-1 mb-4">
+                    Acompanhe o status do seu anuncio e gerencie sua assinatura.
+                  </p>
+                  <Link
+                    href={isLoggedIn ? "/dashboard/anunciar" : "/cadastro"}
+                    className="inline-block rounded-lg border border-white/30 text-white px-5 py-2.5 font-semibold hover:bg-white/10 transition w-full text-center"
+                  >
+                    {isLoggedIn ? "Enviar novo anuncio" : "Criar conta e anunciar"}
+                  </Link>
+                </div>
+              </div>
             </div>
 
-            <h1 className="font-heading font-bold text-5xl md:text-6xl lg:text-7xl text-white leading-tight">
-              A Vitrine da
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F97316] to-[#FCD34D]">
-                Comunidade Brasileira
-              </span>
-            </h1>
+            {/* Texto à direita */}
+            <div className="flex-1 space-y-6 text-center lg:text-left order-1 lg:order-2">
+              <div className="inline-flex items-center space-x-2 bg-[#F97316]/10 border border-[#F97316]/20 rounded-full px-4 py-2">
+                <span className="text-[#FCD34D] text-xl">🔥</span>
+                <span className="text-white/90 font-medium text-xs md:text-sm">
+                  Alcance milhares de brasileiros toda sexta-feira
+                </span>
+              </div>
 
-            <p className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-              Toda sexta-feira, em grupo fechado, milhares de brasileiros descobrem negócios incríveis.
-              Seu negócio pode ser o próximo.
-            </p>
+              <h1 className="font-heading font-bold text-4xl md:text-5xl lg:text-6xl text-white leading-tight">
+                A Vitrine da
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F97316] to-[#FCD34D]">
+                  Comunidade Brasileira
+                </span>
+              </h1>
 
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm max-w-3xl mx-auto">
-              <p className="text-white font-semibold">
-                Ja tem conta? Entre para acessar seu dashboard e acompanhar seus anuncios.
+              <p className="text-lg md:text-xl text-slate-300 max-w-2xl lg:mx-0 mx-auto leading-relaxed">
+                Toda sexta-feira, em grupo fechado, milhares de brasileiros descobrem negócios incríveis.
+                Seu negócio pode ser o próximo.
               </p>
-              <p className="text-slate-300 text-sm mt-2">
-                Depois de enviar um anuncio, ele fica visivel no seu dashboard com o status da analise
-                e voce acompanha tudo por la.
-              </p>
-              <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
+
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
                 <Link
-                  href={isLoggedIn ? "/dashboard" : "/login"}
-                  className="rounded-lg bg-white text-slate-900 px-5 py-3 font-semibold hover:bg-slate-100 transition w-full sm:w-auto text-center"
+                  href="/anuncios"
+                  className="group bg-[#F97316] hover:bg-[#EA580C] text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center space-x-2 w-full sm:w-auto"
                 >
-                  {isLoggedIn ? "Abrir Meu Dashboard" : "Entrar para ver meu dashboard"}
+                  <span>Ver Anuncios</span>
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
                 </Link>
                 <Link
-                  href={isLoggedIn ? "/dashboard/anunciar" : "/cadastro"}
-                  className="rounded-lg border border-white/30 text-white px-5 py-3 font-semibold hover:bg-white/10 transition w-full sm:w-auto text-center"
+                  href={isLoggedIn ? "/dashboard" : "/login"}
+                  className="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition backdrop-blur-sm w-full sm:w-auto text-center"
                 >
-                  {isLoggedIn ? "Enviar novo anuncio" : "Criar conta e anunciar"}
+                  {isLoggedIn ? "Meu Dashboard" : "Entrar"}
                 </Link>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 pt-4">
-              <Link
-                href="/anuncios"
-                className="group bg-[#F97316] hover:bg-[#EA580C] text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center space-x-2 w-full sm:w-auto"
-              >
-                <span>Ver Anuncios</span>
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </Link>
-              <Link
-                href={isLoggedIn ? "/dashboard" : "/login"}
-                className="border-2 border-white/30 hover:border-white hover:bg-white/10 text-white px-8 py-4 rounded-lg font-heading font-bold text-lg transition backdrop-blur-sm w-full sm:w-auto text-center"
-              >
-                {isLoggedIn ? "Meu Dashboard" : "Entrar"}
-              </Link>
-            </div>
+          </div>
+        </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
               <div className="text-center">
@@ -226,6 +267,7 @@ export default async function Home() {
               <h4 className="font-heading font-semibold mb-4">Links</h4>
               <ul className="space-y-2 text-slate-400">
                 <li><Link href="/anuncios" className="hover:text-[#F97316] transition">Anuncios</Link></li>
+                <li><Link href="/videos" className="hover:text-[#F97316] transition">Vídeos</Link></li>
                 <li><Link href="/como-funciona" className="hover:text-[#F97316] transition">Como Funciona</Link></li>
                 <li><Link href={isLoggedIn ? "/dashboard" : "/login"} className="hover:text-[#F97316] transition">{isLoggedIn ? "Meu Dashboard" : "Entrar"}</Link></li>
                 <li><Link href={isLoggedIn ? "/dashboard/anunciar" : "/cadastro"} className="hover:text-[#F97316] transition">{isLoggedIn ? "Novo Anuncio" : "Anunciar"}</Link></li>
