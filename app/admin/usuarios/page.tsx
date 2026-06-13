@@ -69,93 +69,95 @@ export default async function AdminUsuariosPage() {
         </div>
 
         <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
-          <table className="w-full">
-            <thead className="border-b bg-gray-50">
-              <tr>
-                <th className="p-4 text-left font-medium text-gray-600">Usuario</th>
-                <th className="p-4 text-left font-medium text-gray-600">Empresa</th>
-                <th className="p-4 text-left font-medium text-gray-600">Cidade</th>
-                <th className="p-4 text-left font-medium text-gray-600">Anuncios</th>
-                <th className="p-4 text-left font-medium text-gray-600">Nivel</th>
-                <th className="p-4 text-left font-medium text-gray-600">Status</th>
-                <th className="p-4 text-left font-medium text-gray-600">Acoes</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {users.map((user) => {
-                const isAdmin = Boolean(user.isAdmin) || isConfiguredAdminEmail(user.email)
+          <div className="overflow-x-auto w-full">
+            <table className="w-full">
+              <thead className="border-b bg-gray-50">
+                <tr>
+                  <th className="p-4 text-left font-medium text-gray-600">Usuario</th>
+                  <th className="p-4 text-left font-medium text-gray-600">Empresa</th>
+                  <th className="p-4 text-left font-medium text-gray-600">Cidade</th>
+                  <th className="p-4 text-left font-medium text-gray-600">Anuncios</th>
+                  <th className="p-4 text-left font-medium text-gray-600">Nivel</th>
+                  <th className="p-4 text-left font-medium text-gray-600">Status</th>
+                  <th className="p-4 text-left font-medium text-gray-600">Acoes</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {users.map((user) => {
+                  const isAdmin = Boolean(user.isAdmin) || isConfiguredAdminEmail(user.email)
 
-                return (
-                  <tr key={user.id} className="hover:bg-gray-50">
-                    <td className="p-4">
-                      <div className="font-medium text-gray-900">{user.fullName}</div>
-                      <div className="text-sm text-gray-500">{user.email}</div>
-                    </td>
-                    <td className="p-4 text-gray-900">{user.businessName}</td>
-                    <td className="p-4 text-gray-500">
-                      {user.city}, {user.state}
-                    </td>
-                    <td className="p-4">
-                      <span className="rounded bg-[#F97316]/10 px-2 py-1 text-sm font-medium text-[#F97316]">
-                        {user._count.ads}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex flex-wrap gap-2">
-                        {isAdmin && (
-                          <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700">
-                            Admin
-                          </span>
-                        )}
-                        {user.isVip && (
-                          <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-700">
-                            VIP
-                          </span>
-                        )}
-                        {!isAdmin && !user.isVip && <span className="text-gray-300">-</span>}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`rounded-full px-2 py-1 text-xs font-medium ${
-                          user.status === "ACTIVE"
-                            ? "bg-green-100 text-green-700"
-                            : user.status === "SUSPENDED"
-                            ? "bg-red-100 text-red-700"
-                            : "bg-gray-100 text-gray-700"
-                        }`}
-                      >
-                        {user.status}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex flex-col gap-2">
-                        <AdminToggleButton userId={user.id} isAdmin={user.isAdmin} />
-                        {isConfiguredAdminEmail(user.email) && (
-                          <p className="text-xs text-gray-500">Admin tambem liberado por ADMIN_EMAILS.</p>
-                        )}
-                        <div className="border-t pt-2">
-                          <DeleteUserButton
-                            userId={user.id}
-                            userName={user.fullName}
-                            userEmail={user.email}
-                            isAdmin={isAdmin}
-                          />
+                  return (
+                    <tr key={user.id} className="hover:bg-gray-50">
+                      <td className="p-4">
+                        <div className="font-medium text-gray-900">{user.fullName}</div>
+                        <div className="text-sm text-gray-500">{user.email}</div>
+                      </td>
+                      <td className="p-4 text-gray-900">{user.businessName}</td>
+                      <td className="p-4 text-gray-500">
+                        {user.city}, {user.state}
+                      </td>
+                      <td className="p-4">
+                        <span className="rounded bg-[#F97316]/10 px-2 py-1 text-sm font-medium text-[#F97316]">
+                          {user._count.ads}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex flex-wrap gap-2">
+                          {isAdmin && (
+                            <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700">
+                              Admin
+                            </span>
+                          )}
+                          {user.isVip && (
+                            <span className="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-700">
+                              VIP
+                            </span>
+                          )}
+                          {!isAdmin && !user.isVip && <span className="text-gray-300">-</span>}
                         </div>
-                      </div>
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`rounded-full px-2 py-1 text-xs font-medium ${
+                            user.status === "ACTIVE"
+                              ? "bg-green-100 text-green-700"
+                              : user.status === "SUSPENDED"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-gray-100 text-gray-700"
+                          }`}
+                        >
+                          {user.status}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex flex-col gap-2">
+                          <AdminToggleButton userId={user.id} isAdmin={user.isAdmin} />
+                          {isConfiguredAdminEmail(user.email) && (
+                            <p className="text-xs text-gray-500">Admin tambem liberado por ADMIN_EMAILS.</p>
+                          )}
+                          <div className="border-t pt-2">
+                            <DeleteUserButton
+                              userId={user.id}
+                              userName={user.fullName}
+                              userEmail={user.email}
+                              isAdmin={isAdmin}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+                {users.length === 0 && (
+                  <tr>
+                    <td colSpan={7} className="p-8 text-center text-gray-500">
+                      Nenhum usuario encontrado
                     </td>
                   </tr>
-                )
-              })}
-              {users.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="p-8 text-center text-gray-500">
-                    Nenhum usuario encontrado
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </main>
     </div>

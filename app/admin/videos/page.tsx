@@ -38,56 +38,58 @@ export default async function AdminVideosPage() {
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <table className="w-full text-left">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Título</th>
-                <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Status</th>
-                <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Destaque</th>
-                <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {videos.length === 0 ? (
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left">
+              <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                    Nenhum vídeo cadastrado.
-                  </td>
+                  <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Título</th>
+                  <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Status</th>
+                  <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Destaque</th>
+                  <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Ações</th>
                 </tr>
-              ) : (
-                videos.map(video => (
-                  <tr key={video.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{video.title}</div>
-                      <div className="text-sm text-gray-500 truncate max-w-xs">{video.youtubeUrl}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        video.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                      }`}>
-                        {video.isActive ? "Ativo" : "Inativo"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      {video.isFeatured ? (
-                        <span className="text-[#F97316] font-bold text-lg">★</span>
-                      ) : (
-                        <span className="text-gray-300 text-lg">☆</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4">
-                      <Link 
-                        href={`/admin/videos/${video.id}`}
-                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                      >
-                        Editar
-                      </Link>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {videos.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                      Nenhum vídeo cadastrado.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  videos.map(video => (
+                    <tr key={video.id} className="hover:bg-gray-50 transition">
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-gray-900">{video.title}</div>
+                        <div className="text-sm text-gray-500 truncate max-w-xs">{video.youtubeUrl}</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          video.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {video.isActive ? "Ativo" : "Inativo"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        {video.isFeatured ? (
+                          <span className="text-[#F97316] font-bold text-lg">★</span>
+                        ) : (
+                          <span className="text-gray-300 text-lg">☆</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <Link 
+                          href={`/admin/videos/${video.id}`}
+                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        >
+                          Editar
+                        </Link>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </main>
     </div>
