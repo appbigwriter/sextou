@@ -5,9 +5,10 @@ import { useState } from "react"
 
 interface ApproveButtonProps {
   adId: string
+  className?: string
 }
 
-export function ApproveButton({ adId }: ApproveButtonProps) {
+export function ApproveButton({ adId, className }: ApproveButtonProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
@@ -26,7 +27,7 @@ export function ApproveButton({ adId }: ApproveButtonProps) {
       })
       if (res.ok) {
         alert("Anúncio aprovado com sucesso!")
-        router.push("/admin/anuncios")
+        router.refresh()
       } else {
         alert("Erro ao aprovar")
       }
@@ -40,7 +41,7 @@ export function ApproveButton({ adId }: ApproveButtonProps) {
     <button
       onClick={handleClick}
       disabled={loading}
-      className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-60"
+      className={className || "px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-60"}
     >
       {loading ? "Salvando..." : "Publicar"}
     </button>
