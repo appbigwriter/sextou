@@ -72,14 +72,15 @@ export default async function SextouToolsPage() {
         <div className="rounded-[22px] border border-white/10 bg-[#171717] p-6">
           <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Fase 2 em andamento</p>
           <h2 className="mt-3 font-toolkit text-3xl font-extrabold text-[#F0EDE6]">
-            Fundacao pronta e primeiro mini-app no ar
+            Fase 2 concluida e Fase 3 em publicacao
           </h2>
           <ul className="mt-5 space-y-3 text-sm leading-7 text-[#A09D97]">
             <li>Rotas autenticadas em `app/sextou-tools`</li>
             <li>Catalogo central com 9 mini-apps planejados</li>
             <li>Shell compartilhado com share e retorno para o hub</li>
             <li>Modelagem inicial de historico por usuario no Prisma</li>
-            <li>Gerador de QR Code entregue como primeiro quick win</li>
+            <li>4 quick wins da fase 2 ja entregues</li>
+            <li>Bloco comercial da fase 3 com leads, orcamentos e invoices em rollout</li>
           </ul>
         </div>
 

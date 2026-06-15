@@ -5,7 +5,7 @@
 
 **Version:** 1.0.0
 **Last Updated:** 2026-06-15
-**Status:** Draft
+**Status:** In Progress
 
 ---
 
@@ -124,16 +124,16 @@ Preparar arquitetura, dados, autenticacao e design base para que todos os mini-a
 
 ### Tasks / Subtasks
 
-- [ ] Criar namespace de rotas `app/sextou-tools/`
-- [ ] Adicionar item `Sextou Tools` na navegacao publica em `app/page.tsx`
-- [ ] Adicionar item `Sextou Tools` no menu mobile em `components/layout/mobile-menu.tsx`
-- [ ] Adicionar entrada de descoberta no dashboard em `app/dashboard/page.tsx`
-- [ ] Criar configuracao central de catalogo dos mini-apps com `slug`, titulo, descricao, status e prioridade
-- [ ] Criar layout compartilhado da suite com heading, navegacao secundaria e estados vazios
-- [ ] Criar guard server-side baseado em `auth()` para todas as rotas da suite
-- [ ] Modelar persistencia Prisma para historico de execucoes por usuario
-- [ ] Definir convencao de share links e deep links por mini-app
-- [ ] Aplicar tokens visuais do `design-system-v2` na suite sem quebrar o restante do site
+- [x] Criar namespace de rotas `app/sextou-tools/`
+- [x] Adicionar item `Sextou Tools` na navegacao publica em `app/page.tsx`
+- [x] Adicionar item `Sextou Tools` no menu mobile em `components/layout/mobile-menu.tsx`
+- [x] Adicionar entrada de descoberta no dashboard em `app/dashboard/page.tsx`
+- [x] Criar configuracao central de catalogo dos mini-apps com `slug`, titulo, descricao, status e prioridade
+- [x] Criar layout compartilhado da suite com heading, navegacao secundaria e estados vazios
+- [x] Criar guard server-side baseado em `auth()` para todas as rotas da suite
+- [x] Modelar persistencia Prisma para historico de execucoes por usuario
+- [x] Definir convencao de share links e deep links por mini-app
+- [x] Aplicar tokens visuais do `design-system-v2` na suite sem quebrar o restante do site
 
 ### Definition of Done
 
@@ -159,15 +159,15 @@ Entregar a pagina indice da suite como menu de mini-apps, com visual consistente
 
 ### Tasks / Subtasks
 
-- [ ] Criar pagina hub com titulo `Brazilian Business Toolkit`
-- [ ] Exibir cards por mini-app com CTA de entrada
-- [ ] Exibir estado `Disponivel`, `Em breve` ou `Beta`
-- [ ] Exibir descricao curta e beneficio de negocio por app
-- [ ] Incluir indicador de login e historico recente do usuario
+- [x] Criar pagina hub com titulo `Brazilian Business Toolkit`
+- [x] Exibir cards por mini-app com CTA de entrada
+- [x] Exibir estado `Disponivel`, `Em breve` ou `Beta`
+- [x] Exibir descricao curta e beneficio de negocio por app
+- [x] Incluir indicador de login e historico recente do usuario
 - [ ] Incluir busca ou filtro simples se o numero de apps publicados justificar
-- [ ] Validar responsividade mobile-first com alvos de toque de 48px/54px
-- [ ] Aplicar tipografia `Bricolage Grotesque` para titulos da suite
-- [ ] Aplicar CTAs e cards derivados de `btn-grad`, `btn-cta`, `--r-xl`, `--r-2xl`, `--grad-brand`
+- [x] Validar responsividade mobile-first com alvos de toque de 48px/54px
+- [x] Aplicar tipografia `Bricolage Grotesque` para titulos da suite
+- [x] Aplicar CTAs e cards derivados de `btn-grad`, `btn-cta`, `--r-xl`, `--r-2xl`, `--grad-brand`
 
 ### Definition of Done
 
@@ -185,12 +185,12 @@ Padronizar a experiencia de uso para qualquer mini-app da suite.
 
 ### Tasks / Subtasks
 
-- [ ] Criar shell de mini-app com breadcrumb simples ou botao `Voltar para ferramentas`
-- [ ] Criar botao compartilhado de share
-- [ ] Criar area padrao de formulario + resultado + historico
-- [ ] Criar feedbacks de loading, sucesso e erro no mesmo padrao visual
-- [ ] Criar persistencia padrao de execucao para todos os mini-apps
-- [ ] Criar convencao para salvar `input`, `output`, `metadata` e `createdAt`
+- [x] Criar shell de mini-app com breadcrumb simples ou botao `Voltar para ferramentas`
+- [x] Criar botao compartilhado de share
+- [x] Criar area padrao de formulario + resultado + historico
+- [x] Criar feedbacks de loading, sucesso e erro no mesmo padrao visual
+- [x] Criar persistencia padrao de execucao para todos os mini-apps
+- [x] Criar convencao para salvar `input`, `output`, `metadata` e `createdAt`
 - [ ] Criar telemetria minima de uso por modulo se o projeto ja possuir observabilidade compativel
 
 ### Definition of Done
@@ -205,44 +205,44 @@ Padronizar a experiencia de uso para qualquer mini-app da suite.
 
 ### 4.1 Gerador de QR Code
 
-- [ ] Criar rota independente do modulo
-- [ ] Implementar seletor de tipo de QR
-- [ ] Implementar formulario dinamico por tipo
-- [ ] Gerar preview em tempo real
-- [ ] Permitir download PNG
-- [ ] Permitir download SVG se a biblioteca adotada suportar
-- [ ] Persistir historico por usuario
-- [ ] Implementar share e voltar
+- [x] Criar rota independente do modulo
+- [x] Implementar seletor de tipo de QR
+- [x] Implementar formulario dinamico por tipo
+- [x] Gerar preview em tempo real
+- [x] Permitir download PNG
+- [x] Permitir download SVG se a biblioteca adotada suportar
+- [x] Persistir historico por usuario
+- [x] Implementar share e voltar
 
 ### 4.2 Calculadora de Preco de Servico
 
-- [ ] Criar rota independente do modulo
-- [ ] Implementar campos de custo, hora, taxas e margem
-- [ ] Calcular custo base, preco minimo e preco ideal
-- [ ] Exibir memoria de calculo
-- [ ] Permitir copiar resumo
-- [ ] Persistir historico por usuario
-- [ ] Implementar share e voltar
+- [x] Criar rota independente do modulo
+- [x] Implementar campos de custo, hora, taxas e margem
+- [x] Calcular custo base, preco minimo e preco ideal
+- [x] Exibir memoria de calculo
+- [x] Permitir copiar resumo
+- [x] Persistir historico por usuario
+- [x] Implementar share e voltar
 
 ### 4.3 Calculadora de ROI de Campanha
 
-- [ ] Criar rota independente do modulo
-- [ ] Implementar campos de investimento, leads, vendas, ticket e margem
-- [ ] Calcular CPL, conversao, receita, lucro, ROI e ROAS
-- [ ] Exibir diagnostico textual
-- [ ] Permitir copiar resumo
-- [ ] Persistir historico por usuario
-- [ ] Implementar share e voltar
+- [x] Criar rota independente do modulo
+- [x] Implementar campos de investimento, leads, vendas, ticket e margem
+- [x] Calcular CPL, conversao, receita, lucro, ROI e ROAS
+- [x] Exibir diagnostico textual
+- [x] Permitir copiar resumo
+- [x] Persistir historico por usuario
+- [x] Implementar share e voltar
 
 ### 4.4 Checklist de Abertura de Empresa
 
-- [ ] Criar rota independente do modulo
-- [ ] Implementar selecao de perfil
-- [ ] Exibir checklist por etapas
-- [ ] Salvar progresso e notas por usuario
-- [ ] Exibir progresso percentual
+- [x] Criar rota independente do modulo
+- [x] Implementar selecao de perfil
+- [x] Exibir checklist por etapas
+- [x] Salvar progresso e notas por usuario
+- [x] Exibir progresso percentual
 - [ ] Preparar exportacao futura
-- [ ] Implementar share e voltar
+- [x] Implementar share e voltar
 
 ### Definition of Done
 
@@ -256,16 +256,16 @@ Padronizar a experiencia de uso para qualquer mini-app da suite.
 
 ### Modulos
 
-- [ ] Gerador de Orcamento em PDF
-- [ ] Gerenciador de Oportunidades - Leads
-- [ ] Gerador de Invoice com envio por e-mail
+- [x] Gerador de Orcamento em PDF
+- [x] Gerenciador de Oportunidades - Leads
+- [x] Gerador de Invoice com envio por e-mail
 
 ### Dependencias adicionais
 
-- [ ] Estrategia de PDF consistente
-- [ ] Estrategia de status por documento
-- [ ] Estrategia de envio de e-mail
-- [ ] Estrategia de relacionamento entre lead -> quote -> invoice
+- [x] Estrategia de PDF consistente
+- [x] Estrategia de status por documento
+- [x] Estrategia de envio de e-mail
+- [x] Estrategia de relacionamento entre lead -> quote -> invoice
 
 ---
 
@@ -359,15 +359,27 @@ O site atual nao segue esse design system em todas as paginas. Para reduzir regr
 
 ## File List Inicial Esperada
 
-- [ ] `app/sextou-tools/page.tsx`
-- [ ] `app/sextou-tools/[slug]/page.tsx`
-- [ ] `components/sextou-tools/*`
-- [ ] `lib/sextou-tools/*`
-- [ ] `types/sextou-tools.ts`
-- [ ] `prisma/schema.prisma`
-- [ ] `app/page.tsx`
-- [ ] `app/dashboard/page.tsx`
-- [ ] `components/layout/mobile-menu.tsx`
+- [x] `app/sextou-tools/page.tsx`
+- [x] `app/sextou-tools/[slug]/page.tsx`
+- [x] `components/sextou-tools/*`
+- [x] `lib/sextou-tools/*`
+- [x] `types/sextou-tools.ts`
+- [x] `prisma/schema.prisma`
+- [x] `app/page.tsx`
+- [x] `app/dashboard/page.tsx`
+- [x] `components/layout/mobile-menu.tsx`
+- [x] `app/api/sextou-tools/leads/route.ts`
+- [x] `app/api/sextou-tools/quotes/route.ts`
+- [x] `app/api/sextou-tools/quotes/[id]/pdf/route.ts`
+- [x] `app/api/sextou-tools/invoices/route.ts`
+- [x] `app/api/sextou-tools/invoices/[id]/pdf/route.ts`
+- [x] `app/api/sextou-tools/invoices/[id]/send/route.ts`
+- [x] `components/sextou-tools/tools/quote-pdf-tool.tsx`
+- [x] `components/sextou-tools/tools/leads-manager-tool.tsx`
+- [x] `components/sextou-tools/tools/invoice-email-tool.tsx`
+- [x] `lib/sextou-tools/business.ts`
+- [x] `lib/sextou-tools/pdf.ts`
+- [x] `lib/sextou-tools/email.ts`
 
 ---
 

@@ -3,6 +3,9 @@ import { notFound } from "next/navigation"
 import { HistoryList } from "@/components/sextou-tools/history-list"
 import { BusinessChecklistTool } from "@/components/sextou-tools/tools/business-checklist-tool"
 import { CampaignRoiTool } from "@/components/sextou-tools/tools/campaign-roi-tool"
+import { InvoiceEmailTool } from "@/components/sextou-tools/tools/invoice-email-tool"
+import { LeadsManagerTool } from "@/components/sextou-tools/tools/leads-manager-tool"
+import { QuotePdfTool } from "@/components/sextou-tools/tools/quote-pdf-tool"
 import { QrCodeTool } from "@/components/sextou-tools/tools/qr-code-tool"
 import { ServicePriceTool } from "@/components/sextou-tools/tools/service-price-tool"
 import { ToolShell } from "@/components/sextou-tools/tool-shell"
@@ -105,6 +108,45 @@ export default async function ToolkitToolPage({
         description={tool.description}
       >
         <BusinessChecklistTool historyItems={historyItems} />
+      </ToolShell>
+    )
+  }
+
+  if (tool.slug === "gerador-orcamento-pdf") {
+    return (
+      <ToolShell
+        title={tool.title}
+        phase={tool.phase}
+        statusLabel={statusLabel[tool.status]}
+        description={tool.description}
+      >
+        <QuotePdfTool historyItems={historyItems} />
+      </ToolShell>
+    )
+  }
+
+  if (tool.slug === "gerenciador-oportunidades-leads") {
+    return (
+      <ToolShell
+        title={tool.title}
+        phase={tool.phase}
+        statusLabel={statusLabel[tool.status]}
+        description={tool.description}
+      >
+        <LeadsManagerTool historyItems={historyItems} />
+      </ToolShell>
+    )
+  }
+
+  if (tool.slug === "gerador-invoice-email") {
+    return (
+      <ToolShell
+        title={tool.title}
+        phase={tool.phase}
+        statusLabel={statusLabel[tool.status]}
+        description={tool.description}
+      >
+        <InvoiceEmailTool historyItems={historyItems} />
       </ToolShell>
     )
   }

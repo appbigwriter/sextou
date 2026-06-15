@@ -14,15 +14,22 @@ interface EmailOptions {
   to: string
   subject: string
   html: string
+  attachments?: Array<{
+    filename: string
+    content: string
+    encoding?: string
+    contentType?: string
+  }>
 }
 
-export async function sendEmail({ to, subject, html }: EmailOptions) {
+export async function sendEmail({ to, subject, html, attachments }: EmailOptions) {
   try {
     await transporter.sendMail({
       from: process.env.SMTP_FROM || "noreply@sextadoempreendedor.com",
       to,
       subject,
       html,
+      attachments,
     })
     return { success: true }
   } catch (error) {

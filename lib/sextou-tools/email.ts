@@ -68,5 +68,15 @@ export async function sendToolkitInvoiceEmail(input: ToolkitInvoiceEmailInput) {
     to: input.to,
     subject: `${input.invoiceNumber} - ${input.title}`,
     html: getToolkitInvoiceEmailTemplate(input),
+    attachments: input.pdfBase64
+      ? [
+          {
+            filename: `${input.invoiceNumber}.pdf`,
+            content: input.pdfBase64,
+            encoding: "base64",
+            contentType: "application/pdf",
+          },
+        ]
+      : undefined,
   })
 }
