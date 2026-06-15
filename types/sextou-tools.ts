@@ -71,3 +71,38 @@ export interface ToolkitInvoiceInput {
   emailMessage?: string
   lineItems: ToolkitLineItemInput[]
 }
+
+export interface ToolkitProjectInput {
+  name: string
+  description?: string
+  status: string
+  priority: string
+  dueDate?: string | null
+}
+
+export interface ToolkitTaskInput {
+  projectId: string
+  title: string
+  description?: string
+  status: string
+  priority: string
+  assigneeName?: string
+  dueDate?: string | null
+}
+
+export interface ToolkitDirectoryEntryInput {
+  businessName: string
+  ownerName: string
+  category: string
+  city: string
+  state: string
+  phone?: string
+  whatsapp?: string
+  email?: string
+  instagram?: string
+  website?: string
+  shortDescription: string
+  servicesSummary?: string
+  badgeLabel?: string
+  isPublic?: boolean
+}

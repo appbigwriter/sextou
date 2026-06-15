@@ -1,10 +1,13 @@
 import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import {
+  ToolkitDirectoryEntryInput,
   ToolkitInvoiceInput,
   ToolkitLeadInput,
   ToolkitLineItemInput,
+  ToolkitProjectInput,
   ToolkitQuoteInput,
+  ToolkitTaskInput,
 } from "@/types/sextou-tools"
 
 function calculateLineItems(lineItems: ToolkitLineItemInput[]) {
@@ -185,6 +188,164 @@ export async function markToolkitInvoiceSent(invoiceId: string) {
     data: {
       status: "SENT",
       lastEmailSentAt: new Date(),
+    },
+  })
+}
+
+function computeProjectProgress(tasks: Array<{ status: string }>) {
+  if (tasks.length === 0) {
+    return 0
+  }
+
+  const completed = tasks.filter((task) => task.status === "DONE").length
+  return Math.round((completed / tasks.length) * 100)
+}
+
+export async function listToolkitProjects(userId: string) {
+  const projects = await prisma.toolkitProject.findMany({
+    where: { userId },
+    include: {
+      tasks: {
+        orderBy: [{ createdAt: "desc" }],
+      },
+    },
+    orderBy: [{ updatedAt: "desc" }],
+    take: 12,
+  })
+
+  return projects.map((project) => ({
+    ...project,
+    progress: computeProjectProgress(project.tasks),
+  }))
+}
+
+export async function createToolkitProject(userId: string, input: ToolkitProjectInput) {
+  return prisma.toolkitProject.create({
+    data: {
+      userId,
+      name: input.name,
+      description: input.description || undefined,
+      status: input.status,
+      priority: input.priority,
+      dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+    },
+  })
+}
+
+export async function createToolkitTask(userId: string, input: ToolkitTaskInput) {
+  const task = await prisma.toolkitTask.create({
+    data: {
+      userId,
+      projectId: input.projectId,
+      title: input.title,
+      description: input.description || undefined,
+      status: input.status,
+      priority: input.priority,
+      assigneeName: input.assigneeName || undefined,
+      dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+      completedAt: input.status === "DONE" ? new Date() : undefined,
+    },
+  })
+
+  const projectTasks = await prisma.toolkitTask.findMany({
+    where: { projectId: input.projectId, userId },
+    select: { status: true },
+  })
+
+  await prisma.toolkitProject.update({
+    where: { id: input.projectId },
+    data: {
+      progress: computeProjectProgress(projectTasks),
+    },
+  })
+
+  return task
+}
+
+export async function updateToolkitTaskStatus(userId: string, taskId: string, status: string) {
+  const task = await prisma.toolkitTask.findFirst({
+    where: { id: taskId, userId },
+    select: {
+      id: true,
+      projectId: true,
+    },
+  })
+
+  if (!task) {
+    throw new Error("task-not-found")
+  }
+
+  const updatedTask = await prisma.toolkitTask.update({
+    where: { id: taskId },
+    data: {
+      status,
+      completedAt: status === "DONE" ? new Date() : null,
+    },
+  })
+
+  const projectTasks = await prisma.toolkitTask.findMany({
+    where: { projectId: task.projectId, userId },
+    select: { status: true },
+  })
+
+  await prisma.toolkitProject.update({
+    where: { id: task.projectId },
+    data: {
+      progress: computeProjectProgress(projectTasks),
+    },
+  })
+
+  return updatedTask
+}
+
+export async function listToolkitDirectoryEntries(userId: string, isAdmin: boolean) {
+  return prisma.toolkitDirectoryEntry.findMany({
+    where: isAdmin
+      ? undefined
+      : {
+          OR: [{ status: "APPROVED", isPublic: true }, { userId }],
+        },
+    orderBy: [{ updatedAt: "desc" }],
+    take: 24,
+  })
+}
+
+export async function createToolkitDirectoryEntry(
+  userId: string,
+  input: ToolkitDirectoryEntryInput
+) {
+  return prisma.toolkitDirectoryEntry.create({
+    data: {
+      userId,
+      businessName: input.businessName,
+      ownerName: input.ownerName,
+      category: input.category,
+      city: input.city,
+      state: input.state,
+      phone: input.phone || undefined,
+      whatsapp: input.whatsapp || undefined,
+      email: input.email || undefined,
+      instagram: input.instagram || undefined,
+      website: input.website || undefined,
+      shortDescription: input.shortDescription,
+      servicesSummary: input.servicesSummary || undefined,
+      badgeLabel: input.badgeLabel || undefined,
+      isPublic: input.isPublic ?? true,
+      status: "PENDING",
+    },
+  })
+}
+
+export async function moderateToolkitDirectoryEntry(
+  entryId: string,
+  status: "APPROVED" | "REJECTED",
+  adminNotes?: string
+) {
+  return prisma.toolkitDirectoryEntry.update({
+    where: { id: entryId },
+    data: {
+      status,
+      adminNotes: adminNotes || undefined,
     },
   })
 }

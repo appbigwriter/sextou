@@ -16,6 +16,7 @@ export async function requireToolkitUser() {
       fullName: true,
       businessName: true,
       email: true,
+      isAdmin: true,
     },
   })
 
@@ -40,6 +41,7 @@ export async function requireToolkitApiUser() {
       fullName: true,
       businessName: true,
       email: true,
+      isAdmin: true,
     },
   })
 }
