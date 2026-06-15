@@ -134,13 +134,40 @@ export default async function AfiliadosPage() {
                 </div>
               ) : (
                 user.affiliates.map((affiliate) => (
-                  <div key={affiliate.id} className="py-4 flex justify-between items-center">
-                    <div>
-                      <p className="font-medium text-gray-900">{affiliate.fullName}</p>
-                      <p className="text-sm text-gray-500">{affiliate.businessName}</p>
+                  <div key={affiliate.id} className="py-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <p className="font-medium text-gray-900">{affiliate.fullName}</p>
+                        <p className="text-sm text-gray-500 font-medium">{affiliate.businessName}</p>
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        {new Date(affiliate.createdAt).toLocaleDateString("pt-BR")}
+                      </div>
                     </div>
-                    <div className="text-sm text-gray-400">
-                      Entrou em {new Date(affiliate.createdAt).toLocaleDateString("pt-BR")}
+                    <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 mt-3 bg-gray-50 p-3 rounded-lg border">
+                      <div>
+                        <span className="font-medium text-gray-500 block text-xs uppercase">Contato</span>
+                        <p className="truncate" title={affiliate.email}>📧 {affiliate.email}</p>
+                        <p>📱 {affiliate.whatsapp}</p>
+                      </div>
+                      <div>
+                        <span className="font-medium text-gray-500 block text-xs uppercase">Localização</span>
+                        <p>📍 {affiliate.city}, {affiliate.state}</p>
+                        <p className="text-xs text-gray-400">{affiliate.country}</p>
+                      </div>
+                      {(affiliate.instagram || affiliate.website) && (
+                        <div className="col-span-2 pt-2 mt-1 border-t border-gray-200">
+                          <span className="font-medium text-gray-500 block text-xs uppercase">Redes / Site</span>
+                          <div className="flex gap-4">
+                            {affiliate.instagram && <p>📸 {affiliate.instagram}</p>}
+                            {affiliate.website && (
+                              <a href={affiliate.website} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">
+                                🌐 Website
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))

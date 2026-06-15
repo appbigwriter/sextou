@@ -16,34 +16,35 @@ datasource db {
 // ========================================
 
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  passwordHash  String   @map("password_hash")
-  fullName      String   @map("full_name")
-  businessName  String   @map("business_name")
-  whatsapp      String
-  instagram     String?
-  website       String?
-  city          String
-  state         String
-  country       String   @default("United States")
-  profileImage  String?  @map("profile_image")
-  status        String   @default("ACTIVE")
-  isVip         Boolean  @default(false) @map("is_vip")
-  isAdmin       Boolean  @default(false) @map("is_admin")
-  balance       Float    @default(0)
-  affiliateId   String?  @map("affiliate_id")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  fullName     String   @map("full_name")
+  businessName String   @map("business_name")
+  whatsapp     String
+  instagram    String?
+  website      String?
+  city         String
+  state        String
+  country      String   @default("United States")
+  profileImage String?  @map("profile_image")
+  status       String   @default("ACTIVE")
+  isVip        Boolean  @default(false) @map("is_vip")
+  isAdmin      Boolean  @default(false) @map("is_admin")
+  balance      Float    @default(0)
+  affiliateId  String?  @map("affiliate_id")
+  zelleCode    String?  @map("zelle_code")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  ads           Ad[]
-  payments      Payment[]
-  notifications Notification[]
+  ads                 Ad[]
+  payments            Payment[]
+  notifications       Notification[]
   passwordResetTokens PasswordResetToken[]
 
-  affiliate     User?    @relation("UserAffiliates", fields: [affiliateId], references: [id])
-  affiliates    User[]   @relation("UserAffiliates")
-  territories   AffiliateTerritory[]
+  affiliate   User?                @relation("UserAffiliates", fields: [affiliateId], references: [id])
+  affiliates  User[]               @relation("UserAffiliates")
+  territories AffiliateTerritory[]
 
   @@map("users")
 }
@@ -53,27 +54,27 @@ model User {
 // ========================================
 
 model MasterTerritory {
-  id          String   @id @default(uuid())
-  city        String
-  state       String
-  country     String   @default("United States")
-  isActive    Boolean  @default(true) @map("is_active")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id        String   @id @default(uuid())
+  city      String
+  state     String
+  country   String   @default("United States")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  affiliates  AffiliateTerritory[]
+  affiliates AffiliateTerritory[]
 
   @@unique([city, state])
   @@map("master_territories")
 }
 
 model AffiliateTerritory {
-  id            String   @id @default(uuid())
-  affiliateId   String   @map("affiliate_id")
-  territoryId   String   @map("territory_id")
-  createdAt     DateTime @default(now()) @map("created_at")
+  id          String   @id @default(uuid())
+  affiliateId String   @map("affiliate_id")
+  territoryId String   @map("territory_id")
+  createdAt   DateTime @default(now()) @map("created_at")
 
-  affiliate     User            @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
-  territory     MasterTerritory @relation(fields: [territoryId], references: [id], onDelete: Cascade)
+  affiliate User            @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  territory MasterTerritory @relation(fields: [territoryId], references: [id], onDelete: Cascade)
 
   @@unique([affiliateId, territoryId])
   @@index([affiliateId])
@@ -93,8 +94,8 @@ model Category {
   icon        String?
   order       Int     @default(0)
   isActive    Boolean @default(true) @map("is_active")
-  
-  ads         Ad[]
+
+  ads Ad[]
 
   @@map("categories")
 }
@@ -104,44 +105,44 @@ model Category {
 // ========================================
 
 model Ad {
-  id                String    @id @default(uuid())
-  userId            String    @map("user_id")
-  categoryId        String    @map("category_id")
-  title             String
-  shortDescription  String    @map("short_description")
-  fullDescription   String    @map("full_description")
-  offerType         String    @default("PRODUCT") @map("offer_type")
-  price             Float?
-  promotionText     String?   @map("promotion_text")
-  city              String
-  state             String?
-  latitude          Float?
-  longitude         Float?
-  deliveryType      String    @default("LOCAL") @map("delivery_type")
-  externalLink      String?   @map("external_link")
-  whatsappContact   String    @map("whatsapp_contact")
-  status            String    @default("DRAFT")
-  paymentStatus     String    @default("PENDING") @map("payment_status")
-  paymentAmount     Float?    @map("payment_amount")
-  paymentDate       DateTime? @map("payment_date")
-  scheduledDate     DateTime? @map("scheduled_date")
-  publishedAt       DateTime? @map("published_at")
-  expiresAt         DateTime? @map("expires_at")
-  viewsCount        Int       @default(0) @map("views_count")
-  clicksCount       Int       @default(0) @map("clicks_count")
-  imageOrientation  String    @default("VERTICAL") @map("image_orientation")
-  isFeatured        Boolean   @default(false) @map("is_featured")
-  rejectionReason   String?   @map("rejection_reason")
-  adminNotes        String?   @map("admin_notes")
-  createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
+  id               String    @id @default(uuid())
+  userId           String    @map("user_id")
+  categoryId       String    @map("category_id")
+  title            String
+  shortDescription String    @map("short_description")
+  fullDescription  String    @map("full_description")
+  offerType        String    @default("PRODUCT") @map("offer_type")
+  price            Float?
+  promotionText    String?   @map("promotion_text")
+  city             String
+  state            String?
+  latitude         Float?
+  longitude        Float?
+  deliveryType     String    @default("LOCAL") @map("delivery_type")
+  externalLink     String?   @map("external_link")
+  whatsappContact  String    @map("whatsapp_contact")
+  status           String    @default("DRAFT")
+  paymentStatus    String    @default("PENDING") @map("payment_status")
+  paymentAmount    Float?    @map("payment_amount")
+  paymentDate      DateTime? @map("payment_date")
+  scheduledDate    DateTime? @map("scheduled_date")
+  publishedAt      DateTime? @map("published_at")
+  expiresAt        DateTime? @map("expires_at")
+  viewsCount       Int       @default(0) @map("views_count")
+  clicksCount      Int       @default(0) @map("clicks_count")
+  imageOrientation String    @default("VERTICAL") @map("image_orientation")
+  isFeatured       Boolean   @default(false) @map("is_featured")
+  rejectionReason  String?   @map("rejection_reason")
+  adminNotes       String?   @map("admin_notes")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
 
-  user              User      @relation(fields: [userId], references: [id])
-  category          Category  @relation(fields: [categoryId], references: [id])
-  images            AdImage[]
-  videos            AdVideo[]
-  payments          Payment[]
-  leads             Lead[]
+  user     User      @relation(fields: [userId], references: [id])
+  category Category  @relation(fields: [categoryId], references: [id])
+  images   AdImage[]
+  videos   AdVideo[]
+  payments Payment[]
+  leads    Lead[]
 
   @@index([userId])
   @@index([categoryId])
@@ -160,7 +161,7 @@ model AdImage {
   order      Int      @default(0)
   uploadedAt DateTime @default(now()) @map("uploaded_at")
 
-  ad         Ad       @relation(fields: [adId], references: [id], onDelete: Cascade)
+  ad Ad @relation(fields: [adId], references: [id], onDelete: Cascade)
 
   @@index([adId])
   @@map("ad_images")
@@ -172,7 +173,7 @@ model AdVideo {
   videoUrl   String   @map("video_url")
   uploadedAt DateTime @default(now()) @map("uploaded_at")
 
-  ad         Ad       @relation(fields: [adId], references: [id], onDelete: Cascade)
+  ad Ad @relation(fields: [adId], references: [id], onDelete: Cascade)
 
   @@index([adId])
   @@map("ad_videos")
@@ -197,8 +198,8 @@ model Payment {
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
 
-  ad              Ad        @relation(fields: [adId], references: [id])
-  user            User      @relation(fields: [userId], references: [id])
+  ad   Ad   @relation(fields: [adId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@index([adId])
   @@index([status])
@@ -210,17 +211,17 @@ model Payment {
 // ========================================
 
 model Lead {
-  id          String   @id @default(uuid())
-  adId        String   @map("ad_id")
-  userName    String?  @map("user_name")
-  userEmail   String?  @map("user_email")
-  userPhone   String?  @map("user_phone")
-  source      String   @default("WEBSITE_CLICK")
-  ipAddress   String?  @map("ip_address")
-  userAgent   String?  @map("user_agent")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id        String   @id @default(uuid())
+  adId      String   @map("ad_id")
+  userName  String?  @map("user_name")
+  userEmail String?  @map("user_email")
+  userPhone String?  @map("user_phone")
+  source    String   @default("WEBSITE_CLICK")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  ad          Ad       @relation(fields: [adId], references: [id])
+  ad Ad @relation(fields: [adId], references: [id])
 
   @@index([adId])
   @@map("leads")
@@ -232,29 +233,29 @@ model Lead {
 
 model AdminUser {
   id           String    @id @default(uuid())
-  email        String     @unique
-  passwordHash String     @map("password_hash")
-  fullName     String     @map("full_name")
-  role         String     @default("MODERATOR")
-  lastLogin    DateTime?  @map("last_login")
-  createdAt    DateTime   @default(now()) @map("created_at")
-  updatedAt    DateTime   @updatedAt @map("updated_at")
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  fullName     String    @map("full_name")
+  role         String    @default("MODERATOR")
+  lastLogin    DateTime? @map("last_login")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
 
-  actions      AdminAction[]
+  actions AdminAction[]
 
   @@map("admin_users")
 }
 
 model AdminAction {
-  id          String   @id @default(uuid())
-  adminId     String   @map("admin_id")
-  actionType  String   @map("action_type")
-  entityType  String   @map("entity_type")
-  entityId    String   @map("entity_id")
-  details     String?  @map("details")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id         String   @id @default(uuid())
+  adminId    String   @map("admin_id")
+  actionType String   @map("action_type")
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  details    String?  @map("details")
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  admin       AdminUser @relation(fields: [adminId], references: [id])
+  admin AdminUser @relation(fields: [adminId], references: [id])
 
   @@index([adminId])
   @@index([entityType, entityId])
@@ -294,7 +295,7 @@ model Notification {
   sentAt    DateTime? @map("sent_at")
   createdAt DateTime  @default(now()) @map("created_at")
 
-  user      User      @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@map("notifications")
@@ -307,7 +308,7 @@ model PasswordResetToken {
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([expiresAt])

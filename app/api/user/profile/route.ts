@@ -4,11 +4,15 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
 const updateProfileSchema = z.object({
+  fullName: z.string().optional(),
+  businessName: z.string().optional(),
   whatsapp: z.string().optional(),
   instagram: z.string().optional(),
   website: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
+  country: z.string().optional(),
+  zelleCode: z.string().optional().nullable(),
 })
 
 export async function PATCH(request: NextRequest) {
@@ -29,11 +33,15 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json({
       id: user.id,
+      fullName: user.fullName,
+      businessName: user.businessName,
       whatsapp: user.whatsapp,
       instagram: user.instagram,
       website: user.website,
       city: user.city,
       state: user.state,
+      country: user.country,
+      zelleCode: user.zelleCode,
     })
   } catch (error) {
     if (error instanceof z.ZodError) {

@@ -38,7 +38,8 @@ export default async function PerfilPage() {
           </Link>
           <nav className="flex items-center gap-4">
             <Link href="/dashboard" className="text-gray-600 hover:text-[#F97316]">Dashboard</Link>
-            <Link href="/dashboard/perfil" className="text-[#F97316] font-medium">Perfil</Link>
+            <Link href="/dashboard/perfil" className="text-[#F97316] font-medium">Perfil Público</Link>
+            <Link href="/dashboard/dados" className="text-gray-600 hover:text-[#F97316]">Meus Dados</Link>
             <Link href="/dashboard/configuracoes" className="text-gray-600 hover:text-[#F97316]">Configurações</Link>
           </nav>
         </div>

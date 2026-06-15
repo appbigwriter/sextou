@@ -79,6 +79,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               { href: "/anuncios", label: "Ver Vitrine" },
               { href: "/dashboard", label: "Meu Dashboard" },
               { href: "/dashboard/afiliados", label: "Meus Afiliados" },
+              { href: "/dashboard/dados", label: "Meus Dados" },
               { href: "/Manual_Afiliado_SEXTOU.pdf", label: "📄 Manual do Afiliado" },
               { href: "/dashboard/configuracoes", label: "Configurações" },
               { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
@@ -161,12 +162,20 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <p className="text-sm text-gray-600">Compartilhe e ganhe comissões</p>
           </Link>
           <Link
+            href="/dashboard/dados"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
+          >
+            <div className="text-4xl mb-3">👤</div>
+            <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Meus Dados</h3>
+            <p className="text-sm text-gray-600">Gerencie informações e Zelle</p>
+          </Link>
+          <Link
             href="/dashboard/configuracoes"
             className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
           >
             <div className="text-4xl mb-3">⚙️</div>
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Configurações</h3>
-            <p className="text-sm text-gray-600">Edite seu perfil</p>
+            <p className="text-sm text-gray-600">Preferências do sistema</p>
           </Link>
           {userIsAdmin && (
             <Link
