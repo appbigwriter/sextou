@@ -1,3 +1,5 @@
+import type { Prisma } from "@prisma/client"
+
 export type ToolkitStatus = "planned" | "beta" | "live"
 
 export interface ToolkitTool {
@@ -14,7 +16,7 @@ export interface ToolkitTool {
 }
 
 export interface ToolkitExecutionPayload {
-  input?: Record<string, unknown> | null
-  output?: Record<string, unknown> | null
-  metadata?: Record<string, unknown> | null
+  input?: Prisma.InputJsonValue | null
+  output?: Prisma.InputJsonValue | null
+  metadata?: Prisma.InputJsonValue | null
 }

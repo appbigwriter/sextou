@@ -41,6 +41,7 @@ model User {
   payments            Payment[]
   notifications       Notification[]
   passwordResetTokens PasswordResetToken[]
+  toolExecutions      ToolExecution[]
 
   affiliate   User?                @relation("UserAffiliates", fields: [affiliateId], references: [id])
   affiliates  User[]               @relation("UserAffiliates")
@@ -344,4 +345,21 @@ model Video {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("videos")
+}
+
+model ToolExecution {
+  id           String   @id @default(uuid())
+  userId       String   @map("user_id")
+  toolSlug     String   @map("tool_slug")
+  inputJson    Json?    @map("input_json")
+  outputJson   Json?    @map("output_json")
+  metadataJson Json?    @map("metadata_json")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([toolSlug])
+  @@map("tool_executions")
 }

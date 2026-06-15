@@ -78,6 +78,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               { href: "/", label: "Home" },
               { href: "/anuncios", label: "Ver Vitrine" },
               { href: "/dashboard", label: "Meu Dashboard" },
+              { href: "/sextou-tools", label: "Sextou Tools" },
               { href: "/dashboard/afiliados", label: "Meus Afiliados" },
               { href: "/dashboard/dados", label: "Meus Dados" },
               { href: "/Manual_Afiliado_SEXTOU.pdf", label: "📄 Manual do Afiliado" },
@@ -152,6 +153,15 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <div className="text-4xl mb-3">🎓</div>
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">SextouTrainning</h3>
             <p className="text-sm text-gray-600">Dicas para fazer um anuncio matador</p>
+          </Link>
+          <Link
+            href="/sextou-tools"
+            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group relative overflow-hidden flex flex-col items-center text-center"
+          >
+            <div className="absolute top-0 right-0 p-2 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-xl">Tool</div>
+            <div className="text-4xl mb-3">ST</div>
+            <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Sextou Tools</h3>
+            <p className="text-sm text-gray-600">Acesse o Brazilian Business Toolkit</p>
           </Link>
           <Link
             href="/dashboard/afiliados"
