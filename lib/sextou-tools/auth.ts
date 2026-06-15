@@ -25,3 +25,21 @@ export async function requireToolkitUser() {
 
   return user
 }
+
+export async function requireToolkitApiUser() {
+  const session = await auth()
+
+  if (!session?.user?.email) {
+    return null
+  }
+
+  return prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: {
+      id: true,
+      fullName: true,
+      businessName: true,
+      email: true,
+    },
+  })
+}
