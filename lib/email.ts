@@ -10,10 +10,15 @@ const transporter = nodemailer.createTransport({
   },
 })
 
+export function isSmtpConfigured() {
+  return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASSWORD)
+}
+
 interface EmailOptions {
   to: string
   subject: string
   html: string
+  replyTo?: string
   attachments?: Array<{
     filename: string
     content: string
@@ -22,13 +27,18 @@ interface EmailOptions {
   }>
 }
 
-export async function sendEmail({ to, subject, html, attachments }: EmailOptions) {
+export async function sendEmail({ to, subject, html, replyTo, attachments }: EmailOptions) {
+  if (!isSmtpConfigured()) {
+    return { success: false, error: new Error("SMTP not configured") }
+  }
+
   try {
     await transporter.sendMail({
       from: process.env.SMTP_FROM || "noreply@sextadoempreendedor.com",
       to,
       subject,
       html,
+      replyTo,
       attachments,
     })
     return { success: true }

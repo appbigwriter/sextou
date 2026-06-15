@@ -4,6 +4,7 @@ import { sendToolkitInvoiceEmail } from "@/lib/sextou-tools/email"
 import { requireToolkitApiUser } from "@/lib/sextou-tools/auth"
 import { createToolkitPdfBuffer } from "@/lib/sextou-tools/pdf"
 import { markToolkitInvoiceSent } from "@/lib/sextou-tools/business"
+import { isSmtpConfigured } from "@/lib/email"
 
 function formatUsd(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -37,6 +38,13 @@ export async function POST(
     return NextResponse.json({ error: "Client email is required" }, { status: 400 })
   }
 
+  if (!isSmtpConfigured()) {
+    return NextResponse.json(
+      { error: "SMTP not configured. Set SMTP_HOST, SMTP_USER and SMTP_PASSWORD." },
+      { status: 503 }
+    )
+  }
+
   const items = Array.isArray(invoice.lineItemsJson) ? invoice.lineItemsJson : []
   const pdf = createToolkitPdfBuffer({
     title: invoice.title,
@@ -63,13 +71,17 @@ export async function POST(
     invoiceNumber: invoice.invoiceNumber,
     title: invoice.emailSubject || invoice.title,
     total: formatUsd(invoice.total),
+    replyTo: invoice.clientEmail,
     dueDate: invoice.dueDate?.toLocaleDateString("pt-BR"),
     message: invoice.emailMessage,
     pdfBase64: pdf.toString("base64"),
   })
 
   if (!result.success) {
-    return NextResponse.json({ error: "Email send failed" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Email send failed", details: String(result.error ?? "unknown") },
+      { status: 500 }
+    )
   }
 
   await markToolkitInvoiceSent(invoice.id)

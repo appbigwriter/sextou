@@ -50,7 +50,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-10 w-auto object-contain" />
+            <img src="/images/logoPNGSextou.png" alt="SEXTOU.biz" className="h-10 w-auto object-contain" />
           </Link>
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center gap-4">
@@ -107,6 +107,24 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <p className="text-gray-600">Gerencie seus anúncios e configurações</p>
         </div>
 
+        <div className="mb-8 rounded-2xl border border-[#F97316]/20 bg-gradient-to-r from-[#FFF7ED] to-white p-5 shadow-sm">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#F97316]">Sextou Tools</p>
+              <h2 className="mt-1 text-lg font-semibold text-gray-900">Acesso rapido ao Brazilian Business Toolkit</h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Use o hub para QR Code, precificacao, ROI, invoices, projetos e o diretorio.
+              </p>
+            </div>
+            <Link
+              href="/sextou-tools"
+              className="inline-flex items-center justify-center rounded-xl bg-[#F97316] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#EA580C]"
+            >
+              Abrir Sextou Tools
+            </Link>
+          </div>
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl p-6 border shadow-sm text-center flex flex-col items-center justify-center">
@@ -156,7 +174,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </Link>
           <Link
             href="/sextou-tools"
-            className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group relative overflow-hidden flex flex-col items-center text-center"
+            className="bg-white rounded-xl p-6 border-2 border-[#F97316]/40 shadow-sm hover:border-[#F97316] transition group relative overflow-hidden flex flex-col items-center text-center"
           >
             <div className="absolute top-0 right-0 p-2 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-xl text-xs font-semibold text-[#F97316]">Novo</div>
             <div className="text-4xl mb-3">QR</div>

@@ -5,6 +5,7 @@ import {
   listToolkitDirectoryEntries,
 } from "@/lib/sextou-tools/business"
 import { requireToolkitApiUser } from "@/lib/sextou-tools/auth"
+import { ToolkitDatabaseUnavailableError } from "@/lib/sextou-tools/prisma-guards"
 
 const directorySchema = z.object({
   businessName: z.string().min(1),
@@ -48,10 +49,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 })
   }
 
-  const entry = await createToolkitDirectoryEntry(user.id, {
-    ...parsed.data,
-    email: parsed.data.email || undefined,
-  })
+  try {
+    const entry = await createToolkitDirectoryEntry(user.id, {
+      ...parsed.data,
+      email: parsed.data.email || undefined,
+    })
 
-  return NextResponse.json({ entry })
+    return NextResponse.json({ entry })
+  } catch (error) {
+    if (error instanceof ToolkitDatabaseUnavailableError) {
+      return NextResponse.json({ error: "Toolkit database unavailable" }, { status: 503 })
+    }
+
+    throw error
+  }
 }

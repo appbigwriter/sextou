@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import { requireToolkitApiUser } from "@/lib/sextou-tools/auth"
 import { updateToolkitTaskStatus } from "@/lib/sextou-tools/business"
+import { ToolkitDatabaseUnavailableError } from "@/lib/sextou-tools/prisma-guards"
 
 const patchSchema = z.object({
   status: z.string().min(1),
@@ -27,7 +28,11 @@ export async function PATCH(
   try {
     const task = await updateToolkitTaskStatus(user.id, params.id, parsed.data.status)
     return NextResponse.json({ task })
-  } catch {
+  } catch (error) {
+    if (error instanceof ToolkitDatabaseUnavailableError) {
+      return NextResponse.json({ error: "Toolkit database unavailable" }, { status: 503 })
+    }
+
     return NextResponse.json({ error: "Task not found" }, { status: 404 })
   }
 }

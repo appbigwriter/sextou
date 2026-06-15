@@ -34,6 +34,16 @@ export default function CadastroPage() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
+  const getSafeNextPath = () => {
+    if (typeof window === "undefined") {
+      return "/dashboard"
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    const raw = params.get("next")
+    return raw && raw.startsWith("/") ? raw : "/dashboard"
+  }
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search)
@@ -106,7 +116,7 @@ export default function CadastroPage() {
         return
       }
 
-      router.push("/dashboard")
+      router.push(getSafeNextPath())
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
       setError(`Erro de conexao: ${message}`)
@@ -288,6 +298,9 @@ export default function CadastroPage() {
             >
               {loading ? "Criando conta..." : "Criar Conta"}
             </Button>
+            <div className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+              Depois de criar a conta, voce vai para o destino solicitado ou para o dashboard.
+            </div>
             <p className="text-sm text-center text-muted-foreground">
               Ja tem conta?{" "}
               <Link href="/login" className="text-[#F97316] hover:underline font-medium">

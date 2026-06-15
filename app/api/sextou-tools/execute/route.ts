@@ -3,6 +3,7 @@ import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { recordToolkitExecution } from "@/lib/sextou-tools/history"
+import { ToolkitDatabaseUnavailableError } from "@/lib/sextou-tools/prisma-guards"
 
 const payloadSchema = z.object({
   toolSlug: z.string().min(1),
@@ -34,11 +35,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 })
   }
 
-  const execution = await recordToolkitExecution(user.id, parsed.data.toolSlug, {
-    input: parsed.data.input ?? undefined,
-    output: parsed.data.output ?? undefined,
-    metadata: parsed.data.metadata ?? undefined,
-  })
+  try {
+    const execution = await recordToolkitExecution(user.id, parsed.data.toolSlug, {
+      input: parsed.data.input ?? undefined,
+      output: parsed.data.output ?? undefined,
+      metadata: parsed.data.metadata ?? undefined,
+    })
 
-  return NextResponse.json({ id: execution.id })
+    return NextResponse.json({ id: execution.id })
+  } catch (error) {
+    if (error instanceof ToolkitDatabaseUnavailableError) {
+      return NextResponse.json({ error: "Toolkit database unavailable" }, { status: 503 })
+    }
+
+    throw error
+  }
 }

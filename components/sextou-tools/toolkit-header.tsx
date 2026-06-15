@@ -11,7 +11,7 @@ export function ToolkitHeader({ userName, businessName }: ToolkitHeaderProps) {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4">
           <Link href="/" className="text-[#F0EDE6] transition hover:text-white">
-            <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-9 w-auto object-contain brightness-0 invert" />
+            <img src="/images/logoPNGSextou.png" alt="SEXTOU.biz" className="h-9 w-auto object-contain" />
           </Link>
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#5A5755]">

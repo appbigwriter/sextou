@@ -250,7 +250,9 @@ export function InvoiceEmailTool({ historyItems }: InvoiceEmailToolProps) {
     })
 
     if (!response.ok) {
-      setStatusMessage("Falha ao enviar invoice por e-mail.")
+      const errorBody = await response.json().catch(() => null)
+      const detail = errorBody?.error ? `: ${errorBody.error}` : ""
+      setStatusMessage(`Falha ao enviar invoice por e-mail${detail}`)
       return
     }
 

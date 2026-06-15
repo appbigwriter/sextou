@@ -11,7 +11,7 @@ import { QuotePdfTool } from "@/components/sextou-tools/tools/quote-pdf-tool"
 import { QrCodeTool } from "@/components/sextou-tools/tools/qr-code-tool"
 import { ServicePriceTool } from "@/components/sextou-tools/tools/service-price-tool"
 import { ToolShell } from "@/components/sextou-tools/tool-shell"
-import { requireToolkitUser } from "@/lib/sextou-tools/auth"
+import { resolveToolkitUser } from "@/lib/sextou-tools/auth"
 import { getToolkitTool } from "@/lib/sextou-tools/catalog"
 import { listRecentToolkitExecutionsByTool } from "@/lib/sextou-tools/history"
 
@@ -45,14 +45,15 @@ export default async function ToolkitToolPage({
 }: {
   params: { slug: string }
 }) {
-  const user = await requireToolkitUser()
+  const result = await resolveToolkitUser()
+  const user = result.kind === "ok" ? result.user : null
   const tool = getToolkitTool(params.slug)
 
   if (!tool) {
     notFound()
   }
 
-  const recentHistory = await listRecentToolkitExecutionsByTool(user.id, tool.slug, 8)
+  const recentHistory = user ? await listRecentToolkitExecutionsByTool(user.id, tool.slug, 8) : []
   const historyItems = recentHistory.map((item) => ({
     title: tool.title,
     subtitle:
@@ -70,8 +71,8 @@ export default async function ToolkitToolPage({
         statusLabel={statusLabel[tool.status]}
         description={tool.description}
       >
-        <QrCodeTool historyItems={historyItems} />
-      </ToolShell>
+      <QrCodeTool historyItems={historyItems} />
+    </ToolShell>
     )
   }
 
@@ -186,6 +187,12 @@ export default async function ToolkitToolPage({
       statusLabel={statusLabel[tool.status]}
       description={tool.description}
     >
+      {result.kind === "db-unavailable" ? (
+        <div className="mb-6 rounded-[22px] border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-sm leading-6 text-amber-100">
+          Conexao com o banco temporariamente indisponivel. O mini-app abre, mas historico e
+          salvamento ficam pausados ate a conexao voltar.
+        </div>
+      ) : null}
       <div className="grid gap-6 lg:grid-cols-[1.2fr_minmax(0,0.8fr)]">
         <section className="rounded-[22px] border border-white/10 bg-[#171717] p-6">
           <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Planejado para a Fase {tool.phase}</p>

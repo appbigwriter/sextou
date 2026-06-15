@@ -9,6 +9,10 @@ import {
   ToolkitQuoteInput,
   ToolkitTaskInput,
 } from "@/types/sextou-tools"
+import {
+  rethrowIfNotToolkitSchemaError,
+  throwToolkitDatabaseUnavailable,
+} from "@/lib/sextou-tools/prisma-guards"
 
 function calculateLineItems(lineItems: ToolkitLineItemInput[]) {
   const normalizedItems = lineItems.map((item) => {
@@ -63,133 +67,164 @@ function nextBusinessNumber(prefix: string) {
 }
 
 export async function listToolkitLeads(userId: string) {
-  return prisma.toolkitLead.findMany({
-    where: { userId },
-    orderBy: [{ updatedAt: "desc" }],
-    take: 12,
-  })
+  try {
+    return await prisma.toolkitLead.findMany({
+      where: { userId },
+      orderBy: [{ updatedAt: "desc" }],
+      take: 12,
+    })
+  } catch (error) {
+    rethrowIfNotToolkitSchemaError(error)
+    return []
+  }
 }
 
 export async function createToolkitLead(userId: string, input: ToolkitLeadInput) {
-  return prisma.toolkitLead.create({
-    data: {
-      userId,
-      name: input.name,
-      companyName: input.companyName || undefined,
-      email: input.email || undefined,
-      phone: input.phone || undefined,
-      source: input.source,
-      status: input.status,
-      estimatedValue: input.estimatedValue ?? undefined,
-      notes: input.notes || undefined,
-      tags: input.tags ?? [],
-    },
-  })
+  try {
+    return await prisma.toolkitLead.create({
+      data: {
+        userId,
+        name: input.name,
+        companyName: input.companyName || undefined,
+        email: input.email || undefined,
+        phone: input.phone || undefined,
+        source: input.source,
+        status: input.status,
+        estimatedValue: input.estimatedValue ?? undefined,
+        notes: input.notes || undefined,
+        tags: input.tags ?? [],
+      },
+    })
+  } catch (error) {
+    throwToolkitDatabaseUnavailable(error)
+  }
 }
 
 export async function listToolkitQuotes(userId: string) {
-  return prisma.toolkitQuote.findMany({
-    where: { userId },
-    include: {
-      lead: {
-        select: {
-          id: true,
-          name: true,
+  try {
+    return await prisma.toolkitQuote.findMany({
+      where: { userId },
+      include: {
+        lead: {
+          select: {
+            id: true,
+            name: true,
+          },
         },
       },
-    },
-    orderBy: [{ updatedAt: "desc" }],
-    take: 12,
-  })
+      orderBy: [{ updatedAt: "desc" }],
+      take: 12,
+    })
+  } catch (error) {
+    rethrowIfNotToolkitSchemaError(error)
+    return []
+  }
 }
 
 export async function createToolkitQuote(userId: string, input: ToolkitQuoteInput) {
   const totals = buildDocumentTotals(input.lineItems, input.taxPercent, input.discountAmount)
 
-  return prisma.toolkitQuote.create({
-    data: {
-      userId,
-      leadId: input.leadId || undefined,
-      quoteNumber: nextBusinessNumber("Q"),
-      status: "DRAFT",
-      title: input.title,
-      clientName: input.clientName,
-      clientCompany: input.clientCompany || undefined,
-      clientEmail: input.clientEmail || undefined,
-      clientPhone: input.clientPhone || undefined,
-      issueDate: new Date(input.issueDate),
-      validUntil: input.validUntil ? new Date(input.validUntil) : undefined,
-      notes: input.notes || undefined,
-      lineItemsJson: totals.normalizedItems as Prisma.InputJsonValue,
-      subtotal: totals.subtotal,
-      taxPercent: totals.taxPercent,
-      taxAmount: totals.taxAmount,
-      discountAmount: totals.discountAmount,
-      total: totals.total,
-    },
-  })
+  try {
+    return await prisma.toolkitQuote.create({
+      data: {
+        userId,
+        leadId: input.leadId || undefined,
+        quoteNumber: nextBusinessNumber("Q"),
+        status: "DRAFT",
+        title: input.title,
+        clientName: input.clientName,
+        clientCompany: input.clientCompany || undefined,
+        clientEmail: input.clientEmail || undefined,
+        clientPhone: input.clientPhone || undefined,
+        issueDate: new Date(input.issueDate),
+        validUntil: input.validUntil ? new Date(input.validUntil) : undefined,
+        notes: input.notes || undefined,
+        lineItemsJson: totals.normalizedItems as Prisma.InputJsonValue,
+        subtotal: totals.subtotal,
+        taxPercent: totals.taxPercent,
+        taxAmount: totals.taxAmount,
+        discountAmount: totals.discountAmount,
+        total: totals.total,
+      },
+    })
+  } catch (error) {
+    throwToolkitDatabaseUnavailable(error)
+  }
 }
 
 export async function listToolkitInvoices(userId: string) {
-  return prisma.toolkitInvoice.findMany({
-    where: { userId },
-    include: {
-      lead: {
-        select: {
-          id: true,
-          name: true,
+  try {
+    return await prisma.toolkitInvoice.findMany({
+      where: { userId },
+      include: {
+        lead: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        quote: {
+          select: {
+            id: true,
+            quoteNumber: true,
+          },
         },
       },
-      quote: {
-        select: {
-          id: true,
-          quoteNumber: true,
-        },
-      },
-    },
-    orderBy: [{ updatedAt: "desc" }],
-    take: 12,
-  })
+      orderBy: [{ updatedAt: "desc" }],
+      take: 12,
+    })
+  } catch (error) {
+    rethrowIfNotToolkitSchemaError(error)
+    return []
+  }
 }
 
 export async function createToolkitInvoice(userId: string, input: ToolkitInvoiceInput) {
   const totals = buildDocumentTotals(input.lineItems, input.taxPercent, input.discountAmount)
 
-  return prisma.toolkitInvoice.create({
-    data: {
-      userId,
-      leadId: input.leadId || undefined,
-      quoteId: input.quoteId || undefined,
-      invoiceNumber: nextBusinessNumber("INV"),
-      status: "DRAFT",
-      title: input.title,
-      clientName: input.clientName,
-      clientCompany: input.clientCompany || undefined,
-      clientEmail: input.clientEmail || undefined,
-      clientPhone: input.clientPhone || undefined,
-      issueDate: new Date(input.issueDate),
-      dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
-      notes: input.notes || undefined,
-      lineItemsJson: totals.normalizedItems as Prisma.InputJsonValue,
-      subtotal: totals.subtotal,
-      taxPercent: totals.taxPercent,
-      taxAmount: totals.taxAmount,
-      discountAmount: totals.discountAmount,
-      total: totals.total,
-      emailSubject: input.emailSubject || undefined,
-      emailMessage: input.emailMessage || undefined,
-    },
-  })
+  try {
+    return await prisma.toolkitInvoice.create({
+      data: {
+        userId,
+        leadId: input.leadId || undefined,
+        quoteId: input.quoteId || undefined,
+        invoiceNumber: nextBusinessNumber("INV"),
+        status: "DRAFT",
+        title: input.title,
+        clientName: input.clientName,
+        clientCompany: input.clientCompany || undefined,
+        clientEmail: input.clientEmail || undefined,
+        clientPhone: input.clientPhone || undefined,
+        issueDate: new Date(input.issueDate),
+        dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+        notes: input.notes || undefined,
+        lineItemsJson: totals.normalizedItems as Prisma.InputJsonValue,
+        subtotal: totals.subtotal,
+        taxPercent: totals.taxPercent,
+        taxAmount: totals.taxAmount,
+        discountAmount: totals.discountAmount,
+        total: totals.total,
+        emailSubject: input.emailSubject || undefined,
+        emailMessage: input.emailMessage || undefined,
+      },
+    })
+  } catch (error) {
+    throwToolkitDatabaseUnavailable(error)
+  }
 }
 
 export async function markToolkitInvoiceSent(invoiceId: string) {
-  return prisma.toolkitInvoice.update({
-    where: { id: invoiceId },
-    data: {
-      status: "SENT",
-      lastEmailSentAt: new Date(),
-    },
-  })
+  try {
+    return await prisma.toolkitInvoice.update({
+      where: { id: invoiceId },
+      data: {
+        status: "SENT",
+        lastEmailSentAt: new Date(),
+      },
+    })
+  } catch (error) {
+    throwToolkitDatabaseUnavailable(error)
+  }
 }
 
 function computeProjectProgress(tasks: Array<{ status: string }>) {
@@ -202,138 +237,168 @@ function computeProjectProgress(tasks: Array<{ status: string }>) {
 }
 
 export async function listToolkitProjects(userId: string) {
-  const projects = await prisma.toolkitProject.findMany({
-    where: { userId },
-    include: {
-      tasks: {
-        orderBy: [{ createdAt: "desc" }],
+  try {
+    const projects = await prisma.toolkitProject.findMany({
+      where: { userId },
+      include: {
+        tasks: {
+          orderBy: [{ createdAt: "desc" }],
+        },
       },
-    },
-    orderBy: [{ updatedAt: "desc" }],
-    take: 12,
-  })
+      orderBy: [{ updatedAt: "desc" }],
+      take: 12,
+    })
 
-  return projects.map((project) => ({
-    ...project,
-    progress: computeProjectProgress(project.tasks),
-  }))
+    return projects.map((project) => ({
+      ...project,
+      progress: computeProjectProgress(project.tasks),
+    }))
+  } catch (error) {
+    rethrowIfNotToolkitSchemaError(error)
+    return []
+  }
 }
 
 export async function createToolkitProject(userId: string, input: ToolkitProjectInput) {
-  return prisma.toolkitProject.create({
-    data: {
-      userId,
-      name: input.name,
-      description: input.description || undefined,
-      status: input.status,
-      priority: input.priority,
-      dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
-    },
-  })
+  try {
+    return await prisma.toolkitProject.create({
+      data: {
+        userId,
+        name: input.name,
+        description: input.description || undefined,
+        status: input.status,
+        priority: input.priority,
+        dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+      },
+    })
+  } catch (error) {
+    throwToolkitDatabaseUnavailable(error)
+  }
 }
 
 export async function createToolkitTask(userId: string, input: ToolkitTaskInput) {
-  const task = await prisma.toolkitTask.create({
-    data: {
-      userId,
-      projectId: input.projectId,
-      title: input.title,
-      description: input.description || undefined,
-      status: input.status,
-      priority: input.priority,
-      assigneeName: input.assigneeName || undefined,
-      dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
-      completedAt: input.status === "DONE" ? new Date() : undefined,
-    },
-  })
+  try {
+    const task = await prisma.toolkitTask.create({
+      data: {
+        userId,
+        projectId: input.projectId,
+        title: input.title,
+        description: input.description || undefined,
+        status: input.status,
+        priority: input.priority,
+        assigneeName: input.assigneeName || undefined,
+        dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+        completedAt: input.status === "DONE" ? new Date() : undefined,
+      },
+    })
 
-  const projectTasks = await prisma.toolkitTask.findMany({
-    where: { projectId: input.projectId, userId },
-    select: { status: true },
-  })
+    const projectTasks = await prisma.toolkitTask.findMany({
+      where: { projectId: input.projectId, userId },
+      select: { status: true },
+    })
 
-  await prisma.toolkitProject.update({
-    where: { id: input.projectId },
-    data: {
-      progress: computeProjectProgress(projectTasks),
-    },
-  })
+    await prisma.toolkitProject.update({
+      where: { id: input.projectId },
+      data: {
+        progress: computeProjectProgress(projectTasks),
+      },
+    })
 
-  return task
+    return task
+  } catch (error) {
+    throwToolkitDatabaseUnavailable(error)
+  }
 }
 
 export async function updateToolkitTaskStatus(userId: string, taskId: string, status: string) {
-  const task = await prisma.toolkitTask.findFirst({
-    where: { id: taskId, userId },
-    select: {
-      id: true,
-      projectId: true,
-    },
-  })
+  try {
+    const task = await prisma.toolkitTask.findFirst({
+      where: { id: taskId, userId },
+      select: {
+        id: true,
+        projectId: true,
+      },
+    })
 
-  if (!task) {
-    throw new Error("task-not-found")
+    if (!task) {
+      throw new Error("task-not-found")
+    }
+
+    const updatedTask = await prisma.toolkitTask.update({
+      where: { id: taskId },
+      data: {
+        status,
+        completedAt: status === "DONE" ? new Date() : null,
+      },
+    })
+
+    const projectTasks = await prisma.toolkitTask.findMany({
+      where: { projectId: task.projectId, userId },
+      select: { status: true },
+    })
+
+    await prisma.toolkitProject.update({
+      where: { id: task.projectId },
+      data: {
+        progress: computeProjectProgress(projectTasks),
+      },
+    })
+
+    return updatedTask
+  } catch (error) {
+    if (error instanceof Error && error.message === "task-not-found") {
+      throw error
+    }
+
+    throwToolkitDatabaseUnavailable(error)
   }
-
-  const updatedTask = await prisma.toolkitTask.update({
-    where: { id: taskId },
-    data: {
-      status,
-      completedAt: status === "DONE" ? new Date() : null,
-    },
-  })
-
-  const projectTasks = await prisma.toolkitTask.findMany({
-    where: { projectId: task.projectId, userId },
-    select: { status: true },
-  })
-
-  await prisma.toolkitProject.update({
-    where: { id: task.projectId },
-    data: {
-      progress: computeProjectProgress(projectTasks),
-    },
-  })
-
-  return updatedTask
 }
 
 export async function listToolkitDirectoryEntries(userId: string, isAdmin: boolean) {
-  return prisma.toolkitDirectoryEntry.findMany({
-    where: isAdmin
-      ? undefined
-      : {
-          OR: [{ status: "APPROVED", isPublic: true }, { userId }],
-        },
-    orderBy: [{ updatedAt: "desc" }],
-    take: 24,
-  })
+  try {
+    return await prisma.toolkitDirectoryEntry.findMany({
+      where: isAdmin
+        ? undefined
+        : {
+            OR: [{ status: "APPROVED", isPublic: true }, { userId }],
+          },
+      orderBy: [{ updatedAt: "desc" }],
+      take: 24,
+    })
+  } catch (error) {
+    rethrowIfNotToolkitSchemaError(error)
+    return []
+  }
 }
 
 export async function createToolkitDirectoryEntry(
   userId: string,
   input: ToolkitDirectoryEntryInput
 ) {
-  return prisma.toolkitDirectoryEntry.create({
-    data: {
-      userId,
-      businessName: input.businessName,
-      ownerName: input.ownerName,
-      category: input.category,
-      city: input.city,
-      state: input.state,
-      phone: input.phone || undefined,
-      whatsapp: input.whatsapp || undefined,
-      email: input.email || undefined,
-      instagram: input.instagram || undefined,
-      website: input.website || undefined,
-      shortDescription: input.shortDescription,
-      servicesSummary: input.servicesSummary || undefined,
-      badgeLabel: input.badgeLabel || undefined,
-      isPublic: input.isPublic ?? true,
-      status: "PENDING",
-    },
-  })
+  try {
+    return await prisma.toolkitDirectoryEntry.create({
+      data: {
+        userId,
+        businessName: input.businessName,
+        ownerName: input.ownerName,
+        category: input.category,
+        city: input.city,
+        state: input.state,
+        phone: input.phone || undefined,
+        whatsapp: input.whatsapp || undefined,
+        email: input.email || undefined,
+        instagram: input.instagram || undefined,
+        website: input.website || undefined,
+        shortDescription: input.shortDescription,
+        servicesSummary: input.servicesSummary || undefined,
+        badgeLabel: input.badgeLabel || undefined,
+        isPublic: input.isPublic ?? true,
+        status: "PENDING",
+      },
+    })
+  } catch (error) {
+    throwToolkitDatabaseUnavailable(error)
+  }
 }
 
 export async function moderateToolkitDirectoryEntry(
@@ -341,13 +406,17 @@ export async function moderateToolkitDirectoryEntry(
   status: "APPROVED" | "REJECTED",
   adminNotes?: string
 ) {
-  return prisma.toolkitDirectoryEntry.update({
-    where: { id: entryId },
-    data: {
-      status,
-      adminNotes: adminNotes || undefined,
-    },
-  })
+  try {
+    return await prisma.toolkitDirectoryEntry.update({
+      where: { id: entryId },
+      data: {
+        status,
+        adminNotes: adminNotes || undefined,
+      },
+    })
+  } catch (error) {
+    throwToolkitDatabaseUnavailable(error)
+  }
 }
 
 export { buildDocumentTotals }

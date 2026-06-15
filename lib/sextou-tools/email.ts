@@ -7,6 +7,7 @@ interface ToolkitInvoiceEmailInput {
   invoiceNumber: string
   title: string
   total: string
+  replyTo?: string
   dueDate?: string | null
   message?: string | null
   pdfBase64?: string
@@ -68,6 +69,7 @@ export async function sendToolkitInvoiceEmail(input: ToolkitInvoiceEmailInput) {
     to: input.to,
     subject: `${input.invoiceNumber} - ${input.title}`,
     html: getToolkitInvoiceEmailTemplate(input),
+    replyTo: input.replyTo,
     attachments: input.pdfBase64
       ? [
           {

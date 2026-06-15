@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -8,29 +8,56 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
+function getSafeNextPath() {
+  if (typeof window === "undefined") {
+    return "/dashboard"
+  }
+
+  const params = new URLSearchParams(window.location.search)
+  const raw = params.get("next")
+  return raw && raw.startsWith("/") ? raw : "/dashboard"
+}
+
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [searchSuffix, setSearchSuffix] = useState("")
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    const next = params.get("next")
+    if (next && next.startsWith("/")) {
+      setSearchSuffix(`?next=${encodeURIComponent(next)}`)
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError("")
 
+    const nextPath = getSafeNextPath()
+
     try {
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
+        callbackUrl: nextPath,
       })
 
       if (result?.error) {
         setError("Email ou senha incorretos")
       } else {
-        router.push("/dashboard")
+        router.push(nextPath)
+        router.refresh()
       }
     } catch (_err) {
       setError("Erro ao fazer login")
@@ -43,7 +70,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#101622] via-slate-900 to-[#0F172A] p-4">
       <div className="mb-8">
         <Link href="/" className="flex items-center">
-          <img src="/images/logo_sextou.png" alt="SEXTOU.biz" className="h-12 w-auto object-contain" />
+          <img src="/images/logoPNGSextou.png" alt="SEXTOU.biz" className="h-12 w-auto object-contain" />
         </Link>
       </div>
       <Card className="w-full max-w-md">
@@ -95,12 +122,11 @@ export default function LoginPage() {
               {loading ? "Entrando..." : "Entrar"}
             </Button>
             <div className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-              Depois do login, voce vai direto para o seu dashboard para ver anuncios enviados,
-              acompanhar a analise e acessar novos envios.
+              Depois do login, voce vai direto para o destino solicitado ou para o seu dashboard.
             </div>
             <p className="text-sm text-center text-muted-foreground">
               Nao tem conta?{" "}
-              <Link href="/cadastro" className="text-[#F97316] hover:underline font-medium">
+              <Link href={`/cadastro${searchSuffix}`} className="text-[#F97316] hover:underline font-medium">
                 Cadastre-se
               </Link>
             </p>

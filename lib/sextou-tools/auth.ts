@@ -1,47 +1,83 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { ToolkitDatabaseUnavailableError, isToolkitDatabaseConnectionError } from "@/lib/sextou-tools/prisma-guards"
 import { redirect } from "next/navigation"
 
-export async function requireToolkitUser() {
+type ToolkitUserLookupResult =
+  | {
+      kind: "ok"
+      user: {
+        id: string
+        fullName: string
+        businessName: string
+        email: string
+        isAdmin: boolean
+      }
+    }
+  | { kind: "unauthorized" }
+  | { kind: "db-unavailable" }
+
+async function lookupToolkitUser(): Promise<ToolkitUserLookupResult> {
   const session = await auth()
 
   if (!session?.user?.email) {
-    redirect("/login?next=/sextou-tools")
+    return { kind: "unauthorized" }
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    select: {
-      id: true,
-      fullName: true,
-      businessName: true,
-      email: true,
-      isAdmin: true,
-    },
-  })
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: {
+        id: true,
+        fullName: true,
+        businessName: true,
+        email: true,
+        isAdmin: true,
+      },
+    })
 
-  if (!user) {
-    redirect("/login")
+    if (!user) {
+      return { kind: "unauthorized" }
+    }
+
+    return { kind: "ok", user }
+  } catch (error) {
+    if (isToolkitDatabaseConnectionError(error)) {
+      return { kind: "db-unavailable" }
+    }
+
+    throw error
+  }
+}
+
+export async function requireToolkitUser() {
+  const result = await lookupToolkitUser()
+
+  if (result.kind === "ok") {
+    return result.user
   }
 
-  return user
+  if (result.kind === "db-unavailable") {
+    throw new ToolkitDatabaseUnavailableError()
+  }
+
+  redirect("/login?next=/sextou-tools")
 }
 
 export async function requireToolkitApiUser() {
-  const session = await auth()
+  const result = await lookupToolkitUser()
 
-  if (!session?.user?.email) {
-    return null
+  if (result.kind === "ok") {
+    return result.user
   }
 
-  return prisma.user.findUnique({
-    where: { email: session.user.email },
-    select: {
-      id: true,
-      fullName: true,
-      businessName: true,
-      email: true,
-      isAdmin: true,
-    },
-  })
+  if (result.kind === "db-unavailable") {
+    throw new ToolkitDatabaseUnavailableError()
+  }
+
+  return null
+}
+
+export async function resolveToolkitUser() {
+  return lookupToolkitUser()
 }

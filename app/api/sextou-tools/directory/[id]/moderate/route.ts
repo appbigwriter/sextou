@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import { moderateToolkitDirectoryEntry } from "@/lib/sextou-tools/business"
 import { requireToolkitApiUser } from "@/lib/sextou-tools/auth"
+import { ToolkitDatabaseUnavailableError } from "@/lib/sextou-tools/prisma-guards"
 
 const moderationSchema = z.object({
   status: z.enum(["APPROVED", "REJECTED"]),
@@ -25,11 +26,19 @@ export async function PATCH(
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 })
   }
 
-  const entry = await moderateToolkitDirectoryEntry(
-    params.id,
-    parsed.data.status,
-    parsed.data.adminNotes
-  )
+  try {
+    const entry = await moderateToolkitDirectoryEntry(
+      params.id,
+      parsed.data.status,
+      parsed.data.adminNotes
+    )
 
-  return NextResponse.json({ entry })
+    return NextResponse.json({ entry })
+  } catch (error) {
+    if (error instanceof ToolkitDatabaseUnavailableError) {
+      return NextResponse.json({ error: "Toolkit database unavailable" }, { status: 503 })
+    }
+
+    throw error
+  }
 }

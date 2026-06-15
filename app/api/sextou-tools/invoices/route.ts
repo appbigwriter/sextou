@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import { createToolkitInvoice, listToolkitInvoices } from "@/lib/sextou-tools/business"
 import { requireToolkitApiUser } from "@/lib/sextou-tools/auth"
+import { ToolkitDatabaseUnavailableError } from "@/lib/sextou-tools/prisma-guards"
 
 const lineItemSchema = z.object({
   description: z.string().min(1),
@@ -52,10 +53,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 })
   }
 
-  const invoice = await createToolkitInvoice(user.id, {
-    ...parsed.data,
-    clientEmail: parsed.data.clientEmail || undefined,
-  })
+  try {
+    const invoice = await createToolkitInvoice(user.id, {
+      ...parsed.data,
+      clientEmail: parsed.data.clientEmail || undefined,
+    })
 
-  return NextResponse.json({ invoice })
+    return NextResponse.json({ invoice })
+  } catch (error) {
+    if (error instanceof ToolkitDatabaseUnavailableError) {
+      return NextResponse.json({ error: "Toolkit database unavailable" }, { status: 503 })
+    }
+
+    throw error
+  }
 }

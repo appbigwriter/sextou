@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { HistoryList } from "@/components/sextou-tools/history-list"
 import { ToolCard } from "@/components/sextou-tools/tool-card"
 import { getToolkitCatalog, groupToolkitCatalogByPhase } from "@/lib/sextou-tools/catalog"
-import { requireToolkitUser } from "@/lib/sextou-tools/auth"
+import { resolveToolkitUser } from "@/lib/sextou-tools/auth"
 import { listRecentToolkitExecutions } from "@/lib/sextou-tools/history"
 
 export const metadata: Metadata = {
@@ -11,20 +11,12 @@ export const metadata: Metadata = {
 }
 
 function ToolkitSection({
-  title,
-  description,
   tools,
 }: {
-  title: string
-  description: string
   tools: ReturnType<typeof getToolkitCatalog>
 }) {
   return (
     <section className="mb-12">
-      <div className="mb-6">
-        <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">{title}</p>
-        <p className="mt-2 max-w-2xl text-sm leading-7 text-[#A09D97]">{description}</p>
-      </div>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {tools.map((tool) => (
           <ToolCard key={tool.slug} tool={tool} />
@@ -35,9 +27,10 @@ function ToolkitSection({
 }
 
 export default async function SextouToolsPage() {
-  const user = await requireToolkitUser()
+  const result = await resolveToolkitUser()
+  const user = result.kind === "ok" ? result.user : null
   const { phase2, phase3, phase4 } = groupToolkitCatalogByPhase()
-  const recentHistory = await listRecentToolkitExecutions(user.id, 5)
+  const recentHistory = user ? await listRecentToolkitExecutions(user.id, 5) : []
   const recentHistoryItems = recentHistory.map((item) => ({
     title: item.toolSlug.replaceAll("-", " "),
     subtitle: typeof item.metadataJson === "object" && item.metadataJson && "summary" in item.metadataJson
@@ -68,42 +61,25 @@ export default async function SextouToolsPage() {
         </div>
       </section>
 
-      <div className="mb-12 grid gap-6 lg:grid-cols-[1.5fr_minmax(0,0.9fr)]">
-        <div className="rounded-[22px] border border-white/10 bg-[#171717] p-6">
-          <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Fase 2 em andamento</p>
-          <h2 className="mt-3 font-toolkit text-3xl font-extrabold text-[#F0EDE6]">
-            Quatro fases publicadas na mesma suite
-          </h2>
-          <ul className="mt-5 space-y-3 text-sm leading-7 text-[#A09D97]">
-            <li>Rotas autenticadas em `app/sextou-tools`</li>
-            <li>Catalogo central com 9 mini-apps publicados</li>
-            <li>Shell compartilhado com share e retorno para o hub</li>
-            <li>Modelagem inicial de historico por usuario no Prisma</li>
-            <li>4 quick wins da fase 2 ja entregues</li>
-            <li>Bloco comercial da fase 3 com leads, orcamentos e invoices ativo</li>
-            <li>Bloco operacional e comunitario da fase 4 com projetos e diretorio ativo</li>
-          </ul>
+      {result.kind === "db-unavailable" ? (
+        <div className="mb-8 rounded-[22px] border border-amber-500/30 bg-amber-500/10 px-5 py-4 text-sm leading-6 text-amber-100">
+          O banco da suíte está temporariamente indisponível. As ferramentas continuam carregando,
+          mas histórico e gravações ficam pausados até a conexão voltar.
         </div>
+      ) : null}
 
-        <div>
-          <p className="mb-3 font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Historico do usuario</p>
-          <HistoryList items={recentHistoryItems} />
-        </div>
+      <div className="mb-12">
+        <p className="mb-3 font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Historico do usuario</p>
+        <HistoryList items={recentHistoryItems} />
       </div>
 
       <ToolkitSection
-        title="Fase 2"
-        description="Quick wins para colocar valor imediato nas maos do usuario com ferramentas rapidas e independentes."
         tools={phase2}
       />
       <ToolkitSection
-        title="Fase 3"
-        description="Ferramentas com documentos, PDF, relacionamento comercial e mais dependencia de persistencia."
         tools={phase3}
       />
       <ToolkitSection
-        title="Fase 4"
-        description="Modulos de operacao continua, organizacao do negocio e fortalecimento da comunidade."
         tools={phase4}
       />
     </main>
