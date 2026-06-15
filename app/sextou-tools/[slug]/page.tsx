@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HistoryList } from "@/components/sextou-tools/history-list"
+import { BusinessChecklistTool } from "@/components/sextou-tools/tools/business-checklist-tool"
+import { CampaignRoiTool } from "@/components/sextou-tools/tools/campaign-roi-tool"
 import { QrCodeTool } from "@/components/sextou-tools/tools/qr-code-tool"
 import { ServicePriceTool } from "@/components/sextou-tools/tools/service-price-tool"
 import { ToolShell } from "@/components/sextou-tools/tool-shell"
@@ -77,6 +79,32 @@ export default async function ToolkitToolPage({
         description={tool.description}
       >
         <ServicePriceTool historyItems={historyItems} />
+      </ToolShell>
+    )
+  }
+
+  if (tool.slug === "calculadora-roi-campanha") {
+    return (
+      <ToolShell
+        title={tool.title}
+        phase={tool.phase}
+        statusLabel={statusLabel[tool.status]}
+        description={tool.description}
+      >
+        <CampaignRoiTool historyItems={historyItems} />
+      </ToolShell>
+    )
+  }
+
+  if (tool.slug === "checklist-abertura-empresa") {
+    return (
+      <ToolShell
+        title={tool.title}
+        phase={tool.phase}
+        statusLabel={statusLabel[tool.status]}
+        description={tool.description}
+      >
+        <BusinessChecklistTool historyItems={historyItems} />
       </ToolShell>
     )
   }
