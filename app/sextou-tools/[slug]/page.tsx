@@ -1,7 +1,11 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { HistoryList } from "@/components/sextou-tools/history-list"
+import { QrCodeTool } from "@/components/sextou-tools/tools/qr-code-tool"
 import { ToolShell } from "@/components/sextou-tools/tool-shell"
+import { requireToolkitUser } from "@/lib/sextou-tools/auth"
 import { getToolkitTool } from "@/lib/sextou-tools/catalog"
+import { listRecentToolkitExecutionsByTool } from "@/lib/sextou-tools/history"
 
 const statusLabel = {
   planned: "Em breve",
@@ -28,15 +32,39 @@ export async function generateMetadata({
   }
 }
 
-export default function ToolkitToolPage({
+export default async function ToolkitToolPage({
   params,
 }: {
   params: { slug: string }
 }) {
+  const user = await requireToolkitUser()
   const tool = getToolkitTool(params.slug)
 
   if (!tool) {
     notFound()
+  }
+
+  const recentHistory = await listRecentToolkitExecutionsByTool(user.id, tool.slug, 8)
+  const historyItems = recentHistory.map((item) => ({
+    title: tool.title,
+    subtitle:
+      typeof item.metadataJson === "object" && item.metadataJson && "summary" in item.metadataJson
+        ? String(item.metadataJson.summary)
+        : undefined,
+    timestamp: item.createdAt.toLocaleString("pt-BR"),
+  }))
+
+  if (tool.slug === "gerador-qr-code") {
+    return (
+      <ToolShell
+        title={tool.title}
+        phase={tool.phase}
+        statusLabel={statusLabel[tool.status]}
+        description={tool.description}
+      >
+        <QrCodeTool historyItems={historyItems} />
+      </ToolShell>
+    )
   }
 
   return (
@@ -67,6 +95,9 @@ export default function ToolkitToolPage({
               </li>
             ))}
           </ul>
+          <div className="mt-6">
+            <HistoryList items={historyItems} />
+          </div>
         </aside>
       </div>
     </ToolShell>

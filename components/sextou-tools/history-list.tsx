@@ -2,6 +2,7 @@ interface HistoryListProps {
   items?: Array<{
     title: string
     timestamp: string
+    subtitle?: string
   }>
 }
 
@@ -23,6 +24,7 @@ export function HistoryList({ items = [] }: HistoryListProps) {
             className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
           >
             <p className="font-semibold text-[#F0EDE6]">{item.title}</p>
+            {item.subtitle ? <p className="mt-1 text-xs text-[#A09D97]">{item.subtitle}</p> : null}
             <p className="font-mono text-xs text-[#A09D97]">{item.timestamp}</p>
           </li>
         ))}

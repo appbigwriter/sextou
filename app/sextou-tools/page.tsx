@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { HistoryList } from "@/components/sextou-tools/history-list"
 import { ToolCard } from "@/components/sextou-tools/tool-card"
 import { getToolkitCatalog, groupToolkitCatalogByPhase } from "@/lib/sextou-tools/catalog"
+import { requireToolkitUser } from "@/lib/sextou-tools/auth"
+import { listRecentToolkitExecutions } from "@/lib/sextou-tools/history"
 
 export const metadata: Metadata = {
   title: "Sextou Tools | Brazilian Business Toolkit",
@@ -32,8 +34,17 @@ function ToolkitSection({
   )
 }
 
-export default function SextouToolsPage() {
+export default async function SextouToolsPage() {
+  const user = await requireToolkitUser()
   const { phase2, phase3, phase4 } = groupToolkitCatalogByPhase()
+  const recentHistory = await listRecentToolkitExecutions(user.id, 5)
+  const recentHistoryItems = recentHistory.map((item) => ({
+    title: item.toolSlug.replaceAll("-", " "),
+    subtitle: typeof item.metadataJson === "object" && item.metadataJson && "summary" in item.metadataJson
+      ? String(item.metadataJson.summary)
+      : undefined,
+    timestamp: item.createdAt.toLocaleString("pt-BR"),
+  }))
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -46,9 +57,8 @@ export default function SextouToolsPage() {
             Brazilian Business Toolkit
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-7 text-[#A09D97]">
-            Base da nova area Sextou Tools. Nesta fase estamos publicando a infraestrutura da suite,
-            o catalogo central dos mini-apps e as rotas autenticadas que vao receber os modulos nas
-            proximas entregas.
+            O Brazilian Business Toolkit agora ja tem seu primeiro mini-app funcional e a estrutura
+            compartilhada pronta para acelerar os proximos modulos da fase 2.
           </p>
           <div className="mt-6 flex flex-wrap gap-2 text-[11px] font-semibold text-[#A09D97]">
             <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">Login obrigatorio</span>
@@ -60,21 +70,22 @@ export default function SextouToolsPage() {
 
       <div className="mb-12 grid gap-6 lg:grid-cols-[1.5fr_minmax(0,0.9fr)]">
         <div className="rounded-[22px] border border-white/10 bg-[#171717] p-6">
-          <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Fase 1 publicada</p>
+          <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Fase 2 em andamento</p>
           <h2 className="mt-3 font-toolkit text-3xl font-extrabold text-[#F0EDE6]">
-            Fundacao da suite pronta para crescer
+            Fundacao pronta e primeiro mini-app no ar
           </h2>
           <ul className="mt-5 space-y-3 text-sm leading-7 text-[#A09D97]">
             <li>Rotas autenticadas em `app/sextou-tools`</li>
             <li>Catalogo central com 9 mini-apps planejados</li>
             <li>Shell compartilhado com share e retorno para o hub</li>
             <li>Modelagem inicial de historico por usuario no Prisma</li>
+            <li>Gerador de QR Code entregue como primeiro quick win</li>
           </ul>
         </div>
 
         <div>
           <p className="mb-3 font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Historico do usuario</p>
-          <HistoryList />
+          <HistoryList items={recentHistoryItems} />
         </div>
       </div>
 

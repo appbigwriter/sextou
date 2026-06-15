@@ -9,6 +9,18 @@ export async function listRecentToolkitExecutions(userId: string, limit = 10) {
   })
 }
 
+export async function listRecentToolkitExecutionsByTool(
+  userId: string,
+  toolSlug: string,
+  limit = 10
+) {
+  return prisma.toolExecution.findMany({
+    where: { userId, toolSlug },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+  })
+}
+
 export async function recordToolkitExecution(
   userId: string,
   toolSlug: string,
