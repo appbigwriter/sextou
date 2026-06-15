@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { HistoryList } from "@/components/sextou-tools/history-list"
 import { QrCodeTool } from "@/components/sextou-tools/tools/qr-code-tool"
+import { ServicePriceTool } from "@/components/sextou-tools/tools/service-price-tool"
 import { ToolShell } from "@/components/sextou-tools/tool-shell"
 import { requireToolkitUser } from "@/lib/sextou-tools/auth"
 import { getToolkitTool } from "@/lib/sextou-tools/catalog"
@@ -63,6 +64,19 @@ export default async function ToolkitToolPage({
         description={tool.description}
       >
         <QrCodeTool historyItems={historyItems} />
+      </ToolShell>
+    )
+  }
+
+  if (tool.slug === "calculadora-preco-servico") {
+    return (
+      <ToolShell
+        title={tool.title}
+        phase={tool.phase}
+        statusLabel={statusLabel[tool.status]}
+        description={tool.description}
+      >
+        <ServicePriceTool historyItems={historyItems} />
       </ToolShell>
     )
   }

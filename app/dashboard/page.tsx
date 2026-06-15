@@ -158,8 +158,8 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             href="/sextou-tools"
             className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group relative overflow-hidden flex flex-col items-center text-center"
           >
-            <div className="absolute top-0 right-0 p-2 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-xl">Tool</div>
-            <div className="text-4xl mb-3">ST</div>
+            <div className="absolute top-0 right-0 p-2 bg-gradient-to-bl from-orange-100 to-transparent rounded-bl-xl text-xs font-semibold text-[#F97316]">Novo</div>
+            <div className="text-4xl mb-3">QR</div>
             <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Sextou Tools</h3>
             <p className="text-sm text-gray-600">Acesse o Brazilian Business Toolkit</p>
           </Link>
