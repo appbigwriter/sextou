@@ -20,3 +20,54 @@ export interface ToolkitExecutionPayload {
   output?: Prisma.InputJsonValue | null
   metadata?: Prisma.InputJsonValue | null
 }
+
+export interface ToolkitLineItemInput {
+  description: string
+  quantity: number
+  unitPrice: number
+}
+
+export interface ToolkitLeadInput {
+  name: string
+  companyName?: string
+  email?: string
+  phone?: string
+  source: string
+  status: string
+  estimatedValue?: number | null
+  notes?: string
+  tags?: string[]
+}
+
+export interface ToolkitQuoteInput {
+  leadId?: string | null
+  title: string
+  clientName: string
+  clientCompany?: string
+  clientEmail?: string
+  clientPhone?: string
+  issueDate: string
+  validUntil?: string | null
+  notes?: string
+  taxPercent?: number
+  discountAmount?: number
+  lineItems: ToolkitLineItemInput[]
+}
+
+export interface ToolkitInvoiceInput {
+  leadId?: string | null
+  quoteId?: string | null
+  title: string
+  clientName: string
+  clientCompany?: string
+  clientEmail?: string
+  clientPhone?: string
+  issueDate: string
+  dueDate?: string | null
+  notes?: string
+  taxPercent?: number
+  discountAmount?: number
+  emailSubject?: string
+  emailMessage?: string
+  lineItems: ToolkitLineItemInput[]
+}

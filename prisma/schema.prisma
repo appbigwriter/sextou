@@ -42,6 +42,9 @@ model User {
   notifications       Notification[]
   passwordResetTokens PasswordResetToken[]
   toolExecutions      ToolExecution[]
+  toolkitLeads        ToolkitLead[]
+  toolkitQuotes       ToolkitQuote[]
+  toolkitInvoices     ToolkitInvoice[]
 
   affiliate   User?                @relation("UserAffiliates", fields: [affiliateId], references: [id])
   affiliates  User[]               @relation("UserAffiliates")
@@ -362,4 +365,100 @@ model ToolExecution {
   @@index([userId, createdAt])
   @@index([toolSlug])
   @@map("tool_executions")
+}
+
+model ToolkitLead {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  name           String
+  companyName    String?  @map("company_name")
+  email          String?
+  phone          String?
+  source         String   @default("MANUAL")
+  status         String   @default("NEW")
+  estimatedValue Float?   @map("estimated_value")
+  notes          String?
+  tags           String[] @default([])
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quotes   ToolkitQuote[]
+  invoices ToolkitInvoice[]
+
+  @@index([userId, status])
+  @@index([createdAt])
+  @@map("toolkit_leads")
+}
+
+model ToolkitQuote {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  leadId         String?  @map("lead_id")
+  quoteNumber    String   @unique @map("quote_number")
+  status         String   @default("DRAFT")
+  title          String
+  clientName     String   @map("client_name")
+  clientCompany  String?  @map("client_company")
+  clientEmail    String?  @map("client_email")
+  clientPhone    String?  @map("client_phone")
+  currency       String   @default("USD")
+  issueDate      DateTime @map("issue_date")
+  validUntil     DateTime? @map("valid_until")
+  notes          String?
+  lineItemsJson  Json     @map("line_items_json")
+  subtotal       Float
+  taxPercent     Float    @default(0) @map("tax_percent")
+  taxAmount      Float    @default(0) @map("tax_amount")
+  discountAmount Float    @default(0) @map("discount_amount")
+  total          Float
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lead     ToolkitLead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  invoices ToolkitInvoice[]
+
+  @@index([userId, status])
+  @@index([leadId])
+  @@map("toolkit_quotes")
+}
+
+model ToolkitInvoice {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  leadId          String?   @map("lead_id")
+  quoteId         String?   @map("quote_id")
+  invoiceNumber   String    @unique @map("invoice_number")
+  status          String    @default("DRAFT")
+  title           String
+  clientName      String    @map("client_name")
+  clientCompany   String?   @map("client_company")
+  clientEmail     String?   @map("client_email")
+  clientPhone     String?   @map("client_phone")
+  currency        String    @default("USD")
+  issueDate       DateTime  @map("issue_date")
+  dueDate         DateTime? @map("due_date")
+  notes           String?
+  lineItemsJson   Json      @map("line_items_json")
+  subtotal        Float
+  taxPercent      Float     @default(0) @map("tax_percent")
+  taxAmount       Float     @default(0) @map("tax_amount")
+  discountAmount  Float     @default(0) @map("discount_amount")
+  total           Float
+  emailSubject    String?   @map("email_subject")
+  emailMessage    String?   @map("email_message")
+  lastEmailSentAt DateTime? @map("last_email_sent_at")
+  paidAt          DateTime? @map("paid_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lead  ToolkitLead?  @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  quote ToolkitQuote? @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@index([leadId])
+  @@index([quoteId])
+  @@map("toolkit_invoices")
 }
