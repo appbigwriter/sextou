@@ -273,14 +273,14 @@ Padronizar a experiencia de uso para qualquer mini-app da suite.
 
 ### Modulos
 
-- [ ] Gerenciador de Projetos e Tarefas
-- [ ] Diretorio de Empresas Brasileiras
+- [x] Gerenciador de Projetos e Tarefas
+- [x] Diretorio de Empresas Brasileiras
 
 ### Dependencias adicionais
 
-- [ ] Modelagem relacional mais rica
-- [ ] Permissoes por dono e visibilidade publica
-- [ ] Fluxo administrativo para moderacao do diretorio
+- [x] Modelagem relacional mais rica
+- [x] Permissoes por dono e visibilidade publica
+- [x] Fluxo administrativo para moderacao do diretorio
 
 ---
 
@@ -380,6 +380,13 @@ O site atual nao segue esse design system em todas as paginas. Para reduzir regr
 - [x] `lib/sextou-tools/business.ts`
 - [x] `lib/sextou-tools/pdf.ts`
 - [x] `lib/sextou-tools/email.ts`
+- [x] `app/api/sextou-tools/projects/route.ts`
+- [x] `app/api/sextou-tools/tasks/route.ts`
+- [x] `app/api/sextou-tools/tasks/[id]/route.ts`
+- [x] `app/api/sextou-tools/directory/route.ts`
+- [x] `app/api/sextou-tools/directory/[id]/moderate/route.ts`
+- [x] `components/sextou-tools/tools/projects-tasks-tool.tsx`
+- [x] `components/sextou-tools/tools/brazilian-directory-tool.tsx`
 
 ---
 

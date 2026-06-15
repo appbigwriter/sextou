@@ -57,8 +57,8 @@ export default async function SextouToolsPage() {
             Brazilian Business Toolkit
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-7 text-[#A09D97]">
-            O Brazilian Business Toolkit agora ja tem seu primeiro mini-app funcional e a estrutura
-            compartilhada pronta para acelerar os proximos modulos da fase 2.
+            A suite completa do Brazilian Business Toolkit agora cobre marketing, precificacao,
+            operacao, documentos, CRM leve e comunidade em um unico fluxo autenticado.
           </p>
           <div className="mt-6 flex flex-wrap gap-2 text-[11px] font-semibold text-[#A09D97]">
             <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">Login obrigatorio</span>
@@ -72,15 +72,16 @@ export default async function SextouToolsPage() {
         <div className="rounded-[22px] border border-white/10 bg-[#171717] p-6">
           <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#5A5755]">Fase 2 em andamento</p>
           <h2 className="mt-3 font-toolkit text-3xl font-extrabold text-[#F0EDE6]">
-            Fase 2 concluida e Fase 3 em publicacao
+            Quatro fases publicadas na mesma suite
           </h2>
           <ul className="mt-5 space-y-3 text-sm leading-7 text-[#A09D97]">
             <li>Rotas autenticadas em `app/sextou-tools`</li>
-            <li>Catalogo central com 9 mini-apps planejados</li>
+            <li>Catalogo central com 9 mini-apps publicados</li>
             <li>Shell compartilhado com share e retorno para o hub</li>
             <li>Modelagem inicial de historico por usuario no Prisma</li>
             <li>4 quick wins da fase 2 ja entregues</li>
-            <li>Bloco comercial da fase 3 com leads, orcamentos e invoices em rollout</li>
+            <li>Bloco comercial da fase 3 com leads, orcamentos e invoices ativo</li>
+            <li>Bloco operacional e comunitario da fase 4 com projetos e diretorio ativo</li>
           </ul>
         </div>
 
