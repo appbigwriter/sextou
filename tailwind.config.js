@@ -10,6 +10,8 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         heading: ['var(--font-outfit)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        toolkit: ['var(--font-bricolage)', 'var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-jetbrains-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
         background: '#F8FAFC',

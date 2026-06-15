@@ -1,0 +1,128 @@
+import { ToolkitTool } from "@/types/sextou-tools"
+
+const toolkitCatalog: ToolkitTool[] = [
+  {
+    slug: "gerador-qr-code",
+    title: "Gerador de QR Code",
+    shortDescription: "Crie QR Codes de WhatsApp, site, Google Review, Wi-Fi e mais.",
+    description: "Ferramenta para gerar QR Codes prontos para marketing, atendimento e operacao local.",
+    phase: 2,
+    status: "planned",
+    icon: "QR",
+    highlight: "Primeiro modulo recomendado para lancamento rapido.",
+    category: "marketing",
+    plannedFeatures: ["QR por tipo", "Preview em tempo real", "Download PNG/SVG", "Historico por usuario"],
+  },
+  {
+    slug: "calculadora-preco-servico",
+    title: "Calculadora de Preco de Servico",
+    shortDescription: "Defina preco minimo, ideal e margem do seu servico.",
+    description: "Calculadora para precificacao de servicos considerando custos, horas, taxas e lucro desejado.",
+    phase: 2,
+    status: "planned",
+    icon: "$",
+    highlight: "Alta utilidade para prestadores de servico.",
+    category: "pricing",
+    plannedFeatures: ["Memoria de calculo", "Preco minimo e ideal", "Copia de resumo", "Historico por usuario"],
+  },
+  {
+    slug: "calculadora-roi-campanha",
+    title: "Calculadora de ROI de Campanha",
+    shortDescription: "Entenda ROI, ROAS, conversao e custo por lead.",
+    description: "Calculadora de retorno para campanhas de Google, Meta, revista, radio, evento ou indicacao.",
+    phase: 2,
+    status: "planned",
+    icon: "%",
+    highlight: "Traduz investimento em diagnostico de marketing.",
+    category: "marketing",
+    plannedFeatures: ["ROI e ROAS", "Diagnostico textual", "Canal da campanha", "Historico por usuario"],
+  },
+  {
+    slug: "checklist-abertura-empresa",
+    title: "Checklist de Abertura de Empresa",
+    shortDescription: "Organize os passos para abrir ou estruturar o negocio.",
+    description: "Checklist educativo para empreendedores brasileiros nos EUA com progresso salvo por usuario.",
+    phase: 2,
+    status: "planned",
+    icon: "OK",
+    highlight: "Conteudo util para aquisicao e onboarding.",
+    category: "operations",
+    plannedFeatures: ["Etapas por perfil", "Progresso percentual", "Notas do usuario", "Historico por usuario"],
+  },
+  {
+    slug: "gerador-orcamento-pdf",
+    title: "Gerador de Orcamento em PDF",
+    shortDescription: "Monte orcamentos profissionais para enviar a clientes.",
+    description: "Fluxo comercial para criar, revisar e baixar orcamentos com itens, totais e logo.",
+    phase: 3,
+    status: "planned",
+    icon: "PDF",
+    highlight: "Inicia o bloco documental da suite.",
+    category: "sales",
+    plannedFeatures: ["Multiplos itens", "Preview PDF", "Totais em tempo real", "Rascunhos"],
+  },
+  {
+    slug: "gerenciador-oportunidades-leads",
+    title: "Gerenciador de Oportunidades - Leads",
+    shortDescription: "Acompanhe status, follow-ups e valor potencial dos leads.",
+    description: "Mini CRM para organizar oportunidades comerciais e preparar integracao com orcamentos.",
+    phase: 3,
+    status: "planned",
+    icon: "CRM",
+    highlight: "Base para o fluxo lead -> orcamento -> invoice.",
+    category: "sales",
+    plannedFeatures: ["Kanban", "Filtro por status", "Follow-up", "Conversao em cliente"],
+  },
+  {
+    slug: "gerador-invoice-email",
+    title: "Gerador de Invoice com E-mail",
+    shortDescription: "Crie invoices em PDF e envie ao cliente.",
+    description: "Ferramenta financeira para emitir invoices com historico, status e envio por e-mail.",
+    phase: 3,
+    status: "planned",
+    icon: "INV",
+    highlight: "Exige backend e servico de e-mail.",
+    category: "sales",
+    plannedFeatures: ["PDF profissional", "Status de invoice", "Envio por e-mail", "Historico completo"],
+  },
+  {
+    slug: "gerenciador-projetos-tarefas",
+    title: "Gerenciador de Projetos e Tarefas",
+    shortDescription: "Organize projetos, responsaveis, prazos e progresso.",
+    description: "Ferramenta operacional para pequenas equipes acompanharem execucao e tarefas.",
+    phase: 4,
+    status: "planned",
+    icon: "PM",
+    highlight: "Foco em recorrencia e operacao continua.",
+    category: "operations",
+    plannedFeatures: ["Projetos", "Tarefas", "Kanban", "Progresso por projeto"],
+  },
+  {
+    slug: "diretorio-empresas-brasileiras",
+    title: "Diretorio de Empresas Brasileiras",
+    shortDescription: "Cadastre, busque e destaque empresas brasileiras nos EUA.",
+    description: "Diretorio publico moderado para fortalecer a comunidade e ampliar a visibilidade dos membros.",
+    phase: 4,
+    status: "planned",
+    icon: "DIR",
+    highlight: "Modulo comunitario com dados publicos e moderacao.",
+    category: "community",
+    plannedFeatures: ["Perfil publico", "Busca por categoria", "Aprovacao admin", "Selos de membro"],
+  },
+]
+
+export function getToolkitCatalog() {
+  return toolkitCatalog
+}
+
+export function getToolkitTool(slug: string) {
+  return toolkitCatalog.find((tool) => tool.slug === slug)
+}
+
+export function groupToolkitCatalogByPhase() {
+  return {
+    phase2: toolkitCatalog.filter((tool) => tool.phase === 2),
+    phase3: toolkitCatalog.filter((tool) => tool.phase === 3),
+    phase4: toolkitCatalog.filter((tool) => tool.phase === 4),
+  }
+}

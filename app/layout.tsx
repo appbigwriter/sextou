@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Outfit } from 'next/font/google'
+import { Bricolage_Grotesque, Inter, JetBrains_Mono, Outfit } from 'next/font/google'
 import './globals.css'
 
 export const viewport: Viewport = {
@@ -20,6 +20,18 @@ const outfit = Outfit({
   display: 'swap',
 })
 
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  variable: '--font-bricolage',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+})
+
 export const metadata: Metadata = {
   title: 'SEXTOU.biz - A vitrine da comunidade brasileira',
   description: 'Toda sexta-feira, em grupo fechado, milhares de brasileiros descobrem negócios incríveis. Anuncie seu negócio por apenas US$ 30!',
@@ -31,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${outfit.variable}`}>
+    <html lang="pt-BR" className={`${inter.variable} ${outfit.variable} ${bricolage.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground">
         {children}
       </body>

@@ -6,6 +6,8 @@
   /* Fontes */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-toolkit: var(--font-bricolage), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
   
   /* Cores da Marca FBR */
   --color-brand-primary: #F97316;
