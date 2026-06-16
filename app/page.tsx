@@ -30,6 +30,7 @@ export default async function Home() {
     { href: "/", label: "Home" },
     { href: "/anuncios", label: "Anuncios" },
     { href: "/sextou-tools", label: "Sextou Tools" },
+    { href: "/sextou-tools-pro", label: "SextouTools PRO" },
     { href: "/videos", label: "Videos" },
     { href: "/como-funciona", label: "Como Funciona" },
     {
@@ -63,6 +64,9 @@ export default async function Home() {
             </Link>
             <Link href="/sextou-tools" className="font-medium text-slate-700 transition hover:text-[#F97316]">
               Sextou Tools
+            </Link>
+            <Link href="/sextou-tools-pro" className="font-medium text-slate-700 transition hover:text-[#F97316]">
+              SextouTools PRO
             </Link>
             <Link href="/videos" className="font-medium text-slate-700 transition hover:text-[#F97316]">
               Videos
@@ -236,6 +240,27 @@ export default async function Home() {
 
       <section className="bg-white py-20">
         <div className="container mx-auto px-4">
+          <div className="mb-12 rounded-2xl border border-[#F97316]/20 bg-gradient-to-r from-[#FFF7ED] to-white p-6 shadow-sm">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#F97316]">Novo</p>
+                <h2 className="mt-1 text-2xl font-heading font-bold text-slate-900">
+                  SextouTools PRO
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
+                  Nova suite com IA leve para respostas de WhatsApp, ofertas, calendario de conteudo,
+                  propostas comerciais e roteiros curtos, cada um em sua propria pagina.
+                </p>
+              </div>
+              <Link
+                href="/sextou-tools-pro"
+                className="inline-flex items-center justify-center rounded-xl bg-[#F97316] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#EA580C]"
+              >
+                Explorar SextouTools PRO
+              </Link>
+            </div>
+          </div>
+
           <h2 className="mb-4 text-center font-heading text-slate-900">Por que Anunciar Conosco?</h2>
           <p className="mx-auto mb-12 max-w-2xl text-center text-lg text-slate-600">
             A maneira mais eficaz de alcancar a comunidade brasileira

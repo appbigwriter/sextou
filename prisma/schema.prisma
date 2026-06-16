@@ -48,6 +48,8 @@ model User {
   toolkitProjects     ToolkitProject[]
   toolkitTasks        ToolkitTask[]
   toolkitDirectoryEntries ToolkitDirectoryEntry[]
+  sextouToolsProGenerations SextouToolsProGeneration[]
+  sextouToolsProUsageEvents SextouToolsProUsageEvent[]
 
   affiliate   User?                @relation("UserAffiliates", fields: [affiliateId], references: [id])
   affiliates  User[]               @relation("UserAffiliates")
@@ -534,4 +536,68 @@ model ToolkitDirectoryEntry {
   @@index([userId, status])
   @@index([status, category])
   @@map("toolkit_directory_entries")
+}
+
+model SextouToolsProGeneration {
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  appId            String   @map("app_id")
+  title            String
+  inputData        Json     @map("input_data")
+  outputData       Json     @map("output_data")
+  outputText       String   @map("output_text")
+  metadataJson     Json?    @map("metadata_json")
+  language         String   @default("pt-BR")
+  model            String
+  promptVersion    String   @map("prompt_version")
+  status           String   @default("ACTIVE")
+  isFavorite       Boolean  @default(false) @map("is_favorite")
+  sourceAction     String   @default("GENERATE") @map("source_action")
+  sourceGenerationId String? @map("source_generation_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceGeneration  SextouToolsProGeneration? @relation("SextouToolsProGenerationLink", fields: [sourceGenerationId], references: [id], onDelete: SetNull)
+  derivedGenerations SextouToolsProGeneration[] @relation("SextouToolsProGenerationLink")
+  usageEvents       SextouToolsProUsageEvent[]
+
+  @@index([userId, appId, createdAt])
+  @@index([userId, status, createdAt])
+  @@index([sourceGenerationId])
+  @@map("sextou_tools_pro_generations")
+}
+
+model SextouToolsProPromptTemplate {
+  id            String   @id @default(uuid())
+  appId         String   @map("app_id")
+  version       String
+  model         String
+  schemaName    String   @map("schema_name")
+  systemPrompt  String   @map("system_prompt")
+  schemaJson    Json     @map("schema_json")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@unique([appId, version])
+  @@index([appId, isActive])
+  @@map("sextou_tools_pro_prompt_templates")
+}
+
+model SextouToolsProUsageEvent {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  appId         String   @map("app_id")
+  generationId  String?  @map("generation_id")
+  actionType    String   @map("action_type")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user       User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generation SextouToolsProGeneration? @relation(fields: [generationId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([userId, appId, createdAt])
+  @@index([generationId, actionType])
+  @@map("sextou_tools_pro_usage_events")
 }
