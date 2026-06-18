@@ -8,7 +8,9 @@ export default auth((req) => {
   const isOnAdmin = req.nextUrl.pathname.startsWith("/admin")
   const isOnAdminApi = req.nextUrl.pathname.startsWith("/api/admin")
   const isOnApiAuth = req.nextUrl.pathname.startsWith("/api/auth")
-  const isOnSextouTools = req.nextUrl.pathname.startsWith("/sextou-tools")
+  const isOnSextouTools =
+    req.nextUrl.pathname === "/sextou-tools" ||
+    req.nextUrl.pathname.startsWith("/sextou-tools/")
   const isAdmin =
     Boolean(req.auth?.user?.isAdmin) || isConfiguredAdminEmail(req.auth?.user?.email)
   const nextPath = `${req.nextUrl.pathname}${req.nextUrl.search}`
