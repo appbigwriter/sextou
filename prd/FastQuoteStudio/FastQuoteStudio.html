@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>Proposal Premium — Sextou.biz Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --display: "Bricolage Grotesque", system-ui, sans-serif;
+            --font: "Inter", system-ui, sans-serif;
+            --mono: "JetBrains Mono", ui-monospace, monospace;
+
+            --bg: #0D0D0D;
+            --surface: #171717;
+            --surface2: #1F1F1F;
+            --text: #F0EDE6;
+            --muted: #A8A39A;
+            --line: #2A2A2A;
+
+            --red: #FF3D57;
+            --redbg: rgba(255, 61, 87, .12);
+            --green: #3DDC97;
+            --gbg: rgba(61, 220, 151, .12);
+            --yellow: #FFC857;
+            --ybg: rgba(255, 200, 87, .12);
+            --blue: #5AA9FF;
+            --bbg: rgba(90, 169, 255, .12);
+            --orange: #FF8C00;
+            --obg: rgba(255, 140, 0, .12);
+            --purple: #B48BFF;
+            --pbg: rgba(180, 139, 255, .12);
+
+            --grad-brand: linear-gradient(135deg, #FF3D57 0%, #FF8C00 100%);
+            --grad-celebrate: linear-gradient(135deg, #FF3D57 0%, #B48BFF 50%, #5AA9FF 100%);
+            --grad-brand-soft: linear-gradient(135deg, rgba(255, 61, 87, .15), rgba(255, 140, 0, .10));
+
+            --r: 8px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 22px;
+            --sh: 0 1px 2px rgba(0, 0, 0, .4);
+            --sh-2: 0 8px 24px rgba(0, 0, 0, .45);
+            --sh-glow: 0 10px 30px rgba(255, 90, 40, .35), 0 2px 8px rgba(255, 61, 87, .4);
+            --tap: 48px;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 15px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased
+        }
+
+        a {
+            color: var(--blue);
+            text-decoration: none
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--display);
+            letter-spacing: -.01em;
+            margin: 0 0 .5em
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: clamp(32px, 6vw, 44px);
+            line-height: 1.05
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: 23px
+        }
+
+        h3 {
+            font-weight: 700;
+            font-size: 16px
+        }
+
+        .mono {
+            font-family: var(--mono);
+            font-size: 13px
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .grad-text {
+            background: var(--grad-brand);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 20px 80px
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            background: rgba(13, 13, 13, .85);
+            backdrop-filter: blur(10px);
+            z-index: 10
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--display);
+            font-weight: 800;
+            font-size: 18px
+        }
+
+        .brand .dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: var(--grad-brand);
+            box-shadow: var(--sh-glow)
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--grad-brand-soft);
+            border: 1px solid rgba(255, 140, 0, .3);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #FFB87A
+        }
+
+        .hero {
+            padding: 48px 0 32px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .hero p.lead {
+            font-size: 17px;
+            color: var(--muted);
+            max-width: 640px
+        }
+
+        .hero .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .chip b {
+            color: var(--text);
+            font-weight: 600
+        }
+
+        section {
+            padding: 36px 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        section:last-child {
+            border-bottom: none
+        }
+
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap
+        }
+
+        .section-num {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .grid {
+            display: grid;
+            gap: 14px
+        }
+
+        .grid.cols-2 {
+            grid-template-columns: repeat(2, 1fr)
+        }
+
+        .grid.cols-3 {
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        .grid.cols-4 {
+            grid-template-columns: repeat(4, 1fr)
+        }
+
+        @media (max-width:720px) {
+
+            .grid.cols-2,
+            .grid.cols-3,
+            .grid.cols-4 {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--r-xl);
+            padding: 18px;
+            box-shadow: var(--sh)
+        }
+
+        .card h3 {
+            margin-bottom: 6px
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        /* Stepper amigável */
+        .stepper {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 0
+        }
+
+        .step {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: var(--r-lg);
+            background: var(--surface);
+            border: 1px solid var(--line);
+            font-size: 13px;
+            font-weight: 600;
+            min-height: var(--tap)
+        }
+
+        .step .n {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--surface2);
+            display: grid;
+            place-items: center;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted)
+        }
+
+        .step.active {
+            background: var(--grad-brand-soft);
+            border-color: rgba(255, 140, 0, .4);
+            color: var(--text)
+        }
+
+        .step.active .n {
+            background: var(--grad-brand);
+            color: #fff
+        }
+
+        .step.done .n {
+            background: var(--green);
+            color: #0D0D0D
+        }
+
+        /* Coach tip */
+        .coach {
+            display: flex;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: var(--r-lg);
+            background: var(--ybg);
+            border: 1px solid rgba(255, 200, 87, .25);
+            font-size: 14px
+        }
+
+        .coach .ico {
+            font-size: 18px
+        }
+
+        .coach b {
+            color: var(--yellow)
+        }
+
+        /* Dropzone */
+        .dropzone {
+            border: 1.5px dashed #3A3A3A;
+            border-radius: var(--r-xl);
+            padding: 22px;
+            text-align: center;
+            background: var(--surface);
+            transition: .2s
+        }
+
+        .dropzone:hover {
+            border-color: var(--orange);
+            background: var(--surface2)
+        }
+
+        .dropzone .big {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 4px
+        }
+
+        .dropzone .sub {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .thumbs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 14px
+        }
+
+        .thumb {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--r);
+            background: linear-gradient(135deg, #2A2A2A, #1F1F1F);
+            border: 1px solid var(--line);
+            display: grid;
+            place-items: center;
+            font-size: 22px
+        }
+
+        /* CTA */
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 54px;
+            padding: 0 22px;
+            border-radius: var(--r-lg);
+            background: var(--grad-brand);
+            color: #fff;
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--sh-glow);
+            min-width: 48px
+        }
+
+        .cta.ghost {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            box-shadow: none;
+            color: var(--text)
+        }
+
+        .cta-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 16px
+        }
+
+        /* Tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px
+        }
+
+        th,
+        td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--line)
+        }
+
+        th {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted)
+        }
+
+        tr:last-child td {
+            border-bottom: none
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600
+        }
+
+        .pill.red {
+            background: var(--redbg);
+            color: #FF8A9C
+        }
+
+        .pill.green {
+            background: var(--gbg);
+            color: #7BE3B8
+        }
+
+        .pill.yellow {
+            background: var(--ybg);
+            color: #FFD48A
+        }
+
+        .pill.blue {
+            background: var(--bbg);
+            color: #8FC1FF
+        }
+
+        .pill.purple {
+            background: var(--pbg);
+            color: #CDB6FF
+        }
+
+        .pill.orange {
+            background: var(--obg);
+            color: #FFB87A
+        }
+
+        /* Preview do PDF */
+        .pdf-preview {
+            background: #F7F4EE;
+            color: #1A1A1A;
+            border-radius: var(--r-xl);
+            padding: 28px 26px;
+            box-shadow: var(--sh-2);
+            font-family: "Inter", sans-serif;
+            max-width: 520px;
+            margin: 0 auto
+        }
+
+        .pdf-preview .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #1A1A1A;
+            padding-bottom: 14px;
+            margin-bottom: 16px
+        }
+
+        .pdf-preview .head .logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #FF3D57, #FF8C00)
+        }
+
+        .pdf-preview h4 {
+            font-family: "Bricolage Grotesque";
+            font-size: 22px;
+            margin: 0 0 4px;
+            color: #1A1A1A
+        }
+
+        .pdf-preview .client {
+            font-size: 12px;
+            color: #666
+        }
+
+        .pdf-preview .section {
+            margin: 14px 0
+        }
+
+        .pdf-preview .section h5 {
+            font-family: "Bricolage Grotesque";
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            color: #FF3D57;
+            margin: 0 0 6px
+        }
+
+        .pdf-preview .section p {
+            font-size: 13px;
+            margin: 0;
+            color: #333;
+            line-height: 1.55
+        }
+
+        .pdf-preview table {
+            font-size: 12px;
+            color: #1A1A1A
+        }
+
+        .pdf-preview table th {
+            color: #888;
+            border-bottom: 1px solid #DDD
+        }
+
+        .pdf-preview table td {
+            border-bottom: 1px solid #EEE
+        }
+
+        .pdf-preview .total {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: #1A1A1A;
+            color: #fff;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 700
+        }
+
+        .pdf-preview .total span:last-child {
+            font-family: "JetBrains Mono";
+            color: #FFB87A
+        }
+
+        /* Celebração */
+        .celebrate {
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: var(--r-2xl);
+            background: var(--grad-celebrate);
+            color: #fff;
+            position: relative;
+            overflow: hidden
+        }
+
+        .celebrate::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .25), transparent 40%)
+        }
+
+        .celebrate .emoji {
+            font-size: 56px;
+            margin-bottom: 8px
+        }
+
+        .celebrate h2 {
+            font-size: 32px;
+            color: #fff
+        }
+
+        .celebrate p {
+            color: rgba(255, 255, 255, .9);
+            margin: 0 0 18px
+        }
+
+        .celebrate .cta {
+            background: #fff;
+            color: #1A1A1A;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .3)
+        }
+
+        /* Erro amigável */
+        .error {
+            display: flex;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: var(--r-lg);
+            background: var(--redbg);
+            border: 1px solid rgba(255, 61, 87, .3);
+            font-size: 14px
+        }
+
+        .error b {
+            color: #FF8A9C
+        }
+
+        /* Campo */
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .field label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted)
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            background: var(--surface2);
+            border: 1px solid var(--line);
+            border-radius: var(--r);
+            padding: 12px 14px;
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 15px;
+            min-height: var(--tap)
+        }
+
+        .field textarea {
+            min-height: 96px;
+            resize: vertical
+        }
+
+        /* Checklist */
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: var(--r);
+            background: var(--surface2);
+            border: 1px solid var(--line);
+            min-height: var(--tap)
+        }
+
+        .check input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--orange)
+        }
+
+        .check .ai {
+            margin-left: auto;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--purple);
+            background: var(--pbg);
+            padding: 3px 7px;
+            border-radius: 999px
+        }
+
+        code,
+        kbd {
+            font-family: var(--mono);
+            font-size: 12px;
+            background: var(--surface2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--line)
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 20px;
+            align-items: start
+        }
+
+        @media (max-width:860px) {
+            .split {
+                grid-template-columns: 1fr
+            }
+        }
+
+        footer {
+            padding: 30px 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="brand"><span class="dot"></span> Sextou.biz <span class="muted"
+                style="font-weight:500;font-size:13px">/ Premium Suite</span></div>
+        <span class="badge">🔒 Premium · is_premium = TRUE</span>
+    </div>
+
+    <div class="wrap">
+
+        <!-- HERO -->
+        <header class="hero">
+            <span class="section-num">proposal-premium · v1.0</span>
+            <h1 style="margin-top:6px">Gerador de <span class="grad-text">Proposta Premium</span><br />em menos de 3
+                minutos.</h1>
+            <p class="lead">Envie orçamentos elegantes em PDF a partir de fotos, checklist e lista de materiais. IA
+                estrutura, redige e revisa — você aprova e envia.</p>
+            <div class="meta">
+                <span class="chip"><b>Artefato:</b> PDF + link web</span>
+                <span class="chip"><b>Custo/run:</b> ~$0.06</span>
+                <span class="chip"><b>Limite:</b> 200/mês</span>
+                <span class="chip"><b>Idiomas:</b> pt-BR · en-US · es</span>
+                <span class="chip"><b>Gate:</b> users.is_premium = TRUE</span>
+            </div>
+        </header>
+
+        <!-- STEPPER -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">01 · fluxo mobile-first</span>
+                    <h2 style="margin-top:4px">Uma decisão por tela. Polegar feliz.</h2>
+                </div>
+            </div>
+            <div class="stepper">
+                <div class="step done"><span class="n">✓</span> Cliente</div>
+                <div class="step done"><span class="n">✓</span> Fotos</div>
+                <div class="step active"><span class="n">3</span> Checklist</div>
+                <div class="step"><span class="n">4</span> Materiais</div>
+                <div class="step"><span class="n">5</span> Escopo</div>
+                <div class="step"><span class="n">6</span> Revisão</div>
+                <div class="step"><span class="n">7</span> PDF</div>
+            </div>
+        </section>
+
+        <!-- FORMULÁRIO MOCKUP -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">02 · formulário</span>
+                    <h2 style="margin-top:4px">Campos guiados, dropdowns sempre que possível.</h2>
+                </div>
+            </div>
+
+            <div class="split">
+                <div class="grid" style="gap:14px">
+                    <div class="grid cols-2">
+                        <div class="field"><label>Nome do cliente</label><input value="Marina Lopes" /></div>
+                        <div class="field"><label>Contato</label><input value="marina@exemplo.com" /></div>
+                    </div>
+
+                    <div class="field">
+                        <label>Template</label>
+                        <select>
+                            <option>🔧 Serviço</option>
+                            <option>🏗️ Obra</option>
+                            <option>🎨 Projeto</option>
+                            <option>💼 Consultoria</option>
+                            <option>📦 Produto</option>
+                        </select>
+                    </div>
+
+                    <div class="dropzone">
+                        <div class="big">📸 Adicione fotos da obra/produto</div>
+                        <div class="sub">Até 10 fotos · a IA sugere itens automaticamente</div>
+                        <div class="thumbs">
+                            <div class="thumb">🖼️</div>
+                            <div class="thumb">🖼️</div>
+                            <div class="thumb">🖼️</div>
+                            <div class="thumb" style="border-style:dashed;color:var(--muted)">＋</div>
+                        </div>
+                    </div>
+
+                    <div class="coach">
+                        <span class="ico">💡</span>
+                        <div><b>Dica:</b> fotos bem iluminadas e em ângulos diferentes aumentam a precisão da sugestão
+                            de materiais em até 40%.</div>
+                    </div>
+
+                    <div>
+                        <label
+                            style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Checklist
+                            de serviços</label>
+                        <div class="checklist" style="margin-top:8px">
+                            <label class="check"><input type="checkbox" checked> Demolição de parede interna <span
+                                    class="ai">✨ IA</span></label>
+                            <label class="check"><input type="checkbox" checked> Instalação elétrica <span class="ai">✨
+                                    IA</span></label>
+                            <label class="check"><input type="checkbox"> Pintura acrílica</label>
+                            <label class="check"><input type="checkbox"> Limpeza pós-obra</label>
+                        </div>
+                    </div>
+
+                    <div class="cta-row">
+                        <button class="cta">✨ Gerar minha proposta</button>
+                        <button class="cta ghost">Salvar rascunho</button>
+                    </div>
+                </div>
+
+                <!-- PREVIEW DO PDF -->
+                <div>
+                    <div
+                        style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px">
+                        Preview do artefato</div>
+                    <div class="pdf-preview">
+                        <div class="head">
+                            <div>
+                                <h4>Proposta Comercial</h4>
+                                <div class="client">Reforma residencial · 18/06/2026</div>
+                            </div>
+                            <div class="logo"></div>
+                        </div>
+                        <div class="section">
+                            <h5>Cliente</h5>
+                            <p>Marina Lopes · marina@exemplo.com</p>
+                        </div>
+                        <div class="section">
+                            <h5>Escopo</h5>
+                            <p>Demolição controlada de parede interna (3,2m), instalação elétrica completa com 8 pontos
+                                e pintura acrílica em 42m².</p>
+                        </div>
+                        <div class="section">
+                            <h5>Materiais</h5>
+                            <table>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Qtd</th>
+                                    <th style="text-align:right">Total</th>
+                                </tr>
+                                <tr>
+                                    <td>Tinta acrílica 18L</td>
+                                    <td>3</td>
+                                    <td style="text-align:right;font-family:var(--mono)">R$ 720</td>
+                                </tr>
+                                <tr>
+                                    <td>Fiação 2,5mm (100m)</td>
+                                    <td>2</td>
+                                    <td style="text-align:right;font-family:var(--mono)">R$ 340</td>
+                                </tr>
+                                <tr>
+                                    <td>Tomadas + interruptores</td>
+                                    <td>8</td>
+                                    <td style="text-align:right;font-family:var(--mono)">R$ 280</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="total"><span>Investimento total</span><span>R$ 8.450,00</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LLMs -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">03 · roteamento premium</span>
+                    <h2 style="margin-top:4px">Modelo certo para cada etapa.</h2>
+                </div>
+                <span class="pill orange">routing: quality_first</span>
+            </div>
+            <div class="card" style="padding:0;overflow:hidden">
+                <table>
+                    <tr>
+                        <th>Fase</th>
+                        <th>Provedor</th>
+                        <th>Modelo</th>
+                        <th>Papel</th>
+                        <th>Fallback</th>
+                    </tr>
+                    <tr>
+                        <td><span class="pill purple">planning</span></td>
+                        <td>Anthropic</td>
+                        <td class="mono">claude-sonnet-latest</td>
+                        <td>Estrutura a proposta</td>
+                        <td>OpenAI gpt-5.1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pill blue">vision</span></td>
+                        <td>OpenAI</td>
+                        <td class="mono">gpt-5.1-vision</td>
+                        <td>Analisa fotos</td>
+                        <td>Gemini Pro Vision</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pill green">writing</span></td>
+                        <td>Anthropic</td>
+                        <td class="mono">claude-sonnet-latest</td>
+                        <td>Redige escopo</td>
+                        <td>OpenAI gpt-5.1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pill yellow">review</span></td>
+                        <td>Google</td>
+                        <td class="mono">gemini-pro-latest</td>
+                        <td>Revisa coerência</td>
+                        <td>Claude Haiku</td>
+                    </tr>
+                    <tr>
+                        <td><span class="pill red">export</span></td>
+                        <td>Self</td>
+                        <td class="mono">puppeteer</td>
+                        <td>HTML → PDF</td>
+                        <td>DocRaptor</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- APIs -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">04 · APIs potencializadoras</span>
+                    <h2 style="margin-top:4px">Só entra no MVP se melhorar o artefato.</h2>
+                </div>
+            </div>
+            <div class="grid cols-3">
+                <div class="card">
+                    <h3>🧠 LLM texto</h3>
+                    <p>Anthropic Claude · OpenAI · Gemini</p>
+                    <div class="mono muted" style="margin-top:8px">~$0.03/run</div>
+                </div>
+                <div class="card">
+                    <h3>👁️ Vision</h3>
+                    <p>Análise de fotos para sugerir itens e materiais</p>
+                    <div class="mono muted" style="margin-top:8px">~$0.01/run</div>
+                </div>
+                <div class="card">
+                    <h3>📄 PDF render</h3>
+                    <p>Puppeteer (self) com fallback DocRaptor</p>
+                    <div class="mono muted" style="margin-top:8px">CPU/infra</div>
+                </div>
+                <div class="card">
+                    <h3>☁️ Storage</h3>
+                    <p>Cloudflare R2 para fotos e PDFs</p>
+                    <div class="mono muted" style="margin-top:8px">~$0.002/run</div>
+                </div>
+                <div class="card">
+                    <h3>✉️ Envio (opt)</h3>
+                    <p>Resend para disparo por e-mail</p>
+                    <div class="mono muted" style="margin-top:8px">pós-MVP</div>
+                </div>
+                <div class="card">
+                    <h3>📊 Analytics</h3>
+                    <p>PostHog · funil de geração</p>
+                    <div class="mono muted" style="margin-top:8px">interno</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DB -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">05 · banco de dados</span>
+                    <h2 style="margin-top:4px">Tabelas base + Premium + específicas do app.</h2>
+                </div>
+            </div>
+            <div class="grid cols-2">
+                <div class="card">
+                    <h3>Tabelas Premium (reutilizadas)</h3>
+                    <p style="margin-top:8px">
+                        <code>premium_model_providers</code> ·
+                        <code>premium_model_configs</code> ·
+                        <code>premium_api_integrations</code> ·
+                        <code>premium_app_runs</code> ·
+                        <code>premium_llm_calls</code> ·
+                        <code>premium_tool_calls</code> ·
+                        <code>generated_artifacts</code> ·
+                        <code>artifact_versions</code> ·
+                        <code>premium_cost_ledger</code> ·
+                        <code>user_premium_limits</code>
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>Tabelas específicas</h3>
+                    <p style="margin-top:8px">
+                        <code>proposals</code> — dados da proposta, fotos, checklist, materiais, totais.<br />
+                        <code>proposal_clients</code> — CRM leve por usuário (autocomplete).<br />
+                        <span class="pill green" style="margin-top:8px;display:inline-block">RLS por user_id</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEGURANÇA -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">06 · segurança &amp; compliance</span>
+                    <h2 style="margin-top:4px">Chaves no servidor. PII sob controle.</h2>
+                </div>
+            </div>
+            <div class="grid cols-3">
+                <div class="card">
+                    <h3>🔐 Credenciais</h3>
+                    <p>API keys apenas em secrets do servidor. Nunca em logs, payloads ou prompts visíveis.</p>
+                </div>
+                <div class="card">
+                    <h3>🛡️ PII</h3>
+                    <p>Dados de cliente com retenção mínima. Usuário pode apagar histórico a qualquer momento.</p>
+                </div>
+                <div class="card">
+                    <h3>🚦 Rate limit</h3>
+                    <p>Limite diário/mensal por plano, CAPTCHA em atividade suspeita, alertas de custo ao admin.</p>
+                </div>
+            </div>
+            <div class="error" style="margin-top:14px">
+                <span>⚠️</span>
+                <div><b>Aviso ao usuário:</b> confira valores, prazos e termos antes de enviar. A IA auxilia a redação,
+                    mas não substitui sua avaliação profissional.</div>
+            </div>
+        </section>
+
+        <!-- CUSTO -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">07 · controle de custo</span>
+                    <h2 style="margin-top:4px">Custo medido por execução. Nada escondido.</h2>
+                </div>
+            </div>
+            <div class="grid cols-4">
+                <div class="card">
+                    <div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.08em">Estimado/run
+                    </div>
+                    <div class="mono" style="font-size:22px;margin-top:4px;color:var(--green)">$0.06</div>
+                </div>
+                <div class="card">
+                    <div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.08em">Limite
+                        mensal</div>
+                    <div class="mono" style="font-size:22px;margin-top:4px">200</div>
+                </div>
+                <div class="card">
+                    <div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.08em">Alerta 80%
+                    </div>
+                    <div class="mono" style="font-size:22px;margin-top:4px;color:var(--yellow)">160</div>
+                </div>
+                <div class="card">
+                    <div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.08em">Fallback
+                    </div>
+                    <div style="font-size:14px;margin-top:6px">downgrade de modelo</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CELEBRAÇÃO -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">08 · entrega</span>
+                    <h2 style="margin-top:4px">O clímax do app merece comemoração.</h2>
+                </div>
+            </div>
+            <div class="celebrate">
+                <div class="emoji">🎉</div>
+                <h2>Sua proposta está pronta!</h2>
+                <p>PDF elegante · 3 páginas · com escopo, materiais e termos</p>
+                <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+                    <button class="cta">⬇ Baixar PDF</button>
+                    <button class="cta ghost"
+                        style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff">🔗 Copiar
+                        link</button>
+                    <button class="cta ghost"
+                        style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff">✉️ Enviar
+                        por e-mail</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHECKLIST -->
+        <section>
+            <div class="section-head">
+                <div>
+                    <span class="section-num">09 · critérios de aceite</span>
+                    <h2 style="margin-top:4px">Pronto para Codex, Claude Code e Antigravity.</h2>
+                </div>
+            </div>
+            <div class="grid cols-2">
+                <div class="card">
+                    <h3>Produto &amp; UX</h3>
+                    <p style="margin-top:8px">
+                        ✅ Login + <code>is_premium = TRUE</code><br />
+                        ✅ Design System v2<br />
+                        ✅ Mobile-first, toque ≥ 48px<br />
+                        ✅ Dropdowns e presets<br />
+                        ✅ Preview antes de gerar<br />
+                        ✅ Histórico e versões
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>LLM &amp; Infra</h3>
+                    <p style="margin-top:8px">
+                        ✅ Multi-provedor com fallback<br />
+                        ✅ Prompt contracts por fase<br />
+                        ✅ Registro de tokens/custo/latência<br />
+                        ✅ APIs com finalidade clara<br />
+                        ✅ Chaves no servidor<br />
+                        ✅ RLS por usuário
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            Sextou.biz · Premium Suite · Design System v2 · Documento gerado em 18/06/2026
+        </footer>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+- [Concurrent commit activity on main](project_concurrent-commit-activity.md) — multiple agents commit/push to main in parallel; re-check git state right before staging
