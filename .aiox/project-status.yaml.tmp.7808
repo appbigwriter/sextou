@@ -1,0 +1,22 @@
+status:
+  branch: main
+  modifiedFiles:
+    - docs/stories/brownfield-sextou-tools-pro-foundation-data-llm-history.md
+    - docs/stories/brownfield-sextou-tools-pro-foundation-routing-dashboard.md
+    - docs/stories/brownfield-sextou-tools-pro-foundation-shared-ux-actions.md
+    - prd/SocialNetworkStudio/SocialnetworkStudio.html
+  modifiedFilesTotalCount: 4
+  recentCommits:
+    - >-
+      feat: implement professional bio tool, kanban board, auth utilities, and
+      ZapLeads API endpoint
+    - >-
+      feat: initialize SextouTools PRO suite with dynamic tools, dashboard, and
+      backend generation API
+  currentEpic: null
+  currentStory: brownfield-sextou-tools-brazilian-business-toolkit
+  lastUpdate: '2026-06-18T12:07:36.401Z'
+  isGitRepo: true
+timestamp: 1781784456405
+ttl: 60
+gitFingerprint: 1775066646195.804:1781784408484.5757

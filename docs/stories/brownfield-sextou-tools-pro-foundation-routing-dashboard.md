@@ -3,7 +3,7 @@
 <!-- Source: docs/SextouTools_PRO_PRD.md + docs/design-system-v2.html + docs/stories/brownfield-sextou-tools-brazilian-business-toolkit.md + codebase atual -->
 <!-- Context: Brownfield foundation para introduzir SextouTools PRO com discovery publico, dashboard autenticado e paginas independentes por app -->
 
-**Status:** Draft  
+**Status:** Ready for Review  
 **Priority:** High  
 **Last Updated:** 2026-06-15
 
@@ -54,13 +54,13 @@ so that eu consiga descobrir a suite e navegar por mini-apps independentes sem a
 
 ## Tasks / Subtasks
 
-- [ ] Definir namespace do `SextouTools PRO`
-- [ ] Criar landing/hub publico da suite
-- [ ] Criar dashboard autenticado do `PRO`
-- [ ] Criar catalogo separado do `PRO`
-- [ ] Criar a infraestrutura de roteamento para pagina individual por app
-- [ ] Registrar os 5 apps do MVP Core no dashboard
-- [ ] Validar regressao da navegacao do pacote anterior
+- [x] Definir namespace do `SextouTools PRO`
+- [x] Criar landing/hub publico da suite
+- [x] Criar dashboard autenticado do `PRO`
+- [x] Criar catalogo separado do `PRO`
+- [x] Criar a infraestrutura de roteamento para pagina individual por app
+- [x] Registrar os 5 apps do MVP Core no dashboard
+- [x] Validar regressao da navegacao do pacote anterior
 
 ---
 
@@ -79,11 +79,14 @@ so that eu consiga descobrir a suite e navegar por mini-apps independentes sem a
 
 ---
 
-## Definition of Done
+## File List
 
-- [ ] Landing/hub publico pronto
-- [ ] Dashboard autenticado pronto
-- [ ] Cada app com rota propria e independente
-- [ ] Catalogo do `PRO` separado
-- [ ] Navegacao antiga validada sem regressao
-
+- [app/sextou-tools-pro/page.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/app/sextou-tools-pro/page.tsx:1)
+- [app/sextou-tools-pro/dashboard/page.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/app/sextou-tools-pro/dashboard/page.tsx:1)
+- [app/sextou-tools-pro/[slug]/page.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/app/sextou-tools-pro/%5Bslug%5D/page.tsx:1)
+- [components/sextou-tools-pro/suite-header.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/components/sextou-tools-pro/suite-header.tsx:1)
+- [components/sextou-tools-pro/history-list.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/components/sextou-tools-pro/history-list.tsx:1)
+- [components/sextou-tools-pro/tool-card.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/components/sextou-tools-pro/tool-card.tsx:1)
+- [lib/sextou-tools-pro/catalog.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/catalog.ts:1)
+- [lib/sextou-tools-pro/history.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/history.ts:1)
+- [lib/sextou-tools-pro/usage.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/usage.ts:1)

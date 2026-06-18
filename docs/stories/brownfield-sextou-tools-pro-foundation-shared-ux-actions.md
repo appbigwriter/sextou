@@ -3,7 +3,7 @@
 <!-- Source: docs/SextouTools_PRO_PRD.md + docs/design-system-v2.html + codebase atual -->
 <!-- Context: Brownfield foundation para experiencia compartilhada entre mini-apps independentes -->
 
-**Status:** Draft  
+**Status:** Ready for Review  
 **Priority:** High  
 **Last Updated:** 2026-06-15
 
@@ -53,12 +53,12 @@ so that eu reconheca a experiencia da suite mesmo mudando de uma pagina independ
 
 ## Tasks / Subtasks
 
-- [ ] Criar shell compartilhado do `PRO`
-- [ ] Criar componentes de coach tip, cards de resultado e badges
-- [ ] Criar barra de progresso amigavel durante geracao
-- [ ] Criar empty state, error state e limit state padronizados
-- [ ] Criar barra/area de acoes padrao compartilhadas
-- [ ] Validar navegacao entre paginas independentes dos apps
+- [x] Criar shell compartilhado do `PRO`
+- [x] Criar componentes de coach tip, cards de resultado e badges
+- [x] Criar barra de progresso amigavel durante geracao
+- [x] Criar empty state, error state e limit state padronizados
+- [x] Criar barra/area de acoes padrao compartilhadas
+- [x] Validar navegacao entre paginas independentes dos apps
 
 ---
 
@@ -77,10 +77,10 @@ so that eu reconheca a experiencia da suite mesmo mudando de uma pagina independ
 
 ---
 
-## Definition of Done
+## File List
 
-- [ ] Shell compartilhado do `PRO` pronto
-- [ ] Estados amigaveis prontos
-- [ ] Acoes padrao compartilhadas prontas
-- [ ] Validada consistencia entre paginas independentes dos apps
-
+- [components/sextou-tools-pro/app-shell.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/components/sextou-tools-pro/app-shell.tsx:1)
+- [components/sextou-tools-pro/suite-header.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/components/sextou-tools-pro/suite-header.tsx:1)
+- [components/sextou-tools-pro/history-list.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/components/sextou-tools-pro/history-list.tsx:1)
+- [components/sextou-tools-pro/tool-card.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/components/sextou-tools-pro/tool-card.tsx:1)
+- [app/sextou-tools-pro/[slug]/page.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/app/sextou-tools-pro/%5Bslug%5D/page.tsx:1)

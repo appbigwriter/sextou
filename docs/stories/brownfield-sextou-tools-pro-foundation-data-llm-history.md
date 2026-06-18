@@ -3,7 +3,7 @@
 <!-- Source: docs/SextouTools_PRO_PRD.md + codebase atual -->
 <!-- Context: Brownfield foundation para persistencia estruturada, limites de uso e pipeline compartilhado de geracao -->
 
-**Status:** Draft  
+**Status:** Ready for Review  
 **Priority:** High  
 **Last Updated:** 2026-06-15
 
@@ -54,14 +54,14 @@ so that eu possa reutilizar resultados com previsibilidade e baixo custo operaci
 
 ## Tasks / Subtasks
 
-- [ ] Modelar tabelas/entidades do `PRO` para geracoes, prompts e limites
-- [ ] Criar migration aditiva
-- [ ] Criar servico compartilhado de geracao
-- [ ] Criar builder de prompt versionado por app
-- [ ] Criar camada de validacao de input/output
-- [ ] Criar logica de favoritos, arquivamento, exclusao logica e duplicacao
-- [ ] Criar logica de uso diario e regeneracao
-- [ ] Validar compatibilidade retroativa no banco
+- [x] Modelar tabelas/entidades do `PRO` para geracoes, prompts e limites
+- [x] Criar migration aditiva
+- [x] Criar servico compartilhado de geracao
+- [x] Criar builder de prompt versionado por app
+- [x] Criar camada de validacao de input/output
+- [x] Criar logica de favoritos, arquivamento, exclusao logica e duplicacao
+- [x] Criar logica de uso diario e regeneracao
+- [x] Validar compatibilidade retroativa no banco
 
 ---
 
@@ -84,11 +84,15 @@ so that eu possa reutilizar resultados com previsibilidade e baixo custo operaci
 
 ---
 
-## Definition of Done
+## File List
 
-- [ ] Persistencia estruturada do `PRO` pronta
-- [ ] Pipeline compartilhado de LLM pronto
-- [ ] Limites e regeneracao funcionando
-- [ ] Favoritos, arquivamento, exclusao e duplicacao funcionando
-- [ ] Banco anterior validado sem regressao
-
+- [prisma/schema.prisma](/abs/path/C:/Projetos/2SextaEmpreendedor/prisma/schema.prisma:1)
+- [prisma/migrations/20260616093000_add_sextou_tools_pro_foundation/migration.sql](/abs/path/C:/Projetos/2SextaEmpreendedor/prisma/migrations/20260616093000_add_sextou_tools_pro_foundation/migration.sql:1)
+- [lib/sextou-tools-pro/catalog.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/catalog.ts:1)
+- [lib/sextou-tools-pro/generation.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/generation.ts:1)
+- [lib/sextou-tools-pro/history.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/history.ts:1)
+- [lib/sextou-tools-pro/metadata.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/metadata.ts:1)
+- [lib/sextou-tools-pro/prompts.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/prompts.ts:1)
+- [lib/sextou-tools-pro/schemas.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/schemas.ts:1)
+- [lib/sextou-tools-pro/usage.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/usage.ts:1)
+- [lib/sextou-tools-pro/prisma-guards.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/prisma-guards.ts:1)
