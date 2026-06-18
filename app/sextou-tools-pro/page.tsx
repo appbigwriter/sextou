@@ -6,9 +6,8 @@ import { getSextouToolsProCatalog, groupSextouToolsProCatalogByCategory } from "
 import { resolveSextouToolsProUser } from "@/lib/sextou-tools/auth"
 
 export const metadata: Metadata = {
-  title: "SextouTools PRO | Ferramentas gratuitas com IA leve",
-  description:
-    "Landing publica do SextouTools PRO com apps gratuitos para empreendedores criarem respostas, ofertas, conteudo e propostas.",
+  title: "SextouTools PRO | Ferramentas Gratuitas Pacote PRO",
+  description: "Suite de ferramentas gratuitas com Inteligência Artificial",
 }
 
 function CategorySection({

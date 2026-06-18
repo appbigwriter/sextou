@@ -9,6 +9,9 @@ type Contact = {
   id: string
   displayName: string | null
   phoneE164: string
+  sourceGroup?: {
+    name: string | null
+  } | null
 }
 
 export type Lead = {

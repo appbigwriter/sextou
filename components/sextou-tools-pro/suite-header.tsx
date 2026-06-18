@@ -23,7 +23,7 @@ export function SextouToolsProSuiteHeader({
               SextouTools PRO
             </p>
             <p className="font-toolkit text-xl font-extrabold text-[#F0EDE6]">
-              Ferramentas gratuitas com IA leve
+              Ferramentas Gratuitas Pacote PRO
             </p>
           </div>
         </div>

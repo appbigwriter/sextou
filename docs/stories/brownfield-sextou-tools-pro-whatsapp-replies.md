@@ -3,7 +3,7 @@
 <!-- Source: docs/SextouTools_PRO_PRD.md -->
 <!-- Context: Brownfield mini-app sobre a nova foundation do SextouTools PRO -->
 
-**Status:** Draft  
+**Status:** Ready for Review  
 **Priority:** High  
 **Depends On:** `brownfield-sextou-tools-pro-foundation-routing-dashboard.md`, `brownfield-sextou-tools-pro-foundation-data-llm-history.md`, `brownfield-sextou-tools-pro-foundation-shared-ux-actions.md`
 
@@ -64,14 +64,14 @@ so that eu economize tempo e mantenha consistencia no atendimento.
 
 ## Tasks / Subtasks
 
-- [ ] Criar catalogo e rota do app `Respostas Prontas para WhatsApp`
-- [ ] Implementar formulario com campos guiados e exemplos
-- [ ] Implementar prompt fixo e schema de saida para 5 respostas
-- [ ] Renderizar cards de resultado com acao de copiar
-- [ ] Persistir historico por situacao
-- [ ] Implementar favoritos, arquivamento e duplicacao
-- [ ] Implementar acoes derivadas para follow-up e FAQ
-- [ ] Validar responsividade e microcopy amigavel
+- [x] Criar catalogo e rota do app `Respostas Prontas para WhatsApp`
+- [x] Implementar formulario com campos guiados e exemplos
+- [x] Implementar prompt fixo e schema de saida para 5 respostas
+- [x] Renderizar cards de resultado com acao de copiar
+- [x] Persistir historico por situacao
+- [x] Implementar favoritos, arquivamento e duplicacao
+- [x] Implementar acoes derivadas para follow-up e FAQ
+- [x] Validar responsividade e microcopy amigavel
 
 ---
 
@@ -91,19 +91,19 @@ so that eu economize tempo e mantenha consistencia no atendimento.
 
 ### Safety Checks
 
-- [ ] O app nao expõe erros tecnicos do provider
-- [ ] O app nao faz envio automatico
-- [ ] O app nao quebra historico nem limites da suite
+- [x] O app nao expoe erros tecnicos do provider
+- [x] O app nao faz envio automatico
+- [x] O app nao quebra historico nem limites da suite
 
 ---
 
 ## File List
 
-- [ ] rota individual do app
-- [ ] componente do mini-app
-- [ ] schema de entrada e saida
-- [ ] template de prompt versionado
-- [ ] endpoint de geracao correspondente
+- [x] [app/sextou-tools-pro/[slug]/page.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/app/sextou-tools-pro/[slug]/page.tsx:1)
+- [x] [components/sextou-tools-pro/tools/whatsapp-replies-tool.tsx](/abs/path/C:/Projetos/2SextaEmpreendedor/components/sextou-tools-pro/tools/whatsapp-replies-tool.tsx:1)
+- [x] [lib/sextou-tools-pro/prompts.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/prompts.ts:1)
+- [x] [lib/sextou-tools-pro/schemas.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/schemas.ts:1)
+- [x] [lib/sextou-tools-pro/history.ts](/abs/path/C:/Projetos/2SextaEmpreendedor/lib/sextou-tools-pro/history.ts:1)
 
 ---
 
@@ -144,8 +144,8 @@ so that eu economize tempo e mantenha consistencia no atendimento.
 
 ## Definition of Done
 
-- [ ] Formulario validado
-- [ ] Saida com 5 versoes estruturadas
-- [ ] Historico e favoritos funcionando
-- [ ] Acoes derivadas expostas
-- [ ] App alinhado ao design system v2
+- [x] Formulario validado
+- [x] Saida com 5 versoes estruturadas
+- [x] Historico e favoritos funcionando
+- [x] Acoes derivadas expostas
+- [x] App alinhado ao design system v2

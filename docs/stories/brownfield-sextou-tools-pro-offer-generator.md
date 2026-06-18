@@ -3,7 +3,7 @@
 <!-- Source: docs/SextouTools_PRO_PRD.md -->
 <!-- Context: Brownfield mini-app sobre a nova foundation do SextouTools PRO -->
 
-**Status:** Draft  
+**Status:** Ready for Review  
 **Priority:** High  
 **Depends On:** `brownfield-sextou-tools-pro-foundation-routing-dashboard.md`, `brownfield-sextou-tools-pro-foundation-data-llm-history.md`, `brownfield-sextou-tools-pro-foundation-shared-ux-actions.md`
 
@@ -88,7 +88,7 @@ so that eu consiga comunicar valor com mais facilidade.
 ### Safety Checks
 
 - [x] Sem promessas absolutas
-- [ ] Sem conflito com app futuro de proposta comercial
+- [x] Sem conflito com app futuro de proposta comercial
 - [x] Sem regressao no dashboard do `PRO`
 
 ---

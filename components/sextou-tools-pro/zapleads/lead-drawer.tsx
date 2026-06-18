@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Lead } from "./kanban-board"
 
 export function ZapLeadDrawer({ lead: initialLead, onClose }: { lead: Lead | null, onClose: () => void }) {
-  const [activeTab, setActiveTab] = useState<"perfil" | "interacoes">("perfil")
+  const [activeTab, setActiveTab] = useState<"perfil" | "interacoes" | "outreach">("perfil")
   const [fullLead, setFullLead] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
