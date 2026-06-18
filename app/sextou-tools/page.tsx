@@ -38,10 +38,17 @@ const premiumCards: CatalogCard[] = [
   // Apps Premium com rota dedicada (fora do catálogo de mini-apps)
   {
     slug: "social-network-studio",
-    title: "Social Network (Oferta11)",
+    title: "EasySocial - Network Studio",
     description: "Crie campanhas e copys baseadas nos 42 ensinamentos de copy de resposta direta.",
-    icon: "SN",
+    icon: "ES",
     href: "/sextou-tools-pro/social-network-studio",
+  },
+  {
+    slug: "launch-studio-pro",
+    title: "Launch Studio PRO",
+    description: "Sua fábrica de Fórmulas de Lançamento baseada na Product Launch Formula (PLF).",
+    icon: "PLF",
+    href: "/sextou-tools-pro/launch-studio-pro",
   },
   {
     slug: "zapleads",

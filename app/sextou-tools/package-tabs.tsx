@@ -21,20 +21,20 @@ const TABS: {
 }[] = [
   {
     key: "basico",
-    label: "Pacote Básico",
+    label: "PACOTE BÁSICO",
     tag: "Grátis",
     note: "Ferramentas gratuitas, liberadas para qualquer usuário cadastrado.",
   },
   {
     key: "pro",
-    label: "Pacote PRO",
+    label: "PACOTE PRO",
     tag: "Anunciantes",
     note: "Liberado automaticamente para quem tem anúncio ativo na plataforma.",
   },
   {
     key: "premium",
-    label: "Pacote Premium",
-    tag: "Anúncio + Assinatura",
+    label: "PACOTE PREMIUM",
+    tag: "Premium",
     note: "Apps avançados — exigem anúncio ativo e assinatura Premium.",
   },
 ]
