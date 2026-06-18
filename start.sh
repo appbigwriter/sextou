@@ -1,8 +1,16 @@
 #!/bin/sh
-# Script de inicialização: aplica migrations e inicia o servidor
+set -eu
 
-echo "🔄 Aplicando migrações do banco de dados (migrate deploy)..."
-node node_modules/prisma/build/index.js migrate deploy && echo "✅ Migrations OK" || echo "⚠️ Sem migrations pendentes ou erro (continuando...)"
+# Script de inicializacao: valida env, aplica migrations e inicia o servidor.
 
-echo "🚀 Iniciando Next.js..."
+if [ -z "${DATABASE_URL:-}" ]; then
+  echo "ERROR: DATABASE_URL nao esta configurada."
+  exit 1
+fi
+
+echo "Aplicando migrations do banco de dados (migrate deploy)..."
+node node_modules/prisma/build/index.js migrate deploy
+echo "Migrations OK"
+
+echo "Iniciando Next.js..."
 exec node server.js
