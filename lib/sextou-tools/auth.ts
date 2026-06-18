@@ -12,10 +12,27 @@ type ToolkitUserLookupResult =
         businessName: string
         email: string
         isAdmin: boolean
+        hasActiveAds: boolean
+        isPremium: boolean
       }
     }
   | { kind: "unauthorized" }
   | { kind: "db-unavailable" }
+
+type SextouToolsProUserLookupResult =
+  | ToolkitUserLookupResult
+  | {
+      kind: "forbidden"
+      user: {
+        id: string
+        fullName: string
+        businessName: string
+        email: string
+        isAdmin: boolean
+        hasActiveAds: boolean
+        isPremium: boolean
+      }
+    }
 
 async function lookupToolkitUser(): Promise<ToolkitUserLookupResult> {
   const session = await auth()
@@ -33,6 +50,8 @@ async function lookupToolkitUser(): Promise<ToolkitUserLookupResult> {
         businessName: true,
         email: true,
         isAdmin: true,
+        hasActiveAds: true,
+        isPremium: true,
       },
     })
 
@@ -80,4 +99,35 @@ export async function requireToolkitApiUser() {
 
 export async function resolveToolkitUser() {
   return lookupToolkitUser()
+}
+
+export async function resolveSextouToolsProUser(): Promise<SextouToolsProUserLookupResult> {
+  const result = await lookupToolkitUser()
+
+  if (result.kind !== "ok") {
+    return result
+  }
+
+  if (!result.user.hasActiveAds && !result.user.isPremium) {
+    return {
+      kind: "forbidden",
+      user: result.user,
+    }
+  }
+
+  return result
+}
+
+export async function requireSextouToolsProApiUser() {
+  const result = await resolveSextouToolsProUser()
+
+  if (result.kind === "ok") {
+    return result.user
+  }
+
+  if (result.kind === "db-unavailable") {
+    throw new ToolkitDatabaseUnavailableError()
+  }
+
+  return result.kind === "forbidden" ? false : null
 }

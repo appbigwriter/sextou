@@ -42,6 +42,11 @@ export async function POST(
       data: adUpdateData,
     })
 
+    await prisma.user.update({
+      where: { id: ad.userId },
+      data: { hasActiveAds: true },
+    })
+
     if (receiptNumber) {
       // Find an existing pending payment
       const existingPayment = await prisma.payment.findFirst({

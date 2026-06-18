@@ -2,6 +2,7 @@ import { auth, isAdmin } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import { ActiveAdsToggleButton } from "@/components/active-ads-toggle-button"
 import { AdminToggleButton } from "@/components/admin-toggle-button"
 import { DeleteUserButton } from "@/components/delete-user-button"
 import { LogoutButton } from "@/components/logout-button"
@@ -56,6 +57,7 @@ export default async function AdminUsersPage({ searchParams }: UsersPageProps) {
         state: true,
         isAdmin: true,
         isVip: true,
+        hasActiveAds: true,
         status: true,
         createdAt: true,
         _count: {
@@ -143,6 +145,11 @@ export default async function AdminUsersPage({ searchParams }: UsersPageProps) {
                           VIP
                         </span>
                       )}
+                      {user.hasActiveAds && (
+                        <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full">
+                          PRO liberado
+                        </span>
+                      )}
                     </div>
                     <p className="text-sm text-gray-500">{user.email}</p>
                     <p className="text-xs text-gray-400">
@@ -150,6 +157,7 @@ export default async function AdminUsersPage({ searchParams }: UsersPageProps) {
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
+                    <ActiveAdsToggleButton userId={user.id} hasActiveAds={user.hasActiveAds} />
                     <AdminToggleButton userId={user.id} isAdmin={user.isAdmin} />
                     <DeleteUserButton
                       userId={user.id}

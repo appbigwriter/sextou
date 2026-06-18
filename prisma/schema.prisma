@@ -31,6 +31,8 @@ model User {
   status       String   @default("ACTIVE")
   isVip        Boolean  @default(false) @map("is_vip")
   isAdmin      Boolean  @default(false) @map("is_admin")
+  hasActiveAds Boolean  @default(false) @map("has_active_ads")
+  isPremium    Boolean  @default(false) @map("is_premium")
   balance      Float    @default(0)
   affiliateId  String?  @map("affiliate_id")
   zelleCode    String?  @map("zelle_code")
@@ -50,6 +52,15 @@ model User {
   toolkitDirectoryEntries ToolkitDirectoryEntry[]
   sextouToolsProGenerations SextouToolsProGeneration[]
   sextouToolsProUsageEvents SextouToolsProUsageEvent[]
+  zapConnections ZapConnection[]
+  zapGroups      ZapGroup[]
+  zapExtractions ZapGroupExtraction[]
+  contacts       Contact[]
+  zapLeads       ZapLead[]
+  leadEvents     LeadEvent[]
+  zapMessages    ZapMessage[]
+  messageTemplates MessageTemplate[]
+  consentLogs    ConsentLog[]
 
   affiliate   User?                @relation("UserAffiliates", fields: [affiliateId], references: [id])
   affiliates  User[]               @relation("UserAffiliates")
@@ -601,3 +612,206 @@ model SextouToolsProUsageEvent {
   @@index([generationId, actionType])
   @@map("sextou_tools_pro_usage_events")
 }
+
+// ========================================
+// SEXTOU ZAPLEADS CRM (Premium)
+// ========================================
+
+model ZapConnection {
+  id                 String    @id @default(uuid())
+  userId             String    @map("user_id")
+  mode               String    // 'web' or 'official'
+  displayNumber      String?   @map("display_number")
+  wabaPhoneId        String?   @map("waba_phone_id")
+  sessionRef         String?   @map("session_ref")
+  status             String    @default("disconnected")
+  riskAcknowledgedAt DateTime? @map("risk_acknowledged_at")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groups ZapGroup[]
+
+  @@index([userId])
+  @@map("zap_connections")
+}
+
+model ZapGroup {
+  id               String    @id @default(uuid())
+  userId           String    @map("user_id")
+  connectionId     String?   @map("connection_id")
+  externalGroupId  String    @map("external_group_id")
+  name             String?
+  memberCount      Int?      @map("member_count")
+  lastExtractedAt  DateTime? @map("last_extracted_at")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  connection  ZapConnection?        @relation(fields: [connectionId], references: [id], onDelete: SetNull)
+  extractions ZapGroupExtraction[]
+  contacts    Contact[]
+
+  @@index([userId])
+  @@map("zap_groups")
+}
+
+model ZapGroupExtraction {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  groupId         String   @map("group_id")
+  declaredPurpose String   @map("declared_purpose")
+  limitApplied    Int?     @map("limit_applied")
+  totalFound      Int?     @map("total_found")
+  totalImported   Int?     @map("total_imported")
+  totalSkipped    Int?     @map("total_skipped")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  user  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group ZapGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([groupId])
+  @@map("zap_group_extractions")
+}
+
+model Contact {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  phoneE164     String   @map("phone_e164")
+  displayName   String?  @map("display_name")
+  email         String?
+  company       String?
+  notes         String?  @db.Text
+  sourceType    String   @default("group") @map("source_type")
+  sourceGroupId String?  @map("source_group_id")
+  persona       String?
+  tags          String[] @default([])
+  isValid       Boolean  @default(true) @map("is_valid")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceGroup ZapGroup?     @relation(fields: [sourceGroupId], references: [id], onDelete: SetNull)
+  zapLeads    ZapLead[]
+  consentLogs ConsentLog[]
+
+  @@unique([userId, phoneE164])
+  @@index([userId, sourceGroupId])
+  @@map("contacts")
+}
+
+model ZapLead {
+  id                 String    @id @default(uuid())
+  userId             String    @map("user_id")
+  contactId          String    @map("contact_id")
+  status             String    @default("frio")
+  heatScore          Int       @default(0) @map("heat_score")
+  ownerId            String?   @map("owner_id")
+  estimatedValue     Float?    @map("estimated_value")
+  nextFollowupAt     DateTime? @map("next_followup_at")
+  firstContactedAt   DateTime? @map("first_contacted_at")
+  becameHotAt        DateTime? @map("became_hot_at")
+  lastInteractionAt  DateTime? @map("last_interaction_at")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact       Contact             @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  statusHistory LeadStatusHistory[]
+  events        LeadEvent[]
+  messages      ZapMessage[]
+
+  @@index([userId, status])
+  @@index([userId, heatScore(sort: Desc)])
+  @@index([userId, nextFollowupAt])
+  @@map("zap_leads")
+}
+
+model LeadStatusHistory {
+  id         String   @id @default(uuid())
+  leadId     String   @map("lead_id")
+  fromStatus String?  @map("from_status")
+  toStatus   String   @map("to_status")
+  reason     String?
+  changedBy  String?  @map("changed_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  lead ZapLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+  @@map("lead_status_history")
+}
+
+model LeadEvent {
+  id             String   @id @default(uuid())
+  leadId         String   @map("lead_id")
+  userId         String   @map("user_id")
+  eventType      String   @map("event_type")
+  payload        Json?
+  detectedIntent String?  @map("detected_intent")
+  sentiment      String?
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  lead ZapLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  user User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([leadId, createdAt(sort: Desc)])
+  @@index([userId])
+  @@map("lead_events")
+}
+
+model ZapMessage {
+  id                String   @id @default(uuid())
+  leadId            String   @map("lead_id")
+  userId            String   @map("user_id")
+  direction         String   // 'out' or 'in'
+  channel           String   @default("whatsapp")
+  body              String?
+  templateId        String?  @map("template_id")
+  aiGenerated       Boolean  @default(false) @map("ai_generated")
+  status            String?
+  externalMessageId String?  @map("external_message_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  lead ZapLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  user User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([leadId, createdAt])
+  @@index([userId])
+  @@map("zap_messages")
+}
+
+model MessageTemplate {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  name       String
+  objective  String?
+  tone       String?
+  language   String   @default("pt-BR")
+  body       String
+  isApproved Boolean  @default(false) @map("is_approved")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("message_templates")
+}
+
+model ConsentLog {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  contactId String?  @map("contact_id")
+  action    String
+  basis     String?
+  source    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@index([contactId, action])
+  @@index([userId])
+  @@map("consent_log")
+}
+

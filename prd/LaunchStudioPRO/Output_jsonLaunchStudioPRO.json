@@ -1,0 +1,37 @@
+{
+  "project": { "title": "", "slug": "", "launch_type": "" },
+  "avatar": {
+    "profile": {},
+    "pains": [],
+    "dreams": [],
+    "fears": [],
+    "objections": [],
+    "language": []
+  },
+  "offer": {
+    "transformation": "",
+    "core_product": {},
+    "bonuses": [],
+    "guarantee": "",
+    "anchor_price": 0,
+    "launch_price": 0,
+    "scarcity_type": "price_increase | bonus_removal | offer_ends | combined"
+  },
+  "sequence": {
+    "pre_pre": { "strategy": "", "email_script": "", "survey_questions": [] },
+    "plc1": { "theme": "Oportunidade", "script": "", "key_points": [], "cta": "" },
+    "plc2": { "theme": "Transformação", "script": "", "teaching": "", "case_study": "" },
+    "plc3": { "theme": "Propriedade", "script": "", "offer_tease": "", "scarcity_seed": "" },
+    "cart_open": { "email_script": "", "sales_page_outline": [] },
+    "cart_close": { "emails": [], "scarcity_amplification": "" }
+  },
+  "triggers_map": [
+    { "trigger": "", "phase": "", "intensity": 0, "how_to_activate": "" }
+  ],
+  "calendar": [
+    { "day": 0, "phase": "", "action": "", "asset": "" }
+  ],
+  "joint_launch": { "recommended": false, "partner_profile": "", "commission_structure": "" },
+  "warnings": [],
+  "fidelity_checklist": []
+}

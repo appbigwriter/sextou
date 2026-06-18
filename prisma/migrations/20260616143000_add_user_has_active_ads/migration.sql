@@ -1,0 +1,3 @@
+ALTER TABLE "users"
+ADD COLUMN "has_active_ads" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN "is_premium" BOOLEAN NOT NULL DEFAULT false;

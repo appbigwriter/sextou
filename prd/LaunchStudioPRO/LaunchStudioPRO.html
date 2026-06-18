@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Launch Studio PRO — Apresentação do Produto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+    --bg: #0D0D0F;
+    --surface: #141418;
+    --surface2: #1C1C22;
+    --surface3: #24242C;
+    --text: #F0EDE6;
+    --muted: #9A968E;
+    --red: #FF3D57;
+    --orange: #FF8C00;
+    --green: #4ADE80;
+    --yellow: #FACC15;
+    --blue: #60A5FA;
+    --purple: #C084FC;
+    --grad-brand: linear-gradient(135deg, #FF3D57 0%, #FF8C00 100%);
+    --grad-brand-soft: linear-gradient(135deg, rgba(255,61,87,.12), rgba(255,140,0,.08));
+    --grad-celebrate: linear-gradient(135deg, #FF3D57, #C084FC, #60A5FA);
+    --r: 10px;
+    --r-lg: 14px;
+    --r-xl: 20px;
+    --r-2xl: 26px;
+    --sh: 0 4px 24px rgba(0,0,0,.35);
+    --sh-glow: 0 10px 40px rgba(255,61,87,.35), 0 4px 16px rgba(255,140,0,.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: hidden; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* HERO */
+  .hero { position: relative; padding: 80px 0 60px; text-align: center; overflow: hidden; }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top, rgba(255,61,87,.18), transparent 60%),
+                radial-gradient(ellipse at bottom right, rgba(255,140,0,.12), transparent 60%);
+    pointer-events: none;
+  }
+  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border: 1px solid rgba(255,255,255,.1); background: var(--surface); border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .hero h1 { font-family: var(--display); font-weight: 800; font-size: clamp(36px, 7vw, 64px); line-height: 1.05; letter-spacing: -.02em; margin-bottom: 20px; }
+  .hero h1 .grad { background: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.lead { font-size: clamp(16px, 2.2vw, 19px); color: var(--muted); max-width: 640px; margin: 0 auto 32px; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: var(--grad-brand); color: white; font-weight: 700; font-size: 16px; border-radius: var(--r-lg); text-decoration: none; box-shadow: var(--sh-glow); transition: transform .2s; }
+  .hero-cta:hover { transform: translateY(-2px); }
+
+  /* SECTION */
+  section { padding: 60px 0; }
+  .section-title { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); margin-bottom: 12px; letter-spacing: -.01em; }
+  .section-sub { color: var(--muted); font-size: 16px; margin-bottom: 40px; max-width: 640px; }
+
+  /* PROBLEM */
+  .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .problem-card { background: var(--surface); border: 1px solid rgba(255,255,255,.06); border-radius: var(--r-xl); padding: 24px; }
+  .problem-card .icon { font-size: 28px; margin-bottom: 12px; }
+  .problem-card h3 { font-family: var(--display); font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+  .problem-card p { color: var(--muted); font-size: 14px; }
+
+  /* STEPPER FLOW */
+  .flow { display: flex; flex-direction: column; gap: 20px; }
+  .flow-step { display: grid; grid-template-columns: 64px 1fr; gap: 20px; align-items: start; background: var(--surface); border: 1px solid rgba(255,255,255,.06); border-radius: var(--r-xl); padding: 24px; position: relative; }
+  .flow-step::before { content: ''; position: absolute; left: 32px; top: 100%; width: 2px; height: 20px; background: linear-gradient(to bottom, rgba(255,61,87,.4), transparent); }
+  .flow-step:last-child::before { display: none; }
+  .step-num { width: 64px; height: 64px; border-radius: 50%; background: var(--grad-brand-soft); border: 1px solid rgba(255,61,87,.3); display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 800; font-size: 24px; color: var(--red); }
+  .flow-step h3 { font-family: var(--display); font-weight: 700; font-size: 20px; margin-bottom: 6px; }
+  .flow-step .phase-tag { display: inline-block; font-family: var(--mono); font-size: 11px; color: var(--orange); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .flow-step p { color: var(--muted); font-size: 14px; }
+  .coach-tip { margin-top: 14px; padding: 12px 14px; background: rgba(250,204,21,.06); border-left: 2px solid var(--yellow); border-radius: 8px; font-size: 13px; color: var(--text); }
+  .coach-tip strong { color: var(--yellow); }
+
+  /* PLF FIDELITY */
+  .plf-map { background: var(--surface); border: 1px solid rgba(255,255,255,.06); border-radius: var(--r-2xl); padding: 28px; }
+  .plf-row { display: grid; grid-template-columns: 140px 1fr auto; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+  .plf-row:last-child { border-bottom: none; }
+  .plf-phase { font-family: var(--display); font-weight: 700; font-size: 15px; }
+  .plf-desc { color: var(--muted); font-size: 14px; }
+  .plf-trigger { font-family: var(--mono); font-size: 11px; padding: 4px 10px; background: var(--surface2); border-radius: 999px; color: var(--purple); white-space: nowrap; }
+
+  /* ARTIFACTS */
+  .artifacts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .artifact { background: var(--surface); border: 1px solid rgba(255,255,255,.06); border-radius: var(--r-lg); padding: 20px; text-align: center; transition: transform .2s, border-color .2s; }
+  .artifact:hover { transform: translateY(-3px); border-color: rgba(255,140,0,.3); }
+  .artifact .emoji { font-size: 32px; margin-bottom: 10px; }
+  .artifact h4 { font-family: var(--display); font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .artifact p { color: var(--muted); font-size: 12px; }
+
+  /* CELEBRATION */
+  .celebration { text-align: center; padding: 80px 20px; background: var(--grad-celebrate); border-radius: var(--r-2xl); position: relative; overflow: hidden; }
+  .celebration::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.2), transparent 50%); }
+  .celebration > * { position: relative; }
+  .celebration .big-emoji { font-size: 64px; margin-bottom: 16px; }
+  .celebration h2 { font-family: var(--display); font-weight: 800; font-size: clamp(28px, 5vw, 44px); color: white; margin-bottom: 12px; }
+  .celebration p { color: rgba(255,255,255,.9); font-size: 17px; max-width: 560px; margin: 0 auto 28px; }
+  .celebration .btn { display: inline-flex; padding: 16px 32px; background: white; color: #0D0D0F; font-weight: 700; border-radius: var(--r-lg); text-decoration: none; font-size: 16px; }
+
+  /* FOOTER */
+  footer { padding: 40px 0; text-align: center; color: var(--muted); font-size: 13px; border-top: 1px solid rgba(255,255,255,.05); margin-top: 40px; }
+  footer strong { color: var(--text); }
+
+  @media (max-width: 640px) {
+    .flow-step { grid-template-columns: 48px 1fr; padding: 18px; }
+    .step-num { width: 48px; height: 48px; font-size: 18px; }
+    .plf-row { grid-template-columns: 1fr; gap: 6px; }
+    .plf-trigger { justify-self: start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="badge"><span class="dot"></span> SextouTools PRO · Premium</div>
+    <h1>Sua Fórmula de Lançamento,<br/><span class="grad">desenhada por IA em 20 minutos.</span></h1>
+    <p class="lead">O Launch Studio PRO transforma sua ideia em um plano completo fiel à <strong>Product Launch Formula™</strong> de Jeff Walker — com copy, cronograma, estímulos mentais e escassez real. Sem "Marketing da Esperança".</p>
+    <a href="#flow" class="hero-cta">✨ Começar meu lançamento →</a>
+  </div>
+</header>
+
+<!-- PROBLEM -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Chega de Marketing da Esperança</h2>
+    <p class="section-sub">A maioria dos lançamentos falha não pelo produto, mas pela falta de sequência, expectativa e diálogo com o mercado.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="icon">😴</div>
+        <h3>Lançar no silêncio</h3>
+        <p>Colocar o produto no ar sem aquecer a audiência é invisibilidade garantida.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🎯</div>
+        <h3>Copy genérica</h3>
+        <p>Mensagens que não tocam nas dores, sonhos e objeções reais do avatar.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">⏳</div>
+        <h3>Sem escassez real</h3>
+        <p>Ofertas abertas para sempre matam a urgência e adiam a decisão.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🧩</div>
+        <h3>Estímulos isolados</h3>
+        <p>Usar só "prova social" ou só "autoridade" não cria o efeito cascata da PLF.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section id="flow">
+  <div class="container">
+    <h2 class="section-title">Como funciona — passo a passo</h2>
+    <p class="section-sub">Uma jornada mobile-first em 6 fases. Você responde, a IA conduz, o plano aparece.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <div>
+          <span class="phase-tag">Briefing · 30 segundos</span>
+          <h3>Diga o essencial</h3>
+          <p>Você informa apenas: <strong>nome do projeto</strong>, <strong>público-alvo</strong> e uma <strong>ideia livre</strong> do produto e da campanha. Só isso.</p>
+          <div class="coach-tip"><strong>💡 Coach tip:</strong> quanto mais específico o público-alvo, mais afiada será a copy. Ex: "mulheres 40+ que querem emagrecer pós-menopausa" é melhor que "pessoas que querem emagrecer".</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <div>
+          <span class="phase-tag">Entrevista multi-step · 8 a 18 minutos</span>
+          <h3>A IA entrevista você</h3>
+          <p>Um formulário elegante em 10 etapas extrai tudo o que a PLF precisa: avatar profundo, transformação, oferta irresistível, tipo de lançamento, escassez, estímulos mentais e pretensão de parceria.</p>
+          <div class="coach-tip"><strong>💡 Coach tip:</strong> cada etapa tem uma dica contextual. Você não precisa saber PLF — o app te ensina pelo caminho.</div>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <div>
+          <span class="phase-tag">Orquestração multi-LLM · 90 a 180 segundos</span>
+          <h3>7 agentes trabalham juntos</h3>
+          <p>Um <em>planner</em> decompõe a estratégia, um <em>copywriter</em> escreve os roteiros, um <em>avatar-researcher</em> pesquisa o mercado, um <em>trigger-mapper</em> distribui os estímulos mentais em camadas — e um <em>fidelity-reviewer</em> garante fidelidade total à PLF.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <div>
+          <span class="phase-tag">Preview · você no controle</span>
+          <h3>Revise por abas antes de exportar</h3>
+          <p>Avatar · Oferta · Sequência (Pré-Pré → PLC 1 → PLC 2 → PLC 3 → Abertura → Fechamento) · Copy · Cronograma · Mapa de Estímulos. Regenere qualquer fase isoladamente.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">5</div>
+        <div>
+          <span class="phase-tag">Exportação · pronto para executar</span>
+          <h3>Baixe seu dossiê completo</h3>
+          <p>PDF profissional, pack de e-mails em Markdown, scripts de vídeo, página de vendas em HTML, cronograma ICS para o Google Calendar e checklist exportável para Notion.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="step-num">6</div>
+        <div>
+          <span class="phase-tag">Gestão contínua</span>
+          <h3>Multi-projeto, multi-usuário</h3>
+          <p>Crie quantos lançamentos quiser, convide sua equipe, versione cada dossiê e acompanhe o histórico. Do Seed Launch ao Lançamento Conjunto — tudo no mesmo workspace.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLF FIDELITY -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Fidelidade total à Product Launch Formula™</h2>
+    <p class="section-sub">Cada fase do seu plano respeita a estrutura original de Jeff Walker — com estímulos mentais distribuídos em camadas.</p>
+
+    <div class="plf-map">
+      <div class="plf-row">
+        <div class="plf-phase">Pré-Pré</div>
+        <div class="plf-desc">Tiro de aviso, pesquisa das 2 perguntas, construção de curiosidade e co-criação.</div>
+        <div class="plf-trigger">curiosidade · reciprocidade</div>
+      </div>
+      <div class="plf-row">
+        <div class="plf-phase">PLC 1</div>
+        <div class="plf-desc">A Oportunidade — o "por quê". Transformação, posicionamento e primeiro ensinamento.</div>
+        <div class="plf-trigger">autoridade · antecipação</div>
+      </div>
+      <div class="plf-row">
+        <div class="plf-phase">PLC 2</div>
+        <div class="plf-desc">A Transformação — o "quê". Ensinamento prático, estudo de caso, quebra de objeções.</div>
+        <div class="plf-trigger">reciprocidade · prova social</div>
+      </div>
+      <div class="plf-row">
+        <div class="plf-phase">PLC 3</div>
+        <div class="plf-desc">A Experiência da Propriedade — o "como". Guinada suave para a oferta, semente de escassez.</div>
+        <div class="plf-trigger">empatia · eventos</div>
+      </div>
+      <div class="plf-row">
+        <div class="plf-phase">Abertura</div>
+        <div class="plf-desc">Carrinho aberto. E-mail direto, página de vendas, bônus de ação rápida.</div>
+        <div class="plf-trigger">comunidade · escassez</div>
+      </div>
+      <div class="plf-row">
+        <div class="plf-phase">Fechamento</div>
+        <div class="plf-desc">Últimas 24h com e-mails de escassez real — preço sobe, bônus somem ou oferta encerra.</div>
+        <div class="plf-trigger">escassez · prova social</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARTIFACTS -->
+<section>
+  <div class="container">
+    <h2 class="section-title">O que você recebe</h2>
+    <p class="section-sub">Artefatos profissionais prontos para execução — não apenas ideias soltas.</p>
+
+    <div class="artifacts">
+      <div class="artifact"><div class="emoji">📄</div><h4>Dossiê PDF</h4><p>Plano completo com visual profissional</p></div>
+      <div class="artifact"><div class="emoji">✉️</div><h4>Pack de e-mails</h4><p>Pré-pré, PLCs, abertura e fechamento</p></div>
+      <div class="artifact"><div class="emoji">🎬</div><h4>Scripts de vídeo</h4><p>PLC 1, 2 e 3 palavra-por-palavra</p></div>
+      <div class="artifact"><div class="emoji">🌐</div><h4>Página de vendas</h4><p>Copy estruturada em blocos HTML</p></div>
+      <div class="artifact"><div class="emoji">📅</div><h4>Cronograma ICS</h4><p>Integrável ao Google Calendar</p></div>
+      <div class="artifact"><div class="emoji">✅</div><h4>Checklist Notion</h4><p>Execução passo a passo</p></div>
+      <div class="artifact"><div class="emoji">🧭</div><h4>Mapa de estímulos</h4><p>Visualização por fase</p></div>
+      <div class="artifact"><div class="emoji">🤝</div><h4>Plano de parceria</h4><p>Para Lançamento Conjunto</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CELEBRATION -->
+<section>
+  <div class="container">
+    <div class="celebration">
+      <div class="big-emoji">🎉</div>
+      <h2>Seu lançamento está pronto.</h2>
+      <p>Em 20 minutos, você sai do "Marketing da Esperança" e entra na sequência que já gerou mais de US$ 500 milhões em vendas pelo mundo — adaptada ao seu produto, seu avatar e seu momento.</p>
+      <a href="#" class="btn">✨ Criar meu primeiro lançamento</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>Launch Studio PRO</strong> · SextouTools PRO Premium · Design System v2</p>
+    <p style="margin-top:8px; font-size:12px;">Product Launch Formula™ é marca registrada de Jeff Walker. Este app é uma ferramenta de planejamento estratégico — resultados dependem de execução, mercado e audiência.</p>
+  </div>
+</footer>
+
+</body>
+</html>

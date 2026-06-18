@@ -5,6 +5,9 @@ const nextConfig = {
   images: {
     domains: ['res.cloudinary.com'],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['puppeteer-core', 'puppeteer', 'whatsapp-web.js'],
+  },
 }
 
 module.exports = nextConfig

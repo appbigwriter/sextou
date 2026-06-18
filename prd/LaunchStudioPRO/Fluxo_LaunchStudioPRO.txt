@@ -1,0 +1,9 @@
+1. Login / Cadastro
+2. Dashboard — "Meus Lançamentos" (lista de projetos + CTA "+ Novo Lançamento")
+3. Briefing inicial (3 campos: Nome · Público · Ideia)
+4. Entrevista Multi-Step (10 etapas com coach tips)
+5. Revisão do briefing antes de gerar
+6. Geração Premium (orquestrador multi-LLM)
+7. Preview do Dossiê (abas: Avatar · Oferta · Sequência · Copy · Cronograma · Estímulos)
+8. Exportação (PDF, ZIP, Markdown)
+9. Histórico, versões e regeneração por fase

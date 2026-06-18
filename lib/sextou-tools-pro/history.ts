@@ -133,9 +133,19 @@ export async function updateSextouToolsProGenerationAction(
       | "delete"
       | "set-operational-status"
       | "set-calendar-post-published"
+      | "set-follow-up-message-sent"
+      | "set-launch-plan-task-completed"
+      | "set-local-partnership-status"
     operationalStatus?: string
     postIndex?: number
     published?: boolean
+    messageIndex?: number
+    sent?: boolean
+    section?: "checklist" | "timeline"
+    taskIndex?: number
+    completed?: boolean
+    partnerIndex?: number
+    partnershipStatus?: "novo" | "contatado" | "interessado"
   }
 ) {
   const existing = await getSextouToolsProGenerationById(userId, generationId)
@@ -197,6 +207,93 @@ export async function updateSextouToolsProGenerationAction(
 
       publishedPosts[String(payload.postIndex)] = Boolean(payload.published)
       metadata.publishedPosts = publishedPosts
+
+      return await prisma.sextouToolsProGeneration.update({
+        where: { id: generationId },
+        data: { metadataJson: metadata as Prisma.InputJsonValue },
+      })
+    }
+
+    if (payload.action === "set-follow-up-message-sent") {
+      const metadata =
+        existing.metadataJson && typeof existing.metadataJson === "object" && !Array.isArray(existing.metadataJson)
+          ? { ...(existing.metadataJson as Record<string, unknown>) }
+          : {}
+
+      const sentMessages =
+        metadata.sentMessages && typeof metadata.sentMessages === "object" && !Array.isArray(metadata.sentMessages)
+          ? { ...(metadata.sentMessages as Record<string, unknown>) }
+          : {}
+
+      if (typeof payload.messageIndex !== "number") {
+        throw new Error("invalid-message-index")
+      }
+
+      sentMessages[String(payload.messageIndex)] = Boolean(payload.sent)
+      metadata.sentMessages = sentMessages
+
+      return await prisma.sextouToolsProGeneration.update({
+        where: { id: generationId },
+        data: { metadataJson: metadata as Prisma.InputJsonValue },
+      })
+    }
+
+    if (payload.action === "set-launch-plan-task-completed") {
+      const metadata =
+        existing.metadataJson && typeof existing.metadataJson === "object" && !Array.isArray(existing.metadataJson)
+          ? { ...(existing.metadataJson as Record<string, unknown>) }
+          : {}
+
+      if (payload.section !== "checklist" && payload.section !== "timeline") {
+        throw new Error("invalid-task-section")
+      }
+
+      if (typeof payload.taskIndex !== "number") {
+        throw new Error("invalid-task-index")
+      }
+
+      const field = payload.section === "checklist" ? "launchPlanChecklist" : "launchPlanTimeline"
+      const taskMap =
+        metadata[field] && typeof metadata[field] === "object" && !Array.isArray(metadata[field])
+          ? { ...(metadata[field] as Record<string, unknown>) }
+          : {}
+
+      taskMap[String(payload.taskIndex)] = Boolean(payload.completed)
+      metadata[field] = taskMap
+
+      return await prisma.sextouToolsProGeneration.update({
+        where: { id: generationId },
+        data: { metadataJson: metadata as Prisma.InputJsonValue },
+      })
+    }
+
+    if (payload.action === "set-local-partnership-status") {
+      const metadata =
+        existing.metadataJson && typeof existing.metadataJson === "object" && !Array.isArray(existing.metadataJson)
+          ? { ...(existing.metadataJson as Record<string, unknown>) }
+          : {}
+
+      if (typeof payload.partnerIndex !== "number") {
+        throw new Error("invalid-partner-index")
+      }
+
+      if (
+        payload.partnershipStatus !== "novo" &&
+        payload.partnershipStatus !== "contatado" &&
+        payload.partnershipStatus !== "interessado"
+      ) {
+        throw new Error("invalid-partnership-status")
+      }
+
+      const localPartnershipStatus =
+        metadata.localPartnershipStatus &&
+        typeof metadata.localPartnershipStatus === "object" &&
+        !Array.isArray(metadata.localPartnershipStatus)
+          ? { ...(metadata.localPartnershipStatus as Record<string, unknown>) }
+          : {}
+
+      localPartnershipStatus[String(payload.partnerIndex)] = payload.partnershipStatus
+      metadata.localPartnershipStatus = localPartnershipStatus
 
       return await prisma.sextouToolsProGeneration.update({
         where: { id: generationId },

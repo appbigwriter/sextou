@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
         id: true,
         fullName: true,
         email: true,
+        hasActiveAds: true,
       },
       orderBy: { fullName: "asc" },
     })
@@ -37,7 +38,18 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { email, password, fullName, businessName, whatsapp, city, state, isAdmin: isUserAdmin, isVip } = await request.json()
+    const {
+      email,
+      password,
+      fullName,
+      businessName,
+      whatsapp,
+      city,
+      state,
+      isAdmin: isUserAdmin,
+      isVip,
+      hasActiveAds,
+    } = await request.json()
 
     if (!email || !password || !fullName) {
       return NextResponse.json(
@@ -70,6 +82,7 @@ export async function POST(request: NextRequest) {
         state: state || "",
         isAdmin: isUserAdmin || false,
         isVip: isVip || false,
+        hasActiveAds: hasActiveAds || false,
       }
     })
 
@@ -78,6 +91,7 @@ export async function POST(request: NextRequest) {
       email: user.email,
       fullName: user.fullName,
       isAdmin: user.isAdmin,
+      hasActiveAds: user.hasActiveAds,
     })
   } catch (error) {
     console.error("Create user error:", error)

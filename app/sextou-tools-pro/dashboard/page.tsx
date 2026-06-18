@@ -8,7 +8,7 @@ import { getSextouToolsProCatalog } from "@/lib/sextou-tools-pro/catalog"
 import { listRecentSextouToolsProGenerations } from "@/lib/sextou-tools-pro/history"
 import { getOperationalStatus } from "@/lib/sextou-tools-pro/metadata"
 import { listSextouToolsProUsageSummary } from "@/lib/sextou-tools-pro/usage"
-import { resolveToolkitUser } from "@/lib/sextou-tools/auth"
+import { resolveSextouToolsProUser } from "@/lib/sextou-tools/auth"
 
 export const metadata: Metadata = {
   title: "Dashboard | SextouTools PRO",
@@ -16,10 +16,14 @@ export const metadata: Metadata = {
 }
 
 export default async function SextouToolsProDashboardPage() {
-  const result = await resolveToolkitUser()
+  const result = await resolveSextouToolsProUser()
 
   if (result.kind === "unauthorized") {
     redirect("/login?next=/sextou-tools-pro/dashboard")
+  }
+
+  if (result.kind === "forbidden") {
+    redirect("/sextou-tools-pro/acesso")
   }
 
   const user =
@@ -32,6 +36,7 @@ export default async function SextouToolsProDashboardPage() {
         }
 
   const tools = getSextouToolsProCatalog()
+  const liveToolsCount = tools.filter((tool) => tool.status === "live").length
   const usage =
     result.kind === "ok"
       ? await listSextouToolsProUsageSummary(user.id)
@@ -66,7 +71,7 @@ export default async function SextouToolsProDashboardPage() {
             <div className="mt-6 flex flex-wrap gap-2 text-[11px] font-semibold text-[#A09D97]">
               <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">5 geracoes por dia</span>
               <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">2 regeneracoes por resultado</span>
-              <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">5 apps live</span>
+              <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">{liveToolsCount} apps live</span>
             </div>
           </div>
 

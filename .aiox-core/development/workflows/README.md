@@ -12,6 +12,9 @@ This directory contains workflow definitions for the Synkra AIOX framework. Work
 - **greenfield-fullstack.yaml** - Workflow for new full-stack projects
 - **greenfield-service.yaml** - Workflow for new service/backend projects
 - **greenfield-ui.yaml** - Workflow for new UI/frontend projects
+- **launchstudiopro-draft-sequence.yaml** - Sequential development of all LaunchStudioPRO Draft stories
+- **launchstudiopro-qa-inconformities.yaml** - UltraQA pass that logs findings into docs/stories/inconformidades.md
+- **launchstudiopro-master-review.yaml** - Master review gate for QA-approved LaunchStudioPRO stories
 
 ### Configuration Workflows
 

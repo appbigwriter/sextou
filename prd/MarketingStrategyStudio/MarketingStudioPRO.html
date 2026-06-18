@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Clareza — Gerador de Estratégia de Marketing (StoryBrand SB7)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--surface:#171717;--surface2:#1F1F1F;--surface3:#2A2A2A;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.15);
+  --text:#F0EDE6;--text2:#A09D97;--text3:#5A5755;
+  --red:#FF3D57;--redbg:rgba(255,61,87,.12);
+  --yellow:#FFD600;--ybg:rgba(255,214,0,.10);
+  --green:#1FBA7A;--gbg:rgba(31,186,122,.12);
+  --blue:#4A9EFF;--bbg:rgba(74,158,255,.12);
+  --orange:#FF8C00;--obg:rgba(255,140,0,.12);
+  --purple:#9B6DFF;--pbg:rgba(155,109,255,.12);
+  --grad-brand:linear-gradient(135deg,#FF3D57 0%,#FF8C00 100%);
+  --grad-brand-soft:linear-gradient(135deg,rgba(255,61,87,.16),rgba(255,140,0,.16));
+  --grad-celebrate:linear-gradient(135deg,#FF3D57,#9B6DFF 60%,#4A9EFF);
+  --r:8px;--r-lg:12px;--r-xl:16px;--r-2xl:22px;
+  --font:'Inter',system-ui,sans-serif;
+  --display:'Bricolage Grotesque','Inter',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --sh:0 1px 3px rgba(0,0,0,.4);--sh-2:0 8px 30px rgba(0,0,0,.5);
+  --sh-glow:0 8px 40px rgba(255,61,87,.28);
+  --tap:48px;--tap-cta:54px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+
+/* ════ HEADER ════ */
+.header{position:sticky;top:0;z-index:100;background:rgba(13,13,13,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 1.25rem;height:56px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--display);font-size:20px;font-weight:800;letter-spacing:-.02em;color:var(--text)}
+.logo span{background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.header-tag{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.04em}
+@media(max-width:560px){.header-tag{display:none}}
+
+.wrap{max-width:960px;margin:0 auto;padding:2.5rem 1.1rem 4rem}
+
+/* ════ HERO ════ */
+.hero{position:relative;margin-bottom:3.5rem;padding:2.5rem 2rem 2.75rem;border-radius:var(--r-2xl);background:var(--grad-brand-soft);border:1px solid rgba(255,61,87,.2);overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 90% -10%,rgba(255,140,0,.18),transparent 60%);pointer-events:none}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:18px;position:relative}
+.hero-title{font-family:var(--display);font-size:clamp(34px,8.5vw,62px);font-weight:800;letter-spacing:-.035em;line-height:.98;margin-bottom:18px;position:relative}
+.hero-title .accent{background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-lead{font-size:16px;color:var(--text2);max-width:560px;line-height:1.65;position:relative}
+.hero-lead b{color:var(--text);font-weight:600}
+.hero-meta{margin-top:24px;display:flex;flex-wrap:wrap;gap:8px;position:relative}
+.pill{font-size:11px;font-weight:600;padding:6px 12px;border-radius:20px;background:rgba(0,0,0,.28);border:1px solid var(--border);color:var(--text2)}
+.pill b{color:var(--text)}
+
+/* ════ SECTION ════ */
+.section{margin-bottom:3.75rem}
+.section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.section-num{font-family:var(--mono);font-size:12px;color:var(--text3);font-weight:500}
+.section-title{font-family:var(--display);font-size:clamp(22px,5vw,28px);font-weight:700;letter-spacing:-.025em}
+.section-desc{font-size:14px;color:var(--text2);margin-bottom:1.75rem;max-width:680px;line-height:1.7}
+.section-desc b{color:var(--text);font-weight:600}
+
+/* ════ "POR QUÊ" — problema/tese ════ */
+.thesis{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.thesis{grid-template-columns:1fr}}
+.thesis-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:1.4rem}
+.thesis-card.bad{border-left:3px solid var(--red)}
+.thesis-card.good{border-left:3px solid var(--green)}
+.tc-tag{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.tc-tag.bad{color:var(--red)}
+.tc-tag.good{color:var(--green)}
+.tc-line{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--text2);line-height:1.55;padding:7px 0}
+.tc-line .mk{flex-shrink:0;font-weight:700;width:16px}
+.tc-line.bad .mk{color:var(--red)}
+.tc-line.good .mk{color:var(--green)}
+
+.coach{display:flex;gap:12px;align-items:flex-start;background:var(--grad-brand-soft);border:1px solid rgba(255,61,87,.25);border-radius:var(--r-xl);padding:15px 17px;margin-top:1.5rem}
+.coach-icon{font-size:20px;flex-shrink:0;line-height:1.4}
+.coach-body{font-size:13.5px;color:var(--text);line-height:1.6}
+.coach-body b{color:var(--red)}
+
+/* ════ SB7 — os 7 elementos ════ */
+.sb7-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.sb7{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:1.4rem 1.4rem 1.5rem;position:relative;overflow:hidden;transition:transform .18s ease,border-color .18s ease}
+.sb7:hover{transform:translateY(-3px);border-color:var(--border2)}
+.sb7::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--red))}
+.sb7-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sb7-num{font-family:var(--mono);font-size:12px;color:var(--text3)}
+.sb7-ico{width:38px;height:38px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-size:19px;background:var(--cbg,var(--redbg))}
+.sb7-name{font-family:var(--display);font-size:18px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.sb7-name .c{color:var(--c,var(--red))}
+.sb7-role{font-size:13px;color:var(--text2);line-height:1.55;margin-bottom:14px}
+.sb7-tags{display:flex;flex-wrap:wrap;gap:6px}
+.sb7-tag{font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+
+/* cores por elemento */
+.c-blue{--c:var(--blue);--cbg:var(--bbg)}
+.c-red{--c:var(--red);--cbg:var(--redbg)}
+.c-purple{--c:var(--purple);--cbg:var(--pbg)}
+.c-orange{--c:var(--orange);--cbg:var(--obg)}
+.c-green{--c:var(--green);--cbg:var(--gbg)}
+.c-yellow{--c:var(--yellow);--cbg:var(--ybg)}
+.sb7.c-grad::before{background:var(--grad-celebrate)}
+.sb7.c-grad .sb7-ico{background:var(--grad-brand-soft)}
+.sb7.c-grad .sb7-name .c{background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ════ COMO FUNCIONA — stepper + passos ════ */
+.stepper{display:flex;align-items:flex-start;gap:6px;margin-bottom:2rem}
+.step{display:flex;flex-direction:column;align-items:center;gap:7px;flex:1;min-width:0}
+.step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:var(--grad-brand);color:#fff;box-shadow:var(--sh-glow)}
+.step-label{font-size:11px;font-weight:600;color:var(--text);text-align:center;line-height:1.3}
+.step-line{height:2px;flex:0 0 14px;background:var(--surface3);border-radius:2px;align-self:flex-start;margin-top:15px}
+
+.flow{display:flex;flex-direction:column;gap:14px}
+.fstep{display:grid;grid-template-columns:auto 1fr;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:1.4rem 1.5rem}
+.fstep-n{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.03em;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.fstep-title{font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:6px}
+.fstep-text{font-size:13.5px;color:var(--text2);line-height:1.65;margin-bottom:12px}
+.fstep-text b{color:var(--text);font-weight:600}
+.field-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.field{font-size:12px;font-weight:500;padding:7px 12px;border-radius:var(--r-lg);background:var(--surface2);border:1px solid var(--border);color:var(--text2);display:inline-flex;align-items:center;gap:7px}
+.field .dot{width:7px;height:7px;border-radius:50%;background:var(--red)}
+
+/* mini mock entrevista */
+.mock{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin-top:6px}
+.mock-q{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px}
+.mock-sugg{font-size:12.5px;color:var(--text2);background:var(--bbg);border:1px solid rgba(74,158,255,.25);border-radius:var(--r);padding:9px 11px;line-height:1.5;position:relative}
+.mock-sugg .ai{font-family:var(--mono);font-size:10px;color:var(--blue);font-weight:500;display:block;margin-bottom:4px;letter-spacing:.04em}
+.mock-opts{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.mock-opt{font-size:11.5px;padding:6px 11px;border-radius:20px;background:var(--surface3);border:1px solid var(--border2);color:var(--text2)}
+.mock-opt.on{background:var(--redbg);border-color:var(--red);color:var(--red);font-weight:600}
+
+/* ════ O QUE VOCÊ RECEBE ════ */
+.deliv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.deliv{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:1.3rem}
+.deliv-ico{font-size:22px;margin-bottom:12px}
+.deliv-name{font-family:var(--display);font-size:15.5px;font-weight:700;margin-bottom:6px}
+.deliv-text{font-size:12.5px;color:var(--text2);line-height:1.6}
+
+.oneliner{margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:var(--r-lg);padding:1.1rem 1.3rem}
+.ol-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.ol-formula{font-family:var(--mono);font-size:12px;color:var(--text2);margin-bottom:10px}
+.ol-formula .p{color:var(--red)}.ol-formula .s{color:var(--orange)}.ol-formula .r{color:var(--green)}
+.ol-example{font-size:14.5px;color:var(--text);line-height:1.6;font-style:italic}
+
+.export-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.25rem}
+.fmt{font-family:var(--mono);font-size:11px;font-weight:500;padding:6px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+
+/* ════ ESCALA / PREMIUM ════ */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.feat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.2rem}
+.feat-ico{font-size:18px;margin-bottom:10px}
+.feat-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.feat-text{font-size:12.5px;color:var(--text2);line-height:1.6}
+
+/* ════ CTA FINAL ════ */
+.celebrate{text-align:center;padding:3rem 1.5rem;border-radius:var(--r-2xl);background:var(--grad-brand-soft);border:1px solid rgba(255,61,87,.22);position:relative;overflow:hidden}
+.celebrate::after{content:"";position:absolute;inset:0;background:radial-gradient(100% 90% at 50% -20%,rgba(155,109,255,.16),transparent 60%);pointer-events:none}
+.cel-emoji{font-size:40px;margin-bottom:14px;position:relative}
+.cel-title{font-family:var(--display);font-size:clamp(26px,6vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:12px;position:relative}
+.cel-sub{font-size:15px;color:var(--text2);max-width:460px;margin:0 auto 26px;line-height:1.6;position:relative}
+.btn-grad{font-family:var(--font);cursor:pointer;background:var(--grad-brand);color:#fff;border:none;font-weight:700;font-size:16px;height:var(--tap-cta);border-radius:var(--r-xl);padding:0 32px;box-shadow:var(--sh-glow);display:inline-flex;align-items:center;gap:8px;transition:filter .15s,transform .15s;position:relative}
+.btn-grad:hover{filter:brightness(1.06)}
+.btn-grad:active{transform:scale(.98)}
+
+footer{text-align:center;margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);line-height:1.7}
+footer .mono{font-family:var(--mono)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.sb7:hover{transform:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">Clareza<span>.</span></div>
+  <div class="header-tag">SextouTools Premium · método StoryBrand SB7</div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero reveal">
+    <div class="hero-eyebrow">Gerador de Estratégia de Marketing</div>
+    <h1 class="hero-title">Seu marketing é um roteiro.<br/><span class="accent">Faltava o roteirista.</span></h1>
+    <p class="hero-lead">Clareza transforma uma ideia solta de negócio em uma <b>estratégia de marca completa</b> — usando o método StoryBrand SB7. A regra de ouro: <b>seu cliente é o herói; sua marca, o guia.</b> Quando a mensagem confunde, a venda some. Aqui ela fica clara.</p>
+    <div class="hero-meta">
+      <span class="pill">⏱ Estratégia em <b>minutos</b></span>
+      <span class="pill">🧩 <b>Qualquer</b> produto ou serviço</span>
+      <span class="pill">🗂 <b>Múltiplos projetos</b></span>
+      <span class="pill">📤 Exporta pronto p/ usar</span>
+    </div>
+  </section>
+
+  <!-- 01 O PROBLEMA -->
+  <section class="section reveal">
+    <div class="section-head"><span class="section-num">01</span><h2 class="section-title">Por que tanta gente perde vendas</h2></div>
+    <p class="section-desc">A causa quase nunca é o produto. É a <b>comunicação confusa</b>. O cérebro do cliente gasta energia tentando entender o que você faz — e, na dúvida, ele não compra. O método StoryBrand resolve isso colocando o cliente no centro da história.</p>
+    <div class="thesis">
+      <div class="thesis-card bad">
+        <div class="tc-tag bad">Marketing que confunde</div>
+        <div class="tc-line bad"><span class="mk">✕</span><span>A marca fala de si mesma o tempo todo</span></div>
+        <div class="tc-line bad"><span class="mk">✕</span><span>O cliente não entende o que ganha</span></div>
+        <div class="tc-line bad"><span class="mk">✕</span><span>Muitas palavras, nenhuma direção</span></div>
+        <div class="tc-line bad"><span class="mk">✕</span><span>O botão de compra fica escondido</span></div>
+      </div>
+      <div class="thesis-card good">
+        <div class="tc-tag good">Marketing com clareza (SB7)</div>
+        <div class="tc-line good"><span class="mk">✓</span><span>O cliente é o herói da história</span></div>
+        <div class="tc-line good"><span class="mk">✓</span><span>A marca é o guia que o leva ao sucesso</span></div>
+        <div class="tc-line good"><span class="mk">✓</span><span>Um plano simples remove o risco</span></div>
+        <div class="tc-line good"><span class="mk">✓</span><span>A chamada para ação é direta e visível</span></div>
+      </div>
+    </div>
+    <div class="coach"><div class="coach-icon">💡</div><div class="coach-body"><b>A regra de ouro do StoryBrand:</b> se você confunde, você perde. Pessoas não compram a melhor solução — compram a solução que conseguem entender mais rápido.</div></div>
+  </section>
+
+  <!-- 02 O MÉTODO -->
+  <section class="section reveal">
+    <div class="section-head"><span class="section-num">02</span><h2 class="section-title">O método SB7, em 7 elementos</h2></div>
+    <p class="section-desc">Clareza é fiel ao framework de Donald Miller. Toda estratégia gerada preenche os <b>7 elementos</b> de um roteiro de história — na ordem certa, sem pular nenhum. É o que torna a mensagem irresistível e fácil de seguir.</p>
+    <div class="sb7-grid">
+
+      <div class="sb7 c-blue">
+        <div class="sb7-top"><span class="sb7-num">01</span><div class="sb7-ico">🦸</div></div>
+        <div class="sb7-name">O <span class="c">Personagem</span></div>
+        <div class="sb7-role">Seu cliente é o protagonista — nunca a marca. Definimos o único desejo que ele realmente quer realizar.</div>
+        <div class="sb7-tags"><span class="sb7-tag">desejo único</span><span class="sb7-tag">cliente = herói</span></div>
+      </div>
+
+      <div class="sb7 c-red">
+        <div class="sb7-top"><span class="sb7-num">02</span><div class="sb7-ico">⚔️</div></div>
+        <div class="sb7-name">O <span class="c">Problema</span></div>
+        <div class="sb7-role">O herói enfrenta obstáculos em três camadas — e damos um rosto ao vilão que os causa.</div>
+        <div class="sb7-tags"><span class="sb7-tag">externo</span><span class="sb7-tag">interno</span><span class="sb7-tag">filosófico</span><span class="sb7-tag">vilão</span></div>
+      </div>
+
+      <div class="sb7 c-purple">
+        <div class="sb7-top"><span class="sb7-num">03</span><div class="sb7-ico">🧭</div></div>
+        <div class="sb7-name">O <span class="c">Guia</span></div>
+        <div class="sb7-role">Sua marca entra como o guia que já superou esse problema, transmitindo as duas coisas que geram confiança.</div>
+        <div class="sb7-tags"><span class="sb7-tag">empatia</span><span class="sb7-tag">autoridade</span></div>
+      </div>
+
+      <div class="sb7 c-orange">
+        <div class="sb7-top"><span class="sb7-num">04</span><div class="sb7-ico">🗺️</div></div>
+        <div class="sb7-name">O <span class="c">Plano</span></div>
+        <div class="sb7-role">Removemos o risco da compra com um caminho simples — o cliente vê exatamente como agir.</div>
+        <div class="sb7-tags"><span class="sb7-tag">3 passos</span><span class="sb7-tag">acordo / promessas</span></div>
+      </div>
+
+      <div class="sb7 c-green">
+        <div class="sb7-top"><span class="sb7-num">05</span><div class="sb7-ico">📣</div></div>
+        <div class="sb7-name">A <span class="c">Chamada</span></div>
+        <div class="sb7-role">Peça a ação sem timidez. Uma chamada direta para quem decidiu — e uma de baixo risco para nutrir quem hesita.</div>
+        <div class="sb7-tags"><span class="sb7-tag">CTA direta</span><span class="sb7-tag">CTA transicional</span></div>
+      </div>
+
+      <div class="sb7 c-yellow">
+        <div class="sb7-top"><span class="sb7-num">06</span><div class="sb7-ico">⚠️</div></div>
+        <div class="sb7-name">A <span class="c">Aversão ao Fracasso</span></div>
+        <div class="sb7-role">Todo herói quer evitar a dor. Mostramos, com equilíbrio, o que o cliente perde se não agir.</div>
+        <div class="sb7-tags"><span class="sb7-tag">o custo da inação</span><span class="sb7-tag">as apostas</span></div>
+      </div>
+
+      <div class="sb7 c-grad">
+        <div class="sb7-top"><span class="sb7-num">07</span><div class="sb7-ico">🎉</div></div>
+        <div class="sb7-name">O <span class="c">Sucesso Final</span></div>
+        <div class="sb7-role">Pintamos a vida do cliente depois da solução — a transformação concreta e quem ele se torna.</div>
+        <div class="sb7-tags"><span class="sb7-tag">transformação</span><span class="sb7-tag">nova identidade</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 03 COMO FUNCIONA -->
+  <section class="section reveal">
+    <div class="section-head"><span class="section-num">03</span><h2 class="section-title">Como funciona, passo a passo</h2></div>
+    <p class="section-desc">Você não precisa saber nada de copywriting. O trabalho pesado é da IA — você só confirma e ajusta. Quatro passos, do nada à estratégia pronta.</p>
+
+    <div class="stepper">
+      <div class="step"><div class="step-dot">1</div><div class="step-label">Conte<br/>a ideia</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot">2</div><div class="step-label">Responda<br/>a entrevista</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-label">Receba<br/>a estratégia</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-dot">4</div><div class="step-label">Exporte<br/>e use</div></div>
+    </div>
+
+    <div class="flow">
+
+      <div class="fstep">
+        <div class="fstep-n">1</div>
+        <div>
+          <div class="fstep-title">Conte a ideia em 3 campos</div>
+          <div class="fstep-text">Comece um <b>novo projeto</b> e preencha apenas o essencial. Nada de formulário gigante — só o suficiente para a IA entender seu negócio.</div>
+          <div class="field-row">
+            <span class="field"><span class="dot"></span>Nome do projeto</span>
+            <span class="field"><span class="dot"></span>Público-alvo</span>
+            <span class="field"><span class="dot"></span>Ideia do produto / empresa</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="fstep">
+        <div class="fstep-n">2</div>
+        <div>
+          <div class="fstep-title">A IA conduz uma entrevista sob medida</div>
+          <div class="fstep-text">A partir da sua ideia, Clareza monta uma <b>entrevista em etapas</b> — uma para cada elemento do SB7. Cada pergunta já vem com uma <b>sugestão pronta</b> que você só confirma ou edita. Elegante, rápida, no celular.</div>
+          <div class="mock">
+            <div class="mock-q">Etapa 2 · Como seu cliente se sente com esse problema?</div>
+            <div class="mock-sugg"><span class="ai">✨ sugestão da IA — edite à vontade</span>"Cansado de tentar resolver sozinho e com medo de tomar a decisão errada de novo."</div>
+            <div class="mock-opts">
+              <span class="mock-opt on">frustração</span>
+              <span class="mock-opt">medo</span>
+              <span class="mock-opt">insegurança</span>
+              <span class="mock-opt">sobrecarga</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fstep">
+        <div class="fstep-n">3</div>
+        <div>
+          <div class="fstep-title">Receba a estratégia completa</div>
+          <div class="fstep-text">Clareza revisa tudo, checa a <b>fidelidade ao SB7</b> e gera sua estratégia: o roteiro de marca (BrandScript), a frase única, o esqueleto do site e as sequências de e-mail. Você vê um <b>preview</b> antes de baixar.</div>
+        </div>
+      </div>
+
+      <div class="fstep">
+        <div class="fstep-n">4</div>
+        <div>
+          <div class="fstep-title">Exporte, versione e reaproveite</div>
+          <div class="fstep-text">Baixe no formato que quiser, <b>regenere uma seção</b> isolada, crie novas versões ou duplique o projeto para testar outro ângulo. Tudo fica salvo no seu histórico.</div>
+          <div class="export-row">
+            <span class="fmt">.md</span><span class="fmt">.pdf</span><span class="fmt">.docx</span><span class="fmt">.html</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 O QUE VOCÊ RECEBE -->
+  <section class="section reveal">
+    <div class="section-head"><span class="section-num">04</span><h2 class="section-title">O que você recebe</h2></div>
+    <p class="section-desc">Não é só um texto bonito — é um <b>kit de marketing</b> pronto para colocar no ar, todo derivado do mesmo roteiro de marca.</p>
+    <div class="deliv-grid">
+      <div class="deliv"><div class="deliv-ico">📜</div><div class="deliv-name">BrandScript</div><div class="deliv-text">Os 7 elementos preenchidos — o roteiro mestre da sua marca.</div></div>
+      <div class="deliv"><div class="deliv-ico">💬</div><div class="deliv-name">Frase única</div><div class="deliv-text">O "elevator pitch" que você repete em qualquer lugar.</div></div>
+      <div class="deliv"><div class="deliv-ico">🖥️</div><div class="deliv-name">Esqueleto do site</div><div class="deliv-text">O wireframe da home na ordem que converte, seção por seção.</div></div>
+      <div class="deliv"><div class="deliv-ico">🎁</div><div class="deliv-name">Isca de leads</div><div class="deliv-text">Ideia de material gratuito para capturar contatos.</div></div>
+      <div class="deliv"><div class="deliv-ico">✉️</div><div class="deliv-name">E-mails de nutrição</div><div class="deliv-text">Sequência que constrói confiança ao longo do tempo.</div></div>
+      <div class="deliv"><div class="deliv-ico">🔥</div><div class="deliv-name">E-mails de vendas</div><div class="deliv-text">Sequência que conduz o lead até a compra.</div></div>
+    </div>
+
+    <div class="oneliner">
+      <div class="ol-label">Exemplo de frase única gerada</div>
+      <div class="ol-formula"><span class="p">[problema]</span> → <span class="s">[sua solução]</span> → <span class="r">[resultado]</span></div>
+      <div class="ol-example">"A maioria das pequenas marcas não sabe o que dizer no próprio site. Clareza monta sua estratégia StoryBrand em minutos — para que sua mensagem venda por você."</div>
+    </div>
+  </section>
+
+  <!-- 05 FEITO PARA ESCALA -->
+  <section class="section reveal">
+    <div class="section-head"><span class="section-num">05</span><h2 class="section-title">Feito para escala e confiança</h2></div>
+    <p class="section-desc">Clareza é um app Premium de verdade — não um chat genérico. Pensado para uso real, com vários projetos, vários usuários e os bastidores certos.</p>
+    <div class="feat-grid">
+      <div class="feat"><div class="feat-ico">🗂️</div><div class="feat-title">Multiprojeto</div><div class="feat-text">Cada marca, produto ou cliente vira um projeto próprio, com histórico e versões.</div></div>
+      <div class="feat"><div class="feat-ico">🔒</div><div class="feat-title">Multiusuário e privado</div><div class="feat-text">Login obrigatório e isolamento total: ninguém vê os projetos de ninguém.</div></div>
+      <div class="feat"><div class="feat-ico">🧠</div><div class="feat-title">Modelo certo por etapa</div><div class="feat-text">IAs diferentes para planejar, escrever e revisar — com alternativa automática se uma falhar.</div></div>
+      <div class="feat"><div class="feat-ico">✅</div><div class="feat-title">Revisão embutida</div><div class="feat-text">Cada estratégia passa por uma checagem de clareza, fidelidade ao SB7 e promessas exageradas.</div></div>
+      <div class="feat"><div class="feat-ico">📊</div><div class="feat-title">Custo transparente</div><div class="feat-text">O custo é estimado antes de gerar e tentativas que falham não são cobradas.</div></div>
+      <div class="feat"><div class="feat-ico">♻️</div><div class="feat-title">Regenere e reaproveite</div><div class="feat-text">Refaça uma seção, crie versões e duplique projetos sem começar do zero.</div></div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="celebrate reveal">
+    <div class="cel-emoji">🎬</div>
+    <h2 class="cel-title">Sua marca merece um<br/>roteiro à altura.</h2>
+    <p class="cel-sub">Conte sua ideia em 3 campos. Deixe a entrevista guiar o resto. Saia com uma estratégia clara o bastante para vender por você.</p>
+    <button class="btn-grad" onclick="if(window.sendPrompt){sendPrompt('Quero começar minha estratégia StoryBrand — me ajude a montar o projeto.')}">✨ Criar minha estratégia</button>
+  </section>
+
+  <footer>
+    <div><b style="color:var(--text2)">Clareza</b> — Gerador de Estratégia de Marketing · SextouTools Premium</div>
+    <div class="mono">método StoryBrand SB7 (Donald Miller) · documento de apresentação do produto</div>
+  </footer>
+
+</div>
+
+<script>
+  // reveal on scroll (respeita prefers-reduced-motion via CSS)
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{ el.style.transitionDelay=(Math.min(i,3)*60)+'ms'; io.observe(el); });
+</script>
+
+</body>
+</html>

@@ -20,6 +20,7 @@ export default function NovoUsuarioPage() {
     state: "",
     isAdmin: false,
     isVip: false,
+    hasActiveAds: false,
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,13 +38,13 @@ export default function NovoUsuarioPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error || "Erro ao criar usuário")
+        setError(data.error || "Erro ao criar usuario")
         return
       }
 
       router.push("/dashboard/admin/usuarios")
     } catch {
-      setError("Erro ao criar usuário")
+      setError("Erro ao criar usuario")
     } finally {
       setLoading(false)
     }
@@ -65,21 +66,21 @@ export default function NovoUsuarioPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
-        <h1 className="text-2xl font-heading font-bold text-gray-900 mb-8">
-          Novo Usuário
+      <main className="container mx-auto max-w-2xl px-4 py-8">
+        <h1 className="mb-8 text-2xl font-heading font-bold text-gray-900">
+          Novo Usuario
         </h1>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl border shadow-sm p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border bg-white p-6 shadow-sm">
           {error && (
-            <div className="p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+            <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
               {error}
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 Nome Completo *
               </label>
               <input
@@ -87,24 +88,24 @@ export default function NovoUsuarioPage() {
                 required
                 value={form.fullName}
                 onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg text-sm"
+                className="w-full rounded-lg border px-4 py-2 text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 Nome da Empresa
               </label>
               <input
                 type="text"
                 value={form.businessName}
                 onChange={(e) => setForm({ ...form, businessName: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg text-sm"
+                className="w-full rounded-lg border px-4 py-2 text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 Email *
               </label>
               <input
@@ -112,12 +113,12 @@ export default function NovoUsuarioPage() {
                 required
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg text-sm"
+                className="w-full rounded-lg border px-4 py-2 text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 Senha *
               </label>
               <input
@@ -126,14 +127,14 @@ export default function NovoUsuarioPage() {
                 minLength={6}
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg text-sm"
+                className="w-full rounded-lg border px-4 py-2 text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 WhatsApp
-                <span className="ml-2 text-xs font-normal text-gray-500">(inclua o código do país)</span>
+                <span className="ml-2 text-xs font-normal text-gray-500">(inclua o codigo do pais)</span>
               </label>
               <PhoneInput
                 value={form.whatsapp}
@@ -142,31 +143,31 @@ export default function NovoUsuarioPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 Cidade
               </label>
               <input
                 type="text"
                 value={form.city}
                 onChange={(e) => setForm({ ...form, city: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg text-sm"
+                className="w-full rounded-lg border px-4 py-2 text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 Estado
               </label>
               <input
                 type="text"
                 value={form.state}
                 onChange={(e) => setForm({ ...form, state: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg text-sm"
+                className="w-full rounded-lg border px-4 py-2 text-sm"
               />
             </div>
           </div>
 
-          <div className="flex items-center gap-6 pt-4">
+          <div className="flex flex-wrap items-center gap-6 pt-4">
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -174,7 +175,7 @@ export default function NovoUsuarioPage() {
                 onChange={(e) => setForm({ ...form, isAdmin: e.target.checked })}
                 className="rounded border-gray-300"
               />
-              <span className="text-sm font-medium text-gray-700">É administrador</span>
+              <span className="text-sm font-medium text-gray-700">E administrador</span>
             </label>
 
             <label className="flex items-center gap-2">
@@ -184,7 +185,17 @@ export default function NovoUsuarioPage() {
                 onChange={(e) => setForm({ ...form, isVip: e.target.checked })}
                 className="rounded border-gray-300"
               />
-              <span className="text-sm font-medium text-gray-700">É VIP</span>
+              <span className="text-sm font-medium text-gray-700">E VIP</span>
+            </label>
+
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={form.hasActiveAds}
+                onChange={(e) => setForm({ ...form, hasActiveAds: e.target.checked })}
+                className="rounded border-gray-300"
+              />
+              <span className="text-sm font-medium text-gray-700">Tem anuncios ativos / PRO liberado</span>
             </label>
           </div>
 
@@ -192,13 +203,13 @@ export default function NovoUsuarioPage() {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-[#F97316] hover:bg-[#EA580C] text-white rounded-lg font-medium text-sm disabled:opacity-60"
+              className="rounded-lg bg-[#F97316] px-6 py-2 text-sm font-medium text-white hover:bg-[#EA580C] disabled:opacity-60"
             >
-              {loading ? "Criando..." : "Criar Usuário"}
+              {loading ? "Criando..." : "Criar Usuario"}
             </button>
             <Link
               href="/dashboard/admin/usuarios"
-              className="px-6 py-2 border rounded-lg font-medium text-sm hover:bg-gray-50"
+              className="rounded-lg border px-6 py-2 text-sm font-medium hover:bg-gray-50"
             >
               Cancelar
             </Link>

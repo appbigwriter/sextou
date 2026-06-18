@@ -1,0 +1,156 @@
+workflow:
+  id: launchstudiopro-master-review
+  name: "LaunchStudioPRO Master Review Gate"
+  version: "1.0.0"
+  description: >-
+    Review automation for LaunchStudioPRO stories released by QA. The
+    workflow runs @aiox-master over each story that has a QA pass and marks
+    it as DONE only after the review gate is satisfied.
+  type: automation
+  project_types:
+    - brownfield
+    - aiox-development
+    - release-gate
+
+  metadata:
+    elicit: false
+    confirmation_required: true
+
+  triggers:
+    - event: command
+      command: "*launchstudiopro-master-review"
+      action: start_review
+
+    - event: qa_gate_approved
+      condition: "story.status == 'Ready for Review'"
+      action: start_review
+
+  config:
+    source_directory: "docs/stories"
+    story_prefix: "brownfield-sextou-tools-pro-"
+    accepted_statuses:
+      - Ready for Review
+    final_status: Done
+    verbose: true
+
+  phases:
+    - phase_1: Review Queue
+    - phase_2: Master Review
+    - phase_3: Done Marking
+
+  sequence:
+    - step: discover_review_ready_stories
+      id: discover
+      phase: 1
+      phase_name: "Review Queue"
+      agent: system
+      action: scan_review_ready_stories
+      description: >-
+        Collect every LaunchStudioPRO story released by QA and ready for the
+        master review gate.
+      inputs:
+        source_directory: "${config.source_directory}"
+        story_prefix: "${config.story_prefix}"
+        statuses: "${config.accepted_statuses}"
+      outputs:
+        - review_ready_stories
+        - review_count
+      next: master_review_each_story
+
+    - step: master_review_each_story
+      id: review
+      phase: 2
+      phase_name: "Master Review"
+      agent: aiox-master
+      task: review
+      action: review_story_for_release
+      description: >-
+        Review one story at a time for release readiness. Only stories with a
+        clean QA gate should reach this point.
+      requires: discover
+      repeats:
+        mode: for_each
+        items: "${review_ready_stories}"
+      inputs:
+        story_file: "${story.file}"
+        qa_gate_file: "${story.gate_file}"
+        inconformities_file: "docs/stories/inconformidades.md"
+      outputs:
+        - master_review_result
+        - release_decision
+      on_success: mark_story_done
+      on_failure: halt_release
+
+    - step: mark_story_done
+      id: done
+      phase: 3
+      phase_name: "Done Marking"
+      agent: aiox-master
+      task: status
+      action: mark_story_done
+      description: >-
+        Mark the story as DONE only after the master review gate validates the
+        QA-approved result.
+      requires: review
+      outputs:
+        - final_status
+        - completed_story
+      next: review
+      on_failure: halt_release
+
+    - workflow_end:
+        id: complete
+        action: workflow_complete
+
+  handoff_prompts:
+    discover_to_master: |
+      QA approved stories are ready for master review.
+      Validate release readiness and mark them as DONE only after approval.
+
+    master_to_done: |
+      Story accepted by the master gate.
+      Update the story to DONE and continue with the next approved item.
+
+    done_to_release: |
+      Release gate completed for this story.
+      Move to the next QA-approved story until the queue is empty.
+
+  state:
+    persistence:
+      enabled: true
+      location: ".aiox/workflow-state/"
+      format: json
+      file: "launchstudiopro-master-review.json"
+
+    tracked_fields:
+      - review_ready_stories
+      - review_count
+      - completed_stories
+      - final_statuses
+      - started_at
+      - last_updated
+
+    recovery:
+      enabled: true
+      auto_resume: true
+      resume_from: last_reviewed_story
+
+  integration:
+    project_status:
+      update_on_complete: true
+      field: launchStudioProMasterReview
+
+    notifications:
+      on_complete:
+        message: "LaunchStudioPRO master review gate complete"
+        channels: [log]
+
+metadata:
+  author: "@aiox-master"
+  created: "2026-06-18"
+  version: "1.0.0"
+  tags:
+    - automation
+    - launchstudiopro
+    - master-review
+    - release-gate

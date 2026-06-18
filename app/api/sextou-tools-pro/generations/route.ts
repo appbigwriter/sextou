@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { requireToolkitApiUser } from "@/lib/sextou-tools/auth"
+import { requireSextouToolsProApiUser } from "@/lib/sextou-tools/auth"
 import {
   duplicateSextouToolsProGeneration,
   getSextouToolsProGenerationById,
@@ -8,7 +8,11 @@ import {
 } from "@/lib/sextou-tools-pro/history"
 
 export async function GET(request: Request) {
-  const user = await requireToolkitApiUser()
+  const user = await requireSextouToolsProApiUser()
+
+  if (user === false) {
+    return NextResponse.json({ error: "SextouTools PRO access requires active ads" }, { status: 403 })
+  }
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -31,7 +35,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const user = await requireToolkitApiUser()
+  const user = await requireSextouToolsProApiUser()
+
+  if (user === false) {
+    return NextResponse.json({ error: "SextouTools PRO access requires active ads" }, { status: 403 })
+  }
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

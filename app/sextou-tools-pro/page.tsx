@@ -3,7 +3,7 @@ import Link from "next/link"
 import { SextouToolsProCard } from "@/components/sextou-tools-pro/tool-card"
 import { SextouToolsProSuiteHeader } from "@/components/sextou-tools-pro/suite-header"
 import { getSextouToolsProCatalog, groupSextouToolsProCatalogByCategory } from "@/lib/sextou-tools-pro/catalog"
-import { auth } from "@/lib/auth"
+import { resolveSextouToolsProUser } from "@/lib/sextou-tools/auth"
 
 export const metadata: Metadata = {
   title: "SextouTools PRO | Ferramentas gratuitas com IA leve",
@@ -15,12 +15,12 @@ function CategorySection({
   title,
   description,
   tools,
-  isLoggedIn,
+  hrefBase,
 }: {
   title: string
   description: string
   tools: ReturnType<typeof getSextouToolsProCatalog>
-  isLoggedIn: boolean
+  hrefBase: string
 }) {
   return (
     <section className="mb-12">
@@ -33,7 +33,7 @@ function CategorySection({
           <SextouToolsProCard
             key={tool.slug}
             tool={tool}
-            href={isLoggedIn ? `/sextou-tools-pro/${tool.slug}` : `/login?next=/sextou-tools-pro/${tool.slug}`}
+            href={`${hrefBase}${tool.slug}`}
           />
         ))}
       </div>
@@ -42,8 +42,16 @@ function CategorySection({
 }
 
 export default async function SextouToolsProLandingPage() {
-  const session = await auth()
-  const isLoggedIn = !!session?.user?.email
+  const result = await resolveSextouToolsProUser()
+  const isLoggedIn = result.kind !== "unauthorized"
+  const hasAccess = result.kind === "ok"
+  const tools = getSextouToolsProCatalog()
+  const liveTools = tools.filter((tool) => tool.status === "live")
+  const hrefBase = hasAccess
+    ? "/sextou-tools-pro/"
+    : isLoggedIn
+      ? "/sextou-tools-pro/acesso?next=/sextou-tools-pro/"
+      : "/login?next=/sextou-tools-pro/"
   const { communication, sales, content } = groupSextouToolsProCatalogByCategory()
 
   return (
@@ -68,13 +76,14 @@ export default async function SextouToolsProLandingPage() {
               <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">Landing publica</span>
               <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">Login para gerar</span>
               <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">Paginas independentes por app</span>
+              <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1">{liveTools.length} apps live</span>
             </div>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
-                href={isLoggedIn ? "/sextou-tools-pro/dashboard" : "/cadastro"}
+                href={hasAccess ? "/sextou-tools-pro/dashboard" : isLoggedIn ? "/sextou-tools-pro/acesso" : "/cadastro"}
                 className="inline-flex h-14 items-center justify-center rounded-2xl bg-gradient-to-r from-[#FF3D57] to-[#FF8C00] px-6 text-sm font-semibold text-white transition hover:opacity-95"
               >
-                {isLoggedIn ? "Abrir dashboard PRO" : "Criar minha conta gratis"}
+                {hasAccess ? "Abrir dashboard PRO" : isLoggedIn ? "Ver meu acesso PRO" : "Criar minha conta gratis"}
               </Link>
               <Link
                 href="/sextou-tools"
@@ -87,14 +96,17 @@ export default async function SextouToolsProLandingPage() {
 
           <aside className="rounded-[28px] border border-white/10 bg-[#171717] p-6">
             <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-[#5A5755]">
-              O que voce encontra no MVP Core
+              Apps publicados agora
             </p>
             <ul className="mt-4 space-y-3 text-sm leading-7 text-[#A09D97]">
-              <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">Respostas prontas para WhatsApp</li>
-              <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">Gerador de oferta irresistivel</li>
-              <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">Calendario de conteudo de 7 dias</li>
-              <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">Proposta comercial one-page</li>
-              <li className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">Roteiro de Reels/Shorts de 30s</li>
+              {liveTools.slice(0, 8).map((tool) => (
+                <li
+                  key={tool.slug}
+                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                >
+                  {tool.title}
+                </li>
+              ))}
             </ul>
           </aside>
         </section>
@@ -103,19 +115,19 @@ export default async function SextouToolsProLandingPage() {
           title="Comunicacao"
           description="Ferramentas para responder mais rapido, com mais clareza e consistencia comercial."
           tools={communication}
-          isLoggedIn={isLoggedIn}
+          hrefBase={hrefBase}
         />
         <CategorySection
           title="Vendas"
           description="Ferramentas para transformar servicos e atendimentos em oferta e proposta mais objetivas."
           tools={sales}
-          isLoggedIn={isLoggedIn}
+          hrefBase={hrefBase}
         />
         <CategorySection
           title="Conteudo"
           description="Ferramentas para sair do branco e publicar com mais consistencia ao longo da semana."
           tools={content}
-          isLoggedIn={isLoggedIn}
+          hrefBase={hrefBase}
         />
       </main>
     </div>

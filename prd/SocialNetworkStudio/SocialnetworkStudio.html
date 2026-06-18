@@ -1,0 +1,745 @@
+---
+
+# Parte 2 — Apresentação HTML do Produto
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oferta11 — Apresentação do Produto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --display: 'Bricolage Grotesque', system-ui, sans-serif;
+            --font: 'Inter', system-ui, sans-serif;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+            --bg: #0D0D0D;
+            --surface: #171717;
+            --surface2: #1F1F1F;
+            --surface3: #262626;
+            --text: #F0EDE6;
+            --muted: #9a968d;
+
+            --red: #FF3D57;
+            --orange: #FF8C00;
+            --yellow: #FFC857;
+            --green: #4ADE80;
+            --blue: #60A5FA;
+            --purple: #C084FC;
+
+            --grad-brand: linear-gradient(135deg, #FF3D57 0%, #FF8C00 100%);
+            --grad-celebrate: linear-gradient(135deg, #FF3D57 0%, #C084FC 50%, #60A5FA 100%);
+            --grad-brand-soft: linear-gradient(135deg, rgba(255, 61, 87, .12) 0%, rgba(255, 140, 0, .08) 100%);
+
+            --r: 8px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 22px;
+
+            --sh: 0 1px 2px rgba(0, 0, 0, .4);
+            --sh-2: 0 8px 24px rgba(0, 0, 0, .5);
+            --sh-glow: 0 10px 40px rgba(255, 61, 87, .35), 0 4px 12px rgba(255, 140, 0, .25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5
+        }
+
+        body {
+            overflow-x: hidden
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            padding: 80px 0 60px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(600px 400px at 50% 0%, rgba(255, 61, 87, .18), transparent 60%),
+                radial-gradient(500px 300px at 80% 30%, rgba(255, 140, 0, .12), transparent 60%);
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: var(--surface2);
+            border: 1px solid var(--surface3);
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 28px;
+        }
+
+        .badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green)
+        }
+
+        .hero h1 {
+            font-family: var(--display);
+            font-weight: 800;
+            font-size: clamp(40px, 7vw, 72px);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .grad {
+            background: var(--grad-brand);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p.lead {
+            font-size: clamp(16px, 2vw, 19px);
+            color: var(--muted);
+            max-width: 640px;
+            margin: 0 auto 36px;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 28px;
+            border-radius: var(--r-2xl);
+            background: var(--grad-brand);
+            color: #fff;
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            box-shadow: var(--sh-glow);
+            transition: transform .2s ease;
+            min-height: 54px;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px)
+        }
+
+        .hero-sub {
+            display: block;
+            margin-top: 14px;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        /* PHONE MOCKUP */
+        .phone-stage {
+            display: flex;
+            justify-content: center;
+            margin: 60px 0 40px;
+            perspective: 1200px;
+        }
+
+        .phone {
+            width: 320px;
+            background: var(--surface);
+            border: 1px solid var(--surface3);
+            border-radius: 40px;
+            padding: 14px;
+            box-shadow: var(--sh-2), 0 0 80px rgba(255, 61, 87, .15);
+            transform: rotateX(4deg);
+        }
+
+        .phone-screen {
+            background: var(--bg);
+            border-radius: 28px;
+            padding: 28px 20px;
+            min-height: 560px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 22px;
+            background: #000;
+            border-radius: 999px;
+        }
+
+        .screen-step {
+            display: none;
+            animation: fadeIn .5s ease
+        }
+
+        .screen-step.active {
+            display: block
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .screen-title {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 20px;
+            margin: 30px 0 6px;
+        }
+
+        .screen-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 22px
+        }
+
+        .screen-field {
+            background: var(--surface);
+            border: 1px solid var(--surface3);
+            border-radius: var(--r-lg);
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .screen-field .label {
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .screen-field .value {
+            font-size: 14px;
+            color: var(--text)
+        }
+
+        .screen-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--r-2xl);
+            background: var(--grad-brand);
+            color: #fff;
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 15px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--sh-glow);
+            margin-top: 18px;
+        }
+
+        .screen-btn.ghost {
+            background: var(--surface2);
+            box-shadow: none;
+            color: var(--text);
+        }
+
+        .coach-tip {
+            background: var(--grad-brand-soft);
+            border-left: 3px solid var(--orange);
+            border-radius: var(--r);
+            padding: 12px 14px;
+            margin: 16px 0;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .coach-tip strong {
+            color: var(--orange)
+        }
+
+        .stepper {
+            display: flex;
+            gap: 6px;
+            margin: 20px 0;
+        }
+
+        .stepper .step {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--surface3);
+        }
+
+        .stepper .step.done {
+            background: var(--grad-brand)
+        }
+
+        .stepper .step.current {
+            background: var(--orange)
+        }
+
+        .celebrate {
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        .celebrate .emoji {
+            font-size: 56px;
+            margin-bottom: 12px;
+            display: block
+        }
+
+        .celebrate h3 {
+            font-family: var(--display);
+            font-weight: 800;
+            font-size: 24px;
+            background: var(--grad-celebrate);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .celebrate p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 20px
+        }
+
+        /* PHONE NAV */
+        .phone-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .phone-nav button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: var(--surface3);
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .phone-nav button.active {
+            background: var(--grad-brand);
+            width: 28px;
+            border-radius: 5px
+        }
+
+        /* SECTIONS */
+        section.block {
+            padding: 80px 0;
+            border-top: 1px solid var(--surface2)
+        }
+
+        .eyebrow {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 14px;
+        }
+
+        .block h2 {
+            font-family: var(--display);
+            font-weight: 800;
+            font-size: clamp(28px, 4vw, 44px);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+        }
+
+        .block h2 .grad {
+            background: var(--grad-brand);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .block .intro {
+            font-size: 17px;
+            color: var(--muted);
+            max-width: 680px;
+            margin-bottom: 48px
+        }
+
+        /* STEPS GRID */
+        .steps {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px
+        }
+
+        @media(min-width:720px) {
+            .steps {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        .step-card {
+            background: var(--surface);
+            border: 1px solid var(--surface3);
+            border-radius: var(--r-xl);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform .2s, border-color .2s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-2px);
+            border-color: #333
+        }
+
+        .step-num {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-num::before {
+            content: "";
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--grad-brand);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-card h3 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.6
+        }
+
+        /* PILLARS */
+        .pillars {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 32px
+        }
+
+        @media(min-width:640px) {
+            .pillars {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(min-width:960px) {
+            .pillars {
+                grid-template-columns: repeat(4, 1fr)
+            }
+        }
+
+        .pillar {
+            background: var(--surface);
+            border: 1px solid var(--surface3);
+            border-radius: var(--r-xl);
+            padding: 22px;
+        }
+
+        .pillar .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--r-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 14px;
+        }
+
+        .pillar.p1 .icon {
+            background: rgba(255, 61, 87, .15)
+        }
+
+        .pillar.p2 .icon {
+            background: rgba(192, 132, 252, .15)
+        }
+
+        .pillar.p3 .icon {
+            background: rgba(255, 200, 87, .15)
+        }
+
+        .pillar.p4 .icon {
+            background: rgba(96, 165, 250, .15)
+        }
+
+        .pillar h4 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 8px
+        }
+
+        .pillar p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6
+        }
+
+        /* FEATURES */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px
+        }
+
+        @media(min-width:720px) {
+            .features {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        .feature {
+            display: flex;
+            gap: 16px;
+            background: var(--surface);
+            border: 1px solid var(--surface3);
+            border-radius: var(--r-xl);
+            padding: 20px;
+        }
+
+        .feature .fi {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--r-lg);
+            background: var(--grad-brand-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .feature h4 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 6px
+        }
+
+        .feature p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.55
+        }
+
+        /* METRICS */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 32px
+        }
+
+        @media(min-width:720px) {
+            .metrics {
+                grid-template-columns: repeat(4, 1fr)
+            }
+        }
+
+        .metric {
+            background: var(--surface);
+            border: 1px solid var(--surface3);
+            border-radius: var(--r-xl);
+            padding: 22px;
+            text-align: center;
+        }
+
+        .metric .num {
+            font-family: var(--display);
+            font-weight: 800;
+            font-size: clamp(28px, 4vw, 38px);
+            background: var(--grad-brand);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .metric .lbl {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .1em
+        }
+
+        /* CTA FINAL */
+        .final-cta {
+            text-align: center;
+            padding: 80px 24px;
+            background: var(--grad-brand-soft);
+            border-radius: var(--r-2xl);
+            margin: 60px 0;
+            border: 1px solid rgba(255, 140, 0, .2);
+        }
+
+        .final-cta h2 {
+            font-family: var(--display);
+            font-weight: 800;
+            font-size: clamp(28px, 4vw, 40px);
+            margin-bottom: 14px;
+        }
+
+        .final-cta p {
+            color: var(--muted);
+            margin-bottom: 28px;
+            font-size: 16px
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--surface2);
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        footer .mono {
+            font-family: var(--mono);
+            font-size: 11px;
+            display: block;
+            margin-top: 8px;
+            opacity: .6
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="wrap">
+            <div class="badge"><span class="dot"></span> SextouTools Premium · v1.0</div>
+            <h1>Pare de postar.<br /><span class="grad">Comece a ofertar.</span></h1>
+            <p class="lead">O Oferta11 é o primeiro app de gestão de redes sociais calibrado pelos <strong
+                    style="color:var(--text)">42 princípios de Transformando Palavras em Dinheiro</strong>. Em 20
+                minutos, você sai com uma campanha completa de oferta 11 estrelas.</p>
+            <a href="#flow" class="hero-cta">✨ Ver o passo a passo</a>
+            <span class="hero-sub">mobile-first · multi-LLM · exportável</span>
+        </div>
+    </section>
+
+    <!-- PHONE MOCKUP -->
+    <div class="wrap">
+        <div class="phone-stage">
+            <div class="phone">
+                <div class="phone-screen">
+                    <div class="phone-notch"></div>
+
+                    <!-- STEP 1: INPUT -->
+                    <div class="screen-step active" data-step="0">
+                        <div class="screen-title">Novo projeto</div>
+                        <div class="screen-sub">Três campos. A IA faz o resto.</div>
+                        <div class="screen-field">
+                            <span class="label">Nome do projeto</span>
+                            <div class="value">Mentoria Copy 2026</div>
+                        </div>
+                        <div class="screen-field">
+                            <span class="label">Público-alvo</span>
+                            <div class="value">Empreendedores que vendem serviços online</div>
+                        </div>
+                        <div class="screen-field">
+                            <span class="label">Ideia básica</span>
+                            <div class="value">Uma mentoria em grupo para ensinar copywriting de resposta direta...
+                            </div>
+                        </div>
+                        <button class="screen-btn" onclick="nextStep()">Continuar →</button>
+                    </div>
+
+                    <!-- STEP 2: INTERVIEW -->
+                    <div class="screen-step" data-step="1">
+                        <div class="stepper">
+                            <div class="step done"></div>
+                            <div class="step current"></div>
+                            <div class="step"></div>
+                            <div class="step"></div>
+                            <div class="step"></div>
+                        </div>
+                        <div class="screen-title">Qual a dor principal?</div>
+                        <div class="screen-sub">O que tira o sono do seu cliente?</div>
+                        <div class="coach-tip"><strong>💡 Dica:</strong> Pense no problema que ele tenta esconder. É ele
+                            que gera a compra por impulso.</div>
+                        <div class="screen-field">
+                            <span class="label">Sugestões da IA</span>
+                            <div class="value">• Posto muito e não vendo<br />• Não sei o que escrever<br />•
+                                Concorrente copia e vende mais</div>
+                        </div>
+                        <button class="screen-btn" onclick="nextStep()">Próxima pergunta →</button>
+                    </div>
+
+                    <!-- STEP 3: OFFER VALIDATION -->
+                    <div class="screen-step" data-step="2">
+                        <div class="stepper">
+                            <div class="step done"></div>
+                            <div class="step done"></div>
+                            <div class="step done"></div>
+                            <div class="step current"></div>
+                            <div class="step"></div>
+                        </div>
+                        <div class="screen-title">Sua oferta 11 estrelas</div>
+                        <div class="screen-sub">Validação de credibilidade em tempo r

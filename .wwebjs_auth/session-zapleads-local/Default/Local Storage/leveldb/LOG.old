@@ -1,0 +1,6 @@
+2026/06/17-21:29:45.038 5b54 Reusing MANIFEST C:\Projetos\2SextaEmpreendedor\.wwebjs_auth\session-zapleads-local\Default\Local Storage\leveldb/MANIFEST-000001
+2026/06/17-21:29:45.044 5b54 Recovering log #3
+2026/06/17-21:29:45.046 5b54 Reusing old log C:\Projetos\2SextaEmpreendedor\.wwebjs_auth\session-zapleads-local\Default\Local Storage\leveldb/000003.log 
+2026/06/17-21:30:45.058 5974 Level-0 table #5: started
+2026/06/17-21:30:45.060 5974 Level-0 table #5: 18798 bytes OK
+2026/06/17-21:30:45.062 5974 Delete type=0 #3

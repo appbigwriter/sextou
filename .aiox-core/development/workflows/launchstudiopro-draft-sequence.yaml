@@ -1,0 +1,187 @@
+workflow:
+  id: launchstudiopro-draft-sequence
+  name: "LaunchStudioPRO Draft Story Sequence"
+  version: "1.0.0"
+  description: >-
+    Sequential automation for all LaunchStudioPRO stories in Draft status.
+    Runs @aiox-dev story-by-story until no Draft stories remain, preserving
+    the dependency order defined by the Sprint 6-10 plan.
+  type: automation
+  project_types:
+    - brownfield
+    - aiox-development
+    - launchstudiopro-pro
+
+  metadata:
+    elicit: false
+    confirmation_required: true
+
+  triggers:
+    - event: command
+      command: "*launchstudiopro-draft-sequence"
+      action: start_batch
+
+    - event: manual
+      description: "Run after the PM confirms the remaining Draft stories"
+
+  config:
+    source_directory: "docs/stories"
+    story_prefix: "brownfield-sextou-tools-pro-"
+    draft_statuses:
+      - Draft
+    status_scope:
+      - Draft
+      - Ready for Review
+      - Done
+    completion_marker: ".aiox/workflow-state/launchstudiopro-draft-batch.json"
+    verbose: true
+    enforce_sequential_order: true
+
+  phases:
+    - phase_1: Draft Discovery
+    - phase_2: Sequential Development
+    - phase_3: Batch Closeout
+
+  sequence:
+    - step: discover_draft_stories
+      id: discover
+      phase: 1
+      phase_name: "Draft Discovery"
+      agent: system
+      action: scan_story_index
+      description: >-
+        Scan docs/stories for LaunchStudioPRO stories still marked as Draft
+        and sort them by the sprint order defined in the brownfield plan.
+      inputs:
+        source_directory: "${config.source_directory}"
+        story_prefix: "${config.story_prefix}"
+        statuses:
+          - Draft
+      outputs:
+        - draft_stories
+        - draft_count
+      next: develop_each_draft
+
+    - step: develop_each_draft
+      id: develop
+      phase: 2
+      phase_name: "Sequential Development"
+      agent: aiox-dev
+      task: develop-story
+      action: implement_next_draft_story
+      description: >-
+        Implement one Draft story at a time. The workflow repeats this step
+        until the Draft queue is empty.
+      requires: discover
+      repeats:
+        mode: for_each
+        items: "${draft_stories}"
+      inputs:
+        story_file: "${story.file}"
+        story_title: "${story.title}"
+        story_status: "${story.status}"
+      outputs:
+        - implementation_files
+        - test_results
+        - story_status
+      on_success: record_story_completion
+      on_failure: halt_batch
+
+    - step: record_story_completion
+      id: record
+      phase: 3
+      phase_name: "Batch Closeout"
+      agent: aiox-master
+      task: status
+      action: update_batch_progress
+      description: >-
+        Record the completed story, persist the batch state, and continue to
+        the next Draft story without parallel execution.
+      requires: develop
+      outputs:
+        - completed_story
+        - remaining_drafts
+      condition_check:
+        - condition: "${remaining_drafts} > 0"
+          action: continue
+          next: develop
+
+        - condition: "${remaining_drafts} == 0"
+          action: continue
+          next: close_batch
+
+      on_failure: halt_batch
+
+    - step: close_batch
+      id: close
+      phase: 3
+      phase_name: "Batch Closeout"
+      agent: aiox-master
+      task: status
+      action: write_completion_marker
+      description: >-
+        Persist a completion marker once no Draft stories remain so QA can
+        start its pass only after the development queue is empty.
+      requires: record
+      condition: "${remaining_drafts} == 0"
+      outputs:
+        - completion_marker
+      next: complete
+
+    - workflow_end:
+        id: complete
+        action: workflow_complete
+
+  handoff_prompts:
+    discover_to_dev: |
+      Draft queue ready.
+      Implement the next LaunchStudioPRO story in sequence.
+      Do not jump ahead of the ordered batch.
+
+    dev_to_master: |
+      Story completed.
+      Record the batch progress and move to the next Draft story only.
+
+    close_to_qa: |
+      Draft batch complete.
+      QA can now consume the completed stories and write inconformities if any.
+
+  state:
+    persistence:
+      enabled: true
+      location: ".aiox/workflow-state/"
+      format: json
+      file: "launchstudiopro-draft-batch.json"
+
+    tracked_fields:
+      - draft_stories
+      - draft_count
+      - completed_stories
+      - remaining_drafts
+      - started_at
+      - last_updated
+
+    recovery:
+      enabled: true
+      auto_resume: true
+      resume_from: last_completed_story
+
+  integration:
+    project_status:
+      update_on_complete: true
+      field: launchStudioProDraftBatch
+
+    notifications:
+      on_complete:
+        message: "LaunchStudioPRO Draft batch complete"
+        channels: [log]
+
+metadata:
+  author: "@aiox-master"
+  created: "2026-06-18"
+  version: "1.0.0"
+  tags:
+    - automation
+    - launchstudiopro
+    - draft-batch
+    - sequential-development

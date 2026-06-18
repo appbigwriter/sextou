@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { requireToolkitApiUser } from "@/lib/sextou-tools/auth"
+import { requireSextouToolsProApiUser } from "@/lib/sextou-tools/auth"
 import { generateSextouToolsProResult } from "@/lib/sextou-tools-pro/generation"
 import { sextouToolsProGenerateSchema } from "@/lib/sextou-tools-pro/schemas"
 import {
@@ -8,7 +8,11 @@ import {
 import { isSextouToolsProUsageLimitError } from "@/lib/sextou-tools-pro/usage"
 
 export async function POST(request: Request) {
-  const user = await requireToolkitApiUser()
+  const user = await requireSextouToolsProApiUser()
+
+  if (user === false) {
+    return NextResponse.json({ error: "SextouTools PRO access requires active ads" }, { status: 403 })
+  }
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

@@ -1,0 +1,176 @@
+workflow:
+  id: launchstudiopro-qa-inconformities
+  name: "LaunchStudioPRO QA Inconformities Loop"
+  version: "1.0.0"
+  description: >-
+    QA automation for LaunchStudioPRO stories. Runs UltraQA over the ready
+    stories only after the Draft batch has been completed, and appends every
+    non-conformity to docs/stories/inconformidades.md for later dev pickup.
+  type: automation
+  project_types:
+    - brownfield
+    - aiox-development
+    - qa-automation
+
+  metadata:
+    elicit: false
+    confirmation_required: true
+
+  triggers:
+    - event: command
+      command: "*launchstudiopro-qa-inconformities"
+      action: start_review
+
+    - event: batch_complete
+      condition: ".aiox/workflow-state/launchstudiopro-draft-batch.json exists"
+      action: start_review
+
+  config:
+    source_directory: "docs/stories"
+    story_prefix: "brownfield-sextou-tools-pro-"
+    inconformities_file: "docs/stories/inconformidades.md"
+    require_no_drafts: true
+    draft_completion_marker: ".aiox/workflow-state/launchstudiopro-draft-batch.json"
+    verbose: true
+
+  phases:
+    - phase_1: Gate Readiness
+    - phase_2: UltraQA Review
+    - phase_3: Inconformities Log
+
+  sequence:
+    - step: verify_draft_batch_complete
+      id: verify
+      phase: 1
+      phase_name: "Gate Readiness"
+      agent: system
+      action: check_batch_completion
+      description: >-
+        Confirm that the Draft batch has been completed before allowing any
+        QA work on the remaining LaunchStudioPRO stories.
+      inputs:
+        completion_marker: "${config.draft_completion_marker}"
+        require_no_drafts: "${config.require_no_drafts}"
+      outputs:
+        - batch_ready
+        - ready_for_qa
+      on_failure: halt
+
+    - step: discover_ready_stories
+      id: discover
+      phase: 1
+      phase_name: "Gate Readiness"
+      agent: system
+      action: scan_review_ready_stories
+      description: >-
+        Collect every LaunchStudioPRO story that is already Ready for Review
+        so UltraQA only evaluates the correct queue.
+      requires: verify
+      inputs:
+        source_directory: "${config.source_directory}"
+        story_prefix: "${config.story_prefix}"
+        statuses:
+          - Ready for Review
+      outputs:
+        - ready_stories
+        - ready_count
+      next: qa_each_ready_story
+
+    - step: qa_each_ready_story
+      id: qa
+      phase: 2
+      phase_name: "UltraQA Review"
+      agent: ultraqa
+      task: review
+      action: run_story_quality_review
+      description: >-
+        Review only stories that are already ready for review. UltraQA must
+        collect findings and avoid touching Draft stories.
+      requires: discover
+      repeats:
+        mode: for_each
+        items: "${ready_stories}"
+      inputs:
+        story_file: "${story.file}"
+        story_title: "${story.title}"
+        story_status: "${story.status}"
+        gate_file: "${story.gate_file}"
+      outputs:
+        - gate_file
+        - verdict
+        - findings
+      on_success: append_inconformities
+      on_failure: append_inconformities
+
+    - step: append_inconformities
+      id: append
+      phase: 3
+      phase_name: "Inconformities Log"
+      agent: system
+      action: write_inconformities_file
+      description: >-
+        Append every QA finding to docs/stories/inconformidades.md so Dev can
+        attack the issues only after the Draft batch is complete.
+      requires: qa
+      outputs:
+        - inconformities_file
+        - issue_count
+      next: complete
+
+    - workflow_end:
+        id: complete
+        action: workflow_complete
+
+  handoff_prompts:
+    verify_to_qa: |
+      Draft batch is complete.
+      Review only the stories that are ready for QA and capture findings.
+
+    qa_to_append: |
+      Record all inconformities in docs/stories/inconformidades.md.
+      Do not send these issues back to Dev yet.
+
+    append_to_dev: |
+      Inconformities are logged.
+      Dev may only pick them up after all Draft stories are finished.
+
+  state:
+    persistence:
+      enabled: true
+      location: ".aiox/workflow-state/"
+      format: json
+      file: "launchstudiopro-qa-inconformities.json"
+
+    tracked_fields:
+      - ready_stories
+      - issue_count
+      - reviewed_stories
+      - inconformities_file
+      - started_at
+      - last_updated
+
+    recovery:
+      enabled: true
+      auto_resume: true
+      resume_from: last_reviewed_story
+
+  integration:
+    project_status:
+      update_on_complete: true
+      field: launchStudioProQaInconformities
+
+    notifications:
+      on_complete:
+        message: "LaunchStudioPRO QA inconformities logged"
+        channels: [log]
+
+metadata:
+  author: "@aiox-master"
+  created: "2026-06-18"
+  version: "1.0.0"
+  tags:
+    - automation
+    - launchstudiopro
+    - ultraqa
+    - inconformities
+    - qa-loop
