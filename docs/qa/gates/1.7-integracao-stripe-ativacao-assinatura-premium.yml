@@ -1,0 +1,32 @@
+schema: 1
+story: '1.7'
+gate: CONCERNS
+status_reason: 'Implementação correta e segura do checkout de assinatura e webhook premium, com fluxo de anúncios preservado; concerns são ausência de testes automatizados e validações end-to-end (AC10/AC1d) que dependem de ambiente Stripe/DB.'
+reviewer: 'Quinn'
+updated: '2026-06-18T00:00:00Z'
+top_issues:
+  - id: 'TEST-001'
+    severity: medium
+    finding: 'Nenhum teste automatizado criado. O arquivo sugerido __tests__/api/stripe/subscription.test.ts não existe e o projeto não possui framework de testes (script "test" = typecheck + build).'
+    suggested_action: 'Rastrear como follow-up. Idealmente introduzir Vitest/Jest e cobrir os 3 cenários da story (planSlug→premium, adId→anúncio intacto, idempotência). Não bloqueante: projeto sem infra de testes pré-existente.'
+  - id: 'REQ-001'
+    severity: medium
+    finding: 'AC10 (teste manual com Stripe CLI) não executado — requer Price IDs no Dashboard, env vars preenchidas, migration aplicada e Stripe CLI. Declarado pendente pelo dev.'
+    suggested_action: 'Aceitável como follow-up pré-deploy. Executar stripe trigger checkout.session.completed em test mode antes do release de produção.'
+  - id: 'REQ-002'
+    severity: low
+    finding: 'AC1d (consumo do PagamentoStripe na tela de upgrade 1.5) fora de escopo desta story. Componente entregue pronto; fiação é escopo da story 1.5.'
+    suggested_action: 'Rastrear na story 1.5. Confirmado que app/sextou-tools-pro/acesso não reimplementa checkout — princípio de ponto único preservado.'
+  - id: 'REL-001'
+    severity: medium
+    finding: 'Migration 20260618120000_add_user_premium_fields gerada mas NÃO aplicada ao banco (requer conexão). Sem ela, o webhook falha em runtime ao gravar premium_plan_slug/premium_since/premium_expires_at.'
+    suggested_action: 'Aplicar prisma migrate deploy antes do deploy. Bloqueante para produção, mas não para o gate de código (migration está correta e additive).'
+  - id: 'DOC-001'
+    severity: low
+    finding: 'app/api/stripe/verify/route.ts foi modificado (force-dynamic + request.nextUrl) mas não consta na File List nem no Change Log da story.'
+    suggested_action: 'Adicionar à File List da story ou reverter se não pertencer a esta entrega. Mudança é tecnicamente correta.'
+  - id: 'REL-002'
+    severity: low
+    finding: 'invoice.payment_failed reverte is_premium=false na PRIMEIRA falha de cobrança, sem tolerância a retry. Stripe normalmente reativa via dunning; pode revogar acesso prematuramente.'
+    suggested_action: 'Considerar aguardar customer.subscription.deleted (fonte de verdade final) ou usar invoice.payment_failed apenas após esgotamento de retries. Aceitável para MVP.'
+waiver: { active: false }
