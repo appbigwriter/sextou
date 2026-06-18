@@ -17,7 +17,7 @@ CREATE POLICY social_network_campaigns_policy ON social_network_campaigns
     EXISTS (
       SELECT 1 FROM social_network_projects p
       WHERE p.id = social_network_campaigns.project_id
-      AND p.userId::text = auth.uid()::text
+      AND p.user_id::text = auth.uid()::text
     )
   );
 
@@ -29,6 +29,7 @@ CREATE POLICY social_network_contents_policy ON social_network_contents
       SELECT 1 FROM social_network_campaigns c
       JOIN social_network_projects p ON p.id = c.project_id
       WHERE c.id = social_network_contents.campaign_id
-      AND p.userId::text = auth.uid()::text
+      AND p.user_id::text = auth.uid()::text
     )
   );
+
