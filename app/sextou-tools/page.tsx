@@ -1,35 +1,60 @@
 import type { Metadata } from "next"
 import { HistoryList } from "@/components/sextou-tools/history-list"
-import { ToolCard } from "@/components/sextou-tools/tool-card"
-import { getToolkitCatalog, groupToolkitCatalogByPhase } from "@/lib/sextou-tools/catalog"
+import { getToolkitCatalog } from "@/lib/sextou-tools/catalog"
+import { getSextouToolsProOnly, getSextouToolsPremiumOnly } from "@/lib/sextou-tools-pro/catalog"
 import { resolveToolkitUser } from "@/lib/sextou-tools/auth"
 import { listRecentToolkitExecutions } from "@/lib/sextou-tools/history"
+import { PackageTabs, type CatalogCard } from "./package-tabs"
 
 export const metadata: Metadata = {
   title: "Sextou Tools | Brazilian Business Toolkit",
   description: "Suite de mini-apps para empreendedores brasileiros nos Estados Unidos.",
 }
 
-function ToolkitSection({
-  tools,
-}: {
-  tools: ReturnType<typeof getToolkitCatalog>
-}) {
-  return (
-    <section className="mb-12">
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {tools.map((tool) => (
-          <ToolCard key={tool.slug} tool={tool} />
-        ))}
-      </div>
-    </section>
-  )
-}
+const basicoCards: CatalogCard[] = getToolkitCatalog().map((tool) => ({
+  slug: tool.slug,
+  title: tool.title,
+  description: tool.shortDescription,
+  icon: tool.icon,
+  href: `/sextou-tools/${tool.slug}`,
+}))
+
+const proCards: CatalogCard[] = getSextouToolsProOnly().map((tool) => ({
+  slug: tool.slug,
+  title: tool.title,
+  description: tool.shortDescription,
+  icon: tool.icon,
+  href: `/sextou-tools-pro/${tool.slug}`,
+}))
+
+const premiumCards: CatalogCard[] = [
+  ...getSextouToolsPremiumOnly().map((tool) => ({
+    slug: tool.slug,
+    title: tool.title,
+    description: tool.shortDescription,
+    icon: tool.icon,
+    href: `/sextou-tools-pro/${tool.slug}`,
+  })),
+  // Apps Premium com rota dedicada (fora do catálogo de mini-apps)
+  {
+    slug: "social-network-studio",
+    title: "Social Network (Oferta11)",
+    description: "Crie campanhas e copys baseadas nos 42 ensinamentos de copy de resposta direta.",
+    icon: "SN",
+    href: "/sextou-tools-pro/social-network-studio",
+  },
+  {
+    slug: "zapleads",
+    title: "ZapLeads CRM & Extrator",
+    description: "Extraia contatos de grupos e crie um funil Kanban integrado ao WhatsApp.",
+    icon: "ZAP",
+    href: "/sextou-tools-pro/zapleads",
+  },
+]
 
 export default async function SextouToolsPage() {
   const result = await resolveToolkitUser()
   const user = result.kind === "ok" ? result.user : null
-  const { phase2, phase3, phase4 } = groupToolkitCatalogByPhase()
   const recentHistory = user ? await listRecentToolkitExecutions(user.id, 5) : []
   const recentHistoryItems = recentHistory.map((item) => ({
     title: item.toolSlug.replaceAll("-", " "),
@@ -73,15 +98,7 @@ export default async function SextouToolsPage() {
         <HistoryList items={recentHistoryItems} />
       </div>
 
-      <ToolkitSection
-        tools={phase2}
-      />
-      <ToolkitSection
-        tools={phase3}
-      />
-      <ToolkitSection
-        tools={phase4}
-      />
+      <PackageTabs basico={basicoCards} pro={proCards} premium={premiumCards} />
     </main>
   )
 }

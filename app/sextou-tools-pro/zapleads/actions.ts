@@ -1,10 +1,10 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { resolveSextouToolsProUser } from "@/lib/sextou-tools/auth"
+import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 
 export async function initiateWhatsAppConnection() {
-  const result = await resolveSextouToolsProUser()
+  const result = await resolveSextouToolsPremiumUser()
   if (result.kind !== "ok") {
     throw new Error("Unauthorized")
   }
@@ -23,7 +23,7 @@ export async function initiateWhatsAppConnection() {
 }
 
 export async function checkConnectionStatus(connectionId: string) {
-  const result = await resolveSextouToolsProUser()
+  const result = await resolveSextouToolsPremiumUser()
   if (result.kind !== "ok") throw new Error("Unauthorized")
 
   const connection = await prisma.zapConnection.findFirst({
@@ -36,7 +36,7 @@ export async function checkConnectionStatus(connectionId: string) {
 }
 
 export async function extractMockedGroup(purpose: string, connectionId?: string) {
-  const result = await resolveSextouToolsProUser()
+  const result = await resolveSextouToolsPremiumUser()
   if (result.kind !== "ok") throw new Error("Unauthorized")
 
   const userId = result.user.id

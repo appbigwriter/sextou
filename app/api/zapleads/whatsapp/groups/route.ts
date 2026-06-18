@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
 import { whatsappEngine } from "@/lib/whatsapp"
-import { resolveSextouToolsProUser } from "@/lib/sextou-tools/auth"
+import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 
 export const dynamic = "force-dynamic"
 
 export async function GET(req: Request) {
-  const result = await resolveSextouToolsProUser()
+  const result = await resolveSextouToolsPremiumUser()
 
   if (result.kind !== "ok") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

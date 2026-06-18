@@ -937,6 +937,13 @@ export const sextouToolsProDefinitions = {
       ["title", "faqs", "objections", "whatsappMessage", "suggestedUsage", "nextActions"]
     ),
   },
+  "storybrand-strategy-generator": {
+    inputSchema: z.any(),
+    outputSchema: z.any(),
+    schemaName: "storybrand_strategy",
+    promptVersion: "1.0.0",
+    jsonSchema: { type: "object", additionalProperties: true },
+  },
 } as const
 
 export type SextouToolsProAppId = keyof typeof sextouToolsProDefinitions

@@ -1,6 +1,3 @@
-// SEXTOU.biz - Database Schema (PostgreSQL)
-// Prisma ORM Schema Definition
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
@@ -11,79 +8,75 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ========================================
-// USUÁRIOS (ANUNCIANTES)
-// ========================================
-
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  passwordHash String   @map("password_hash")
-  fullName     String   @map("full_name")
-  businessName String   @map("business_name")
-  whatsapp     String
-  instagram    String?
-  website      String?
-  city         String
-  state        String
-  country      String   @default("United States")
-  profileImage String?  @map("profile_image")
-  status       String   @default("ACTIVE")
-  isVip        Boolean  @default(false) @map("is_vip")
-  isAdmin      Boolean  @default(false) @map("is_admin")
-  hasActiveAds Boolean  @default(false) @map("has_active_ads")
-  isPremium    Boolean  @default(false) @map("is_premium")
-  premiumPlanSlug  String?   @map("premium_plan_slug")
-  premiumSince     DateTime? @map("premium_since")
-  premiumExpiresAt DateTime? @map("premium_expires_at")
-  balance      Float    @default(0)
-  affiliateId  String?  @map("affiliate_id")
-  zelleCode    String?  @map("zelle_code")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
-  ads                 Ad[]
-  payments            Payment[]
-  notifications       Notification[]
-  passwordResetTokens PasswordResetToken[]
-  toolExecutions      ToolExecution[]
-  toolkitLeads        ToolkitLead[]
-  toolkitQuotes       ToolkitQuote[]
-  toolkitInvoices     ToolkitInvoice[]
-  toolkitProjects     ToolkitProject[]
-  toolkitTasks        ToolkitTask[]
-  toolkitDirectoryEntries ToolkitDirectoryEntry[]
+  id                        String                     @id @default(uuid())
+  email                     String                     @unique
+  passwordHash              String                     @map("password_hash")
+  fullName                  String                     @map("full_name")
+  businessName              String                     @map("business_name")
+  whatsapp                  String
+  instagram                 String?
+  website                   String?
+  city                      String
+  state                     String
+  country                   String                     @default("United States")
+  profileImage              String?                    @map("profile_image")
+  status                    String                     @default("ACTIVE")
+  isVip                     Boolean                    @default(false) @map("is_vip")
+  createdAt                 DateTime                   @default(now()) @map("created_at")
+  updatedAt                 DateTime                   @updatedAt @map("updated_at")
+  isAdmin                   Boolean                    @default(false) @map("is_admin")
+  affiliateId               String?                    @map("affiliate_id")
+  balance                   Float                      @default(0)
+  hasActiveAds              Boolean                    @default(false) @map("has_active_ads")
+  isPremium                 Boolean                    @default(false) @map("is_premium")
+  premiumPlanSlug           String?                    @map("premium_plan_slug")
+  premiumSince              DateTime?                  @map("premium_since")
+  premiumExpiresAt          DateTime?                  @map("premium_expires_at")
+  zelleCode                 String?                    @map("zelle_code")
+  ads                       Ad[]
+  territories               AffiliateTerritory[]
+  consentLogs               ConsentLog[]
+  contacts                  Contact[]
+  launchProjects            LaunchProject[]
+  leadEvents                LeadEvent[]
+  messageTemplates          MessageTemplate[]
+  notifications             Notification[]
+  passwordResetTokens       PasswordResetToken[]
+  payments                  Payment[]
+  premiumAppRuns            PremiumAppRun[]
+  premiumLlmCalls           PremiumLlmCall[]
+  sb7Projects               Sb7Project[]
   sextouToolsProGenerations SextouToolsProGeneration[]
   sextouToolsProUsageEvents SextouToolsProUsageEvent[]
-  zapConnections ZapConnection[]
-  zapGroups      ZapGroup[]
-  zapExtractions ZapGroupExtraction[]
-  contacts       Contact[]
-  zapLeads       ZapLead[]
-  leadEvents     LeadEvent[]
-  zapMessages    ZapMessage[]
-  messageTemplates MessageTemplate[]
-  consentLogs    ConsentLog[]
-
-  affiliate   User?                @relation("UserAffiliates", fields: [affiliateId], references: [id])
-  affiliates  User[]               @relation("UserAffiliates")
-  territories AffiliateTerritory[]
+  socialNetworkProjects     SocialNetworkProject[]
+  toolExecutions            ToolExecution[]
+  toolkitDirectoryEntries   ToolkitDirectoryEntry[]
+  toolkitInvoices           ToolkitInvoice[]
+  toolkitLeads              ToolkitLead[]
+  toolkitProjects           ToolkitProject[]
+  toolkitQuotes             ToolkitQuote[]
+  toolkitTasks              ToolkitTask[]
+  affiliate                 User?                      @relation("UserAffiliates", fields: [affiliateId], references: [id])
+  affiliates                User[]                     @relation("UserAffiliates")
+  youtubeChannels           YoutubeChannel[]
+  youtubeContentPlans       YoutubeContentPlan[]
+  zapConnections            ZapConnection[]
+  zapExtractions            ZapGroupExtraction[]
+  zapGroups                 ZapGroup[]
+  zapLeads                  ZapLead[]
+  zapMessages               ZapMessage[]
 
   @@map("users")
 }
 
-// ========================================
-// TERRITÓRIOS DE AFILIADOS
-// ========================================
-
 model MasterTerritory {
-  id        String   @id @default(uuid())
-  city      String
-  state     String
-  country   String   @default("United States")
-  isActive  Boolean  @default(true) @map("is_active")
-  createdAt DateTime @default(now()) @map("created_at")
-
+  id         String               @id @default(uuid())
+  city       String
+  state      String
+  isActive   Boolean              @default(true) @map("is_active")
+  createdAt  DateTime             @default(now()) @map("created_at")
+  country    String               @default("United States")
   affiliates AffiliateTerritory[]
 
   @@unique([city, state])
@@ -91,23 +84,18 @@ model MasterTerritory {
 }
 
 model AffiliateTerritory {
-  id          String   @id @default(uuid())
-  affiliateId String   @map("affiliate_id")
-  territoryId String   @map("territory_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-
-  affiliate User            @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
-  territory MasterTerritory @relation(fields: [territoryId], references: [id], onDelete: Cascade)
+  id          String          @id @default(uuid())
+  affiliateId String          @map("affiliate_id")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  territoryId String          @map("territory_id")
+  affiliate   User            @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  territory   MasterTerritory @relation(fields: [territoryId], references: [id], onDelete: Cascade)
 
   @@unique([affiliateId, territoryId])
   @@index([affiliateId])
   @@index([territoryId])
   @@map("affiliate_territories")
 }
-
-// ========================================
-// CATEGORIAS
-// ========================================
 
 model Category {
   id          String  @id @default(uuid())
@@ -117,15 +105,10 @@ model Category {
   icon        String?
   order       Int     @default(0)
   isActive    Boolean @default(true) @map("is_active")
-
-  ads Ad[]
+  ads         Ad[]
 
   @@map("categories")
 }
-
-// ========================================
-// ANÚNCIOS
-// ========================================
 
 model Ad {
   id               String    @id @default(uuid())
@@ -139,8 +122,6 @@ model Ad {
   promotionText    String?   @map("promotion_text")
   city             String
   state            String?
-  latitude         Float?
-  longitude        Float?
   deliveryType     String    @default("LOCAL") @map("delivery_type")
   externalLink     String?   @map("external_link")
   whatsappContact  String    @map("whatsapp_contact")
@@ -153,19 +134,20 @@ model Ad {
   expiresAt        DateTime? @map("expires_at")
   viewsCount       Int       @default(0) @map("views_count")
   clicksCount      Int       @default(0) @map("clicks_count")
-  imageOrientation String    @default("VERTICAL") @map("image_orientation")
   isFeatured       Boolean   @default(false) @map("is_featured")
   rejectionReason  String?   @map("rejection_reason")
   adminNotes       String?   @map("admin_notes")
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
-
-  user     User      @relation(fields: [userId], references: [id])
-  category Category  @relation(fields: [categoryId], references: [id])
-  images   AdImage[]
-  videos   AdVideo[]
-  payments Payment[]
-  leads    Lead[]
+  latitude         Float?
+  longitude        Float?
+  imageOrientation String    @default("VERTICAL") @map("image_orientation")
+  images           AdImage[]
+  videos           AdVideo[]
+  category         Category  @relation(fields: [categoryId], references: [id])
+  user             User      @relation(fields: [userId], references: [id])
+  leads            Lead[]
+  payments         Payment[]
 
   @@index([userId])
   @@index([categoryId])
@@ -173,18 +155,13 @@ model Ad {
   @@map("ads")
 }
 
-// ========================================
-// MÍDIA DOS ANÚNCIOS
-// ========================================
-
 model AdImage {
   id         String   @id @default(uuid())
   adId       String   @map("ad_id")
   imageUrl   String   @map("image_url")
   order      Int      @default(0)
   uploadedAt DateTime @default(now()) @map("uploaded_at")
-
-  ad Ad @relation(fields: [adId], references: [id], onDelete: Cascade)
+  ad         Ad       @relation(fields: [adId], references: [id], onDelete: Cascade)
 
   @@index([adId])
   @@map("ad_images")
@@ -195,16 +172,11 @@ model AdVideo {
   adId       String   @map("ad_id")
   videoUrl   String   @map("video_url")
   uploadedAt DateTime @default(now()) @map("uploaded_at")
-
-  ad Ad @relation(fields: [adId], references: [id], onDelete: Cascade)
+  ad         Ad       @relation(fields: [adId], references: [id], onDelete: Cascade)
 
   @@index([adId])
   @@map("ad_videos")
 }
-
-// ========================================
-// PAGAMENTOS
-// ========================================
 
 model Payment {
   id              String    @id @default(uuid())
@@ -213,25 +185,20 @@ model Payment {
   amount          Float
   paymentMethod   String    @default("ZELLE") @map("payment_method")
   transactionId   String?   @map("transaction_id")
-  transactionDate DateTime? @map("transaction_date")
   status          String    @default("PENDING")
   paymentProofUrl String?   @map("payment_proof_url")
   confirmedBy     String?   @map("confirmed_by")
   confirmedAt     DateTime? @map("confirmed_at")
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
-
-  ad   Ad   @relation(fields: [adId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  transactionDate DateTime? @map("transaction_date")
+  ad              Ad        @relation(fields: [adId], references: [id])
+  user            User      @relation(fields: [userId], references: [id])
 
   @@index([adId])
   @@index([status])
   @@map("payments")
 }
-
-// ========================================
-// LEADS (INTERESSE)
-// ========================================
 
 model Lead {
   id        String   @id @default(uuid())
@@ -243,51 +210,40 @@ model Lead {
   ipAddress String?  @map("ip_address")
   userAgent String?  @map("user_agent")
   createdAt DateTime @default(now()) @map("created_at")
-
-  ad Ad @relation(fields: [adId], references: [id])
+  ad        Ad       @relation(fields: [adId], references: [id])
 
   @@index([adId])
   @@map("leads")
 }
 
-// ========================================
-// ADMINISTRAÇÃO
-// ========================================
-
 model AdminUser {
-  id           String    @id @default(uuid())
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  fullName     String    @map("full_name")
-  role         String    @default("MODERATOR")
-  lastLogin    DateTime? @map("last_login")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
-
-  actions AdminAction[]
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String        @map("password_hash")
+  fullName     String        @map("full_name")
+  role         String        @default("MODERATOR")
+  lastLogin    DateTime?     @map("last_login")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  actions      AdminAction[]
 
   @@map("admin_users")
 }
 
 model AdminAction {
-  id         String   @id @default(uuid())
-  adminId    String   @map("admin_id")
-  actionType String   @map("action_type")
-  entityType String   @map("entity_type")
-  entityId   String   @map("entity_id")
-  details    String?  @map("details")
-  createdAt  DateTime @default(now()) @map("created_at")
-
-  admin AdminUser @relation(fields: [adminId], references: [id])
+  id         String    @id @default(uuid())
+  adminId    String    @map("admin_id")
+  actionType String    @map("action_type")
+  entityType String    @map("entity_type")
+  entityId   String    @map("entity_id")
+  details    String?   @map("details")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  admin      AdminUser @relation(fields: [adminId], references: [id])
 
   @@index([adminId])
   @@index([entityType, entityId])
   @@map("admin_actions")
 }
-
-// ========================================
-// CUPONS
-// ========================================
 
 model Coupon {
   id            String   @id @default(uuid())
@@ -304,10 +260,6 @@ model Coupon {
   @@map("coupons")
 }
 
-// ========================================
-// NOTIFICAÇÕES
-// ========================================
-
 model Notification {
   id        String    @id @default(uuid())
   userId    String    @map("user_id")
@@ -317,8 +269,7 @@ model Notification {
   status    String    @default("PENDING")
   sentAt    DateTime? @map("sent_at")
   createdAt DateTime  @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@map("notifications")
@@ -330,17 +281,12 @@ model PasswordResetToken {
   token     String   @unique
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([expiresAt])
   @@map("password_reset_tokens")
 }
-
-// ========================================
-// CONFIGURAÇÕES
-// ========================================
 
 model Setting {
   id          String   @id @default(uuid())
@@ -351,10 +297,6 @@ model Setting {
 
   @@map("settings")
 }
-
-// ========================================
-// VÍDEOS DA PLATAFORMA
-// ========================================
 
 model Video {
   id          String   @id @default(uuid())
@@ -378,8 +320,7 @@ model ToolExecution {
   metadataJson Json?    @map("metadata_json")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
   @@index([toolSlug])
@@ -387,23 +328,22 @@ model ToolExecution {
 }
 
 model ToolkitLead {
-  id             String   @id @default(uuid())
-  userId         String   @map("user_id")
+  id             String           @id @default(uuid())
+  userId         String           @map("user_id")
   name           String
-  companyName    String?  @map("company_name")
+  companyName    String?          @map("company_name")
   email          String?
   phone          String?
-  source         String   @default("MANUAL")
-  status         String   @default("NEW")
-  estimatedValue Float?   @map("estimated_value")
+  source         String           @default("MANUAL")
+  status         String           @default("NEW")
+  estimatedValue Float?           @map("estimated_value")
   notes          String?
-  tags           String[] @default([])
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
-
-  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quotes   ToolkitQuote[]
-  invoices ToolkitInvoice[]
+  tags           String[]         @default([])
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  invoices       ToolkitInvoice[]
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quotes         ToolkitQuote[]
 
   @@index([userId, status])
   @@index([createdAt])
@@ -411,32 +351,31 @@ model ToolkitLead {
 }
 
 model ToolkitQuote {
-  id             String   @id @default(uuid())
-  userId         String   @map("user_id")
-  leadId         String?  @map("lead_id")
-  quoteNumber    String   @unique @map("quote_number")
-  status         String   @default("DRAFT")
+  id             String           @id @default(uuid())
+  userId         String           @map("user_id")
+  leadId         String?          @map("lead_id")
+  quoteNumber    String           @unique @map("quote_number")
+  status         String           @default("DRAFT")
   title          String
-  clientName     String   @map("client_name")
-  clientCompany  String?  @map("client_company")
-  clientEmail    String?  @map("client_email")
-  clientPhone    String?  @map("client_phone")
-  currency       String   @default("USD")
-  issueDate      DateTime @map("issue_date")
-  validUntil     DateTime? @map("valid_until")
+  clientName     String           @map("client_name")
+  clientCompany  String?          @map("client_company")
+  clientEmail    String?          @map("client_email")
+  clientPhone    String?          @map("client_phone")
+  currency       String           @default("USD")
+  issueDate      DateTime         @map("issue_date")
+  validUntil     DateTime?        @map("valid_until")
   notes          String?
-  lineItemsJson  Json     @map("line_items_json")
+  lineItemsJson  Json             @map("line_items_json")
   subtotal       Float
-  taxPercent     Float    @default(0) @map("tax_percent")
-  taxAmount      Float    @default(0) @map("tax_amount")
-  discountAmount Float    @default(0) @map("discount_amount")
+  taxPercent     Float            @default(0) @map("tax_percent")
+  taxAmount      Float            @default(0) @map("tax_amount")
+  discountAmount Float            @default(0) @map("discount_amount")
   total          Float
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
-
-  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lead     ToolkitLead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
-  invoices ToolkitInvoice[]
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  invoices       ToolkitInvoice[]
+  lead           ToolkitLead?     @relation(fields: [leadId], references: [id])
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, status])
   @@index([leadId])
@@ -444,37 +383,36 @@ model ToolkitQuote {
 }
 
 model ToolkitInvoice {
-  id              String    @id @default(uuid())
-  userId          String    @map("user_id")
-  leadId          String?   @map("lead_id")
-  quoteId         String?   @map("quote_id")
-  invoiceNumber   String    @unique @map("invoice_number")
-  status          String    @default("DRAFT")
+  id              String        @id @default(uuid())
+  userId          String        @map("user_id")
+  leadId          String?       @map("lead_id")
+  quoteId         String?       @map("quote_id")
+  invoiceNumber   String        @unique @map("invoice_number")
+  status          String        @default("DRAFT")
   title           String
-  clientName      String    @map("client_name")
-  clientCompany   String?   @map("client_company")
-  clientEmail     String?   @map("client_email")
-  clientPhone     String?   @map("client_phone")
-  currency        String    @default("USD")
-  issueDate       DateTime  @map("issue_date")
-  dueDate         DateTime? @map("due_date")
+  clientName      String        @map("client_name")
+  clientCompany   String?       @map("client_company")
+  clientEmail     String?       @map("client_email")
+  clientPhone     String?       @map("client_phone")
+  currency        String        @default("USD")
+  issueDate       DateTime      @map("issue_date")
+  dueDate         DateTime?     @map("due_date")
   notes           String?
-  lineItemsJson   Json      @map("line_items_json")
+  lineItemsJson   Json          @map("line_items_json")
   subtotal        Float
-  taxPercent      Float     @default(0) @map("tax_percent")
-  taxAmount       Float     @default(0) @map("tax_amount")
-  discountAmount  Float     @default(0) @map("discount_amount")
+  taxPercent      Float         @default(0) @map("tax_percent")
+  taxAmount       Float         @default(0) @map("tax_amount")
+  discountAmount  Float         @default(0) @map("discount_amount")
   total           Float
-  emailSubject    String?   @map("email_subject")
-  emailMessage    String?   @map("email_message")
-  lastEmailSentAt DateTime? @map("last_email_sent_at")
-  paidAt          DateTime? @map("paid_at")
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
-
-  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lead  ToolkitLead?  @relation(fields: [leadId], references: [id], onDelete: SetNull)
-  quote ToolkitQuote? @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  emailSubject    String?       @map("email_subject")
+  emailMessage    String?       @map("email_message")
+  lastEmailSentAt DateTime?     @map("last_email_sent_at")
+  paidAt          DateTime?     @map("paid_at")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  lead            ToolkitLead?  @relation(fields: [leadId], references: [id])
+  quote           ToolkitQuote? @relation(fields: [quoteId], references: [id])
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, status])
   @@index([leadId])
@@ -483,40 +421,38 @@ model ToolkitInvoice {
 }
 
 model ToolkitProject {
-  id          String   @id @default(uuid())
-  userId      String   @map("user_id")
+  id          String        @id @default(uuid())
+  userId      String        @map("user_id")
   name        String
   description String?
-  status      String   @default("PLANNING")
-  priority    String   @default("MEDIUM")
-  dueDate     DateTime? @map("due_date")
-  progress    Int      @default(0)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tasks ToolkitTask[]
+  status      String        @default("PLANNING")
+  priority    String        @default("MEDIUM")
+  dueDate     DateTime?     @map("due_date")
+  progress    Int           @default(0)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks       ToolkitTask[]
 
   @@index([userId, status])
   @@map("toolkit_projects")
 }
 
 model ToolkitTask {
-  id           String    @id @default(uuid())
-  userId       String    @map("user_id")
-  projectId    String    @map("project_id")
+  id           String         @id @default(uuid())
+  userId       String         @map("user_id")
+  projectId    String         @map("project_id")
   title        String
   description  String?
-  status       String    @default("TODO")
-  priority     String    @default("MEDIUM")
-  assigneeName String?   @map("assignee_name")
-  dueDate      DateTime? @map("due_date")
-  completedAt  DateTime? @map("completed_at")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
-
-  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  project ToolkitProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  status       String         @default("TODO")
+  priority     String         @default("MEDIUM")
+  assigneeName String?        @map("assignee_name")
+  dueDate      DateTime?      @map("due_date")
+  completedAt  DateTime?      @map("completed_at")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  project      ToolkitProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, status])
   @@index([projectId, status])
@@ -544,8 +480,7 @@ model ToolkitDirectoryEntry {
   adminNotes       String?  @map("admin_notes")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, status])
   @@index([status, category])
@@ -553,28 +488,27 @@ model ToolkitDirectoryEntry {
 }
 
 model SextouToolsProGeneration {
-  id               String   @id @default(uuid())
-  userId           String   @map("user_id")
-  appId            String   @map("app_id")
-  title            String
-  inputData        Json     @map("input_data")
-  outputData       Json     @map("output_data")
-  outputText       String   @map("output_text")
-  metadataJson     Json?    @map("metadata_json")
-  language         String   @default("pt-BR")
-  model            String
-  promptVersion    String   @map("prompt_version")
-  status           String   @default("ACTIVE")
-  isFavorite       Boolean  @default(false) @map("is_favorite")
-  sourceAction     String   @default("GENERATE") @map("source_action")
-  sourceGenerationId String? @map("source_generation_id")
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
-
-  user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sourceGeneration  SextouToolsProGeneration? @relation("SextouToolsProGenerationLink", fields: [sourceGenerationId], references: [id], onDelete: SetNull)
+  id                 String                     @id @default(uuid())
+  userId             String                     @map("user_id")
+  appId              String                     @map("app_id")
+  title              String
+  inputData          Json                       @map("input_data")
+  outputData         Json                       @map("output_data")
+  outputText         String                     @map("output_text")
+  metadataJson       Json?                      @map("metadata_json")
+  language           String                     @default("pt-BR")
+  model              String
+  promptVersion      String                     @map("prompt_version")
+  status             String                     @default("ACTIVE")
+  isFavorite         Boolean                    @default(false) @map("is_favorite")
+  sourceAction       String                     @default("GENERATE") @map("source_action")
+  sourceGenerationId String?                    @map("source_generation_id")
+  createdAt          DateTime                   @default(now()) @map("created_at")
+  updatedAt          DateTime                   @updatedAt @map("updated_at")
+  sourceGeneration   SextouToolsProGeneration?  @relation("SextouToolsProGenerationLink", fields: [sourceGenerationId], references: [id])
   derivedGenerations SextouToolsProGeneration[] @relation("SextouToolsProGenerationLink")
-  usageEvents       SextouToolsProUsageEvent[]
+  user               User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usageEvents        SextouToolsProUsageEvent[]
 
   @@index([userId, appId, createdAt])
   @@index([userId, status, createdAt])
@@ -583,16 +517,16 @@ model SextouToolsProGeneration {
 }
 
 model SextouToolsProPromptTemplate {
-  id            String   @id @default(uuid())
-  appId         String   @map("app_id")
-  version       String
-  model         String
-  schemaName    String   @map("schema_name")
-  systemPrompt  String   @map("system_prompt")
-  schemaJson    Json     @map("schema_json")
-  isActive      Boolean  @default(true) @map("is_active")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id           String   @id @default(uuid())
+  appId        String   @map("app_id")
+  version      String
+  model        String
+  schemaName   String   @map("schema_name")
+  systemPrompt String   @map("system_prompt")
+  schemaJson   Json     @map("schema_json")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@unique([appId, version])
   @@index([appId, isActive])
@@ -600,15 +534,14 @@ model SextouToolsProPromptTemplate {
 }
 
 model SextouToolsProUsageEvent {
-  id            String   @id @default(uuid())
-  userId        String   @map("user_id")
-  appId         String   @map("app_id")
-  generationId  String?  @map("generation_id")
-  actionType    String   @map("action_type")
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  user       User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  generation SextouToolsProGeneration? @relation(fields: [generationId], references: [id], onDelete: SetNull)
+  id           String                    @id @default(uuid())
+  userId       String                    @map("user_id")
+  appId        String                    @map("app_id")
+  generationId String?                   @map("generation_id")
+  actionType   String                    @map("action_type")
+  createdAt    DateTime                  @default(now()) @map("created_at")
+  generation   SextouToolsProGeneration? @relation(fields: [generationId], references: [id])
+  user         User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
   @@index([userId, appId, createdAt])
@@ -616,43 +549,37 @@ model SextouToolsProUsageEvent {
   @@map("sextou_tools_pro_usage_events")
 }
 
-// ========================================
-// SEXTOU ZAPLEADS CRM (Premium)
-// ========================================
-
 model ZapConnection {
-  id                 String    @id @default(uuid())
-  userId             String    @map("user_id")
-  mode               String    // 'web' or 'official'
-  displayNumber      String?   @map("display_number")
-  wabaPhoneId        String?   @map("waba_phone_id")
-  sessionRef         String?   @map("session_ref")
-  status             String    @default("disconnected")
-  riskAcknowledgedAt DateTime? @map("risk_acknowledged_at")
-  createdAt          DateTime  @default(now()) @map("created_at")
-  updatedAt          DateTime  @updatedAt @map("updated_at")
-
-  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  groups ZapGroup[]
+  id                 String     @id @default(uuid())
+  userId             String     @map("user_id")
+  mode               String
+  displayNumber      String?    @map("display_number")
+  wabaPhoneId        String?    @map("waba_phone_id")
+  sessionRef         String?    @map("session_ref")
+  status             String     @default("disconnected")
+  riskAcknowledgedAt DateTime?  @map("risk_acknowledged_at")
+  createdAt          DateTime   @default(now()) @map("created_at")
+  updatedAt          DateTime   @updatedAt @map("updated_at")
+  user               User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groups             ZapGroup[]
 
   @@index([userId])
   @@map("zap_connections")
 }
 
 model ZapGroup {
-  id               String    @id @default(uuid())
-  userId           String    @map("user_id")
-  connectionId     String?   @map("connection_id")
-  externalGroupId  String    @map("external_group_id")
-  name             String?
-  memberCount      Int?      @map("member_count")
-  lastExtractedAt  DateTime? @map("last_extracted_at")
-  createdAt        DateTime  @default(now()) @map("created_at")
-
-  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  connection  ZapConnection?        @relation(fields: [connectionId], references: [id], onDelete: SetNull)
-  extractions ZapGroupExtraction[]
-  contacts    Contact[]
+  id              String               @id @default(uuid())
+  userId          String               @map("user_id")
+  connectionId    String?              @map("connection_id")
+  externalGroupId String               @map("external_group_id")
+  name            String?
+  memberCount     Int?                 @map("member_count")
+  lastExtractedAt DateTime?            @map("last_extracted_at")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  contacts        Contact[]
+  extractions     ZapGroupExtraction[]
+  connection      ZapConnection?       @relation(fields: [connectionId], references: [id])
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("zap_groups")
@@ -668,9 +595,8 @@ model ZapGroupExtraction {
   totalImported   Int?     @map("total_imported")
   totalSkipped    Int?     @map("total_skipped")
   createdAt       DateTime @default(now()) @map("created_at")
-
-  user  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  group ZapGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  group           ZapGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([groupId])
@@ -678,25 +604,24 @@ model ZapGroupExtraction {
 }
 
 model Contact {
-  id            String   @id @default(uuid())
-  userId        String   @map("user_id")
-  phoneE164     String   @map("phone_e164")
-  displayName   String?  @map("display_name")
+  id            String       @id @default(uuid())
+  userId        String       @map("user_id")
+  phoneE164     String       @map("phone_e164")
+  displayName   String?      @map("display_name")
   email         String?
   company       String?
-  notes         String?  @db.Text
-  sourceType    String   @default("group") @map("source_type")
-  sourceGroupId String?  @map("source_group_id")
+  notes         String?
+  sourceType    String       @default("group") @map("source_type")
+  sourceGroupId String?      @map("source_group_id")
   persona       String?
-  tags          String[] @default([])
-  isValid       Boolean  @default(true) @map("is_valid")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sourceGroup ZapGroup?     @relation(fields: [sourceGroupId], references: [id], onDelete: SetNull)
-  zapLeads    ZapLead[]
-  consentLogs ConsentLog[]
+  tags          String[]     @default([])
+  isValid       Boolean      @default(true) @map("is_valid")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+  consentLogs   ConsentLog[]
+  sourceGroup   ZapGroup?    @relation(fields: [sourceGroupId], references: [id])
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  zapLeads      ZapLead[]
 
   @@unique([userId, phoneE164])
   @@index([userId, sourceGroupId])
@@ -704,25 +629,24 @@ model Contact {
 }
 
 model ZapLead {
-  id                 String    @id @default(uuid())
-  userId             String    @map("user_id")
-  contactId          String    @map("contact_id")
-  status             String    @default("frio")
-  heatScore          Int       @default(0) @map("heat_score")
-  ownerId            String?   @map("owner_id")
-  estimatedValue     Float?    @map("estimated_value")
-  nextFollowupAt     DateTime? @map("next_followup_at")
-  firstContactedAt   DateTime? @map("first_contacted_at")
-  becameHotAt        DateTime? @map("became_hot_at")
-  lastInteractionAt  DateTime? @map("last_interaction_at")
-  createdAt          DateTime  @default(now()) @map("created_at")
-  updatedAt          DateTime  @updatedAt @map("updated_at")
-
-  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  contact       Contact             @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  statusHistory LeadStatusHistory[]
-  events        LeadEvent[]
-  messages      ZapMessage[]
+  id                String              @id @default(uuid())
+  userId            String              @map("user_id")
+  contactId         String              @map("contact_id")
+  status            String              @default("frio")
+  heatScore         Int                 @default(0) @map("heat_score")
+  ownerId           String?             @map("owner_id")
+  estimatedValue    Float?              @map("estimated_value")
+  nextFollowupAt    DateTime?           @map("next_followup_at")
+  firstContactedAt  DateTime?           @map("first_contacted_at")
+  becameHotAt       DateTime?           @map("became_hot_at")
+  lastInteractionAt DateTime?           @map("last_interaction_at")
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @updatedAt @map("updated_at")
+  events            LeadEvent[]
+  statusHistory     LeadStatusHistory[]
+  contact           Contact             @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages          ZapMessage[]
 
   @@index([userId, status])
   @@index([userId, heatScore(sort: Desc)])
@@ -738,8 +662,7 @@ model LeadStatusHistory {
   reason     String?
   changedBy  String?  @map("changed_by")
   createdAt  DateTime @default(now()) @map("created_at")
-
-  lead ZapLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  lead       ZapLead  @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
   @@index([leadId])
   @@map("lead_status_history")
@@ -754,9 +677,8 @@ model LeadEvent {
   detectedIntent String?  @map("detected_intent")
   sentiment      String?
   createdAt      DateTime @default(now()) @map("created_at")
-
-  lead ZapLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  user User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lead           ZapLead  @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([leadId, createdAt(sort: Desc)])
   @@index([userId])
@@ -767,7 +689,7 @@ model ZapMessage {
   id                String   @id @default(uuid())
   leadId            String   @map("lead_id")
   userId            String   @map("user_id")
-  direction         String   // 'out' or 'in'
+  direction         String
   channel           String   @default("whatsapp")
   body              String?
   templateId        String?  @map("template_id")
@@ -775,9 +697,8 @@ model ZapMessage {
   status            String?
   externalMessageId String?  @map("external_message_id")
   createdAt         DateTime @default(now()) @map("created_at")
-
-  lead ZapLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  user User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lead              ZapLead  @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([leadId, createdAt])
   @@index([userId])
@@ -794,8 +715,7 @@ model MessageTemplate {
   body       String
   isApproved Boolean  @default(false) @map("is_approved")
   createdAt  DateTime @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("message_templates")
@@ -809,12 +729,354 @@ model ConsentLog {
   basis     String?
   source    String?
   createdAt DateTime @default(now()) @map("created_at")
-
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  contact Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  contact   Contact? @relation(fields: [contactId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([contactId, action])
   @@index([userId])
   @@map("consent_log")
 }
 
+model Sb7Project {
+  id             String                @id @default(uuid())
+  userId         String                @map("user_id")
+  appId          String                @map("app_id")
+  name           String
+  targetAudience String                @map("target_audience")
+  rawIdea        String                @map("raw_idea")
+  brandVoice     String?               @map("brand_voice")
+  language       String                @default("pt-BR")
+  channels       String[]              @default([])
+  status         String                @default("draft")
+  createdAt      DateTime              @default(now()) @map("created_at")
+  updatedAt      DateTime              @updatedAt @map("updated_at")
+  brandScripts   Sb7BrandScript[]
+  sessions       Sb7InterviewSession[]
+  user           User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
+  @@index([userId])
+  @@map("sb7_projects")
+}
+
+model Sb7InterviewSession {
+  id        String     @id @default(uuid())
+  projectId String     @map("project_id")
+  userId    String     @map("user_id")
+  questions Json
+  answers   Json?
+  status    String     @default("open")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  project   Sb7Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("sb7_interview_sessions")
+}
+
+model Sb7BrandScript {
+  id                   String          @id @default(uuid())
+  projectId            String          @map("project_id")
+  userId               String          @map("user_id")
+  version              Int             @default(1)
+  heroWant             String          @map("hero_want")
+  problemExternal      String          @map("problem_external")
+  problemInternal      String          @map("problem_internal")
+  problemPhilosophical String          @map("problem_philosophical")
+  villain              String?
+  empathy              String
+  authority            Json
+  planProcess          Json
+  planAgreement        Json?
+  ctaDirect            String          @map("cta_direct")
+  ctaTransitional      String?         @map("cta_transitional")
+  stakes               Json
+  success              Json
+  oneLiner             String          @map("one_liner")
+  isCurrent            Boolean         @default(true) @map("is_current")
+  createdAt            DateTime        @default(now()) @map("created_at")
+  project              Sb7Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  collaterals          Sb7Collateral[]
+
+  @@unique([projectId, version])
+  @@index([projectId, isCurrent])
+  @@map("sb7_brandscripts")
+}
+
+model Sb7Collateral {
+  id            String         @id @default(uuid())
+  brandScriptId String         @map("brandscript_id")
+  userId        String         @map("user_id")
+  wireframe     Json
+  leadGenerator Json?
+  nurtureEmails Json?
+  salesEmails   Json?
+  createdAt     DateTime       @default(now()) @map("created_at")
+  brandScript   Sb7BrandScript @relation(fields: [brandScriptId], references: [id], onDelete: Cascade)
+
+  @@index([brandScriptId])
+  @@map("sb7_collateral")
+}
+
+model PremiumAppRun {
+  id                 String           @id @default(uuid())
+  userId             String           @map("user_id")
+  appId              String           @map("app_id")
+  artifactType       String           @map("artifact_type")
+  artifactStatus     String           @default("pending") @map("artifact_status")
+  totalEstimatedCost Float            @default(0) @map("total_estimated_cost")
+  totalActualCost    Float            @default(0) @map("total_actual_cost")
+  totalLatencyMs     Int              @default(0) @map("total_latency_ms")
+  totalLlmCalls      Int              @default(0) @map("total_llm_calls")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  llmCalls           PremiumLlmCall[]
+
+  @@index([userId])
+  @@map("premium_app_runs")
+}
+
+model PremiumLlmCall {
+  id           String        @id @default(uuid())
+  premiumRunId String        @map("premium_run_id")
+  userId       String        @map("user_id")
+  appId        String        @map("app_id")
+  phase        String
+  providerSlug String        @map("provider_slug")
+  modelId      String        @map("model_id")
+  inputTokens  Int           @default(0) @map("input_tokens")
+  outputTokens Int           @default(0) @map("output_tokens")
+  actualCost   Float         @default(0) @map("actual_cost")
+  latencyMs    Int           @default(0) @map("latency_ms")
+  status       String
+  errorMessage String?       @map("error_message")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  premiumRun   PremiumAppRun @relation(fields: [premiumRunId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([premiumRunId])
+  @@map("premium_llm_calls")
+}
+
+model YoutubeChannel {
+  id                  String               @id @default(uuid())
+  userId              String               @map("user_id")
+  channelName         String               @map("channel_name")
+  niche               String
+  city                String?
+  state               String?
+  primaryOffer        String?              @map("primary_offer")
+  targetAudience      String[]             @default([]) @map("target_audience")
+  tone                String?
+  goal                String?
+  language            String               @default("pt-BR")
+  weeklyFrequency     Int                  @default(2) @map("weekly_frequency")
+  includeShorts       Boolean              @default(true) @map("include_shorts")
+  includeLives        Boolean              @default(false) @map("include_lives")
+  competitorChannels  String[]             @default([]) @map("competitor_channels")
+  focusKeywords       String[]             @default([]) @map("focus_keywords")
+  contentRestrictions String[]             @default([]) @map("content_restrictions")
+  isDefault           Boolean              @default(false) @map("is_default")
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           DateTime             @updatedAt @map("updated_at")
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentPlans        YoutubeContentPlan[]
+
+  @@index([userId])
+  @@map("youtube_channels")
+}
+
+model YoutubeContentPlan {
+  id              String               @id @default(uuid())
+  premiumRunId    String               @map("premium_run_id")
+  userId          String               @map("user_id")
+  channelId       String               @map("channel_id")
+  month           Int
+  year            Int
+  totalVideos     Int?                 @map("total_videos")
+  totalShorts     Int?                 @map("total_shorts")
+  totalPosts      Int?                 @map("total_posts")
+  strategySummary String?              @map("strategy_summary")
+  calendarJson    Json                 @map("calendar_json")
+  status          String               @default("draft")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  contentItems    YoutubeContentItem[]
+  channel         YoutubeChannel       @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([channelId])
+  @@map("youtube_content_plans")
+}
+
+model YoutubeContentItem {
+  id             String             @id @default(uuid())
+  planId         String             @map("plan_id")
+  itemType       String             @map("item_type")
+  scheduledDate  DateTime           @map("scheduled_date")
+  title          String?
+  hook           String?
+  scriptJson     Json?              @map("script_json")
+  seoPack        Json?              @map("seo_pack")
+  socialPack     Json?              @map("social_pack")
+  carouselJson   Json?              @map("carousel_json")
+  captionsJson   Json?              @map("captions_json")
+  thumbnailBrief Json?              @map("thumbnail_brief")
+  thumbnailUrl   String?            @map("thumbnail_url")
+  cta            String?
+  qualityScore   Float?             @map("quality_score")
+  warnings       Json?
+  createdAt      DateTime           @default(now()) @map("created_at")
+  plan           YoutubeContentPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([planId])
+  @@map("youtube_content_items")
+}
+
+model YoutubeTrendsCache {
+  id        String   @id @default(uuid())
+  niche     String
+  city      String?
+  trendData Json     @map("trend_data")
+  fetchedAt DateTime @default(now()) @map("fetched_at")
+  expiresAt DateTime @map("expires_at")
+
+  @@unique([niche, city])
+  @@map("youtube_trends_cache")
+}
+
+model SocialNetworkProject {
+  id             String                  @id @default(uuid())
+  userId         String                  @map("user_id")
+  projectName    String                  @map("project_name")
+  targetAudience String                  @map("target_audience")
+  basicIdea      String                  @map("basic_idea")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+  campaigns      SocialNetworkCampaign[]
+  user           User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("social_network_projects")
+}
+
+model SocialNetworkCampaign {
+  id           String                 @id @default(uuid())
+  projectId    String                 @map("project_id")
+  premiumRunId String                 @map("premium_run_id")
+  month        Int
+  year         Int
+  dorPrincipal String                 @map("dor_principal")
+  medo         String
+  sonho        String
+  promessa     String
+  provaSocial  String                 @map("prova_social")
+  escassez     String
+  status       String                 @default("draft")
+  version      Int                    @default(1)
+  createdAt    DateTime               @default(now()) @map("created_at")
+  updatedAt    DateTime               @updatedAt @map("updated_at")
+  project      SocialNetworkProject   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contents     SocialNetworkContent[]
+
+  @@index([projectId])
+  @@map("social_network_campaigns")
+}
+
+model SocialNetworkContent {
+  id          String                @id @default(uuid())
+  campaignId  String                @map("campaign_id")
+  contentType String                @map("content_type")
+  channel     String
+  title       String?
+  body        String
+  framework   String?
+  pronomesOk  Boolean               @default(true) @map("pronomes_ok")
+  readability Float?                @map("readability_score")
+  createdAt   DateTime              @default(now()) @map("created_at")
+  updatedAt   DateTime              @updatedAt @map("updated_at")
+  campaign    SocialNetworkCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@map("social_network_contents")
+}
+
+model LaunchProject {
+  id               String                  @id @default(uuid())
+  userId           String                  @map("user_id")
+  title            String
+  slug             String
+  targetAudience   String                  @map("target_audience")
+  initialBriefing  String                  @map("initial_briefing")
+  status           String                  @default("draft")
+  launchType       String?                 @map("launch_type")
+  fidelityScore    Float?                  @map("fidelity_score")
+  createdAt        DateTime                @default(now()) @map("created_at")
+  updatedAt        DateTime                @updatedAt @map("updated_at")
+  deletedAt        DateTime?               @map("deleted_at")
+  dossiers         LaunchDossier[]
+  interviewAnswers LaunchInterviewAnswer[]
+  user             User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("launch_projects")
+}
+
+model LaunchInterviewAnswer {
+  id            String        @id @default(uuid())
+  projectId     String        @map("project_id")
+  stepNumber    Int           @map("step_number")
+  stepSlug      String        @map("step_slug")
+  answers       Json
+  coachTipShown String?       @map("coach_tip_shown")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  project       LaunchProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("launch_interview_answers")
+}
+
+model LaunchDossier {
+  id          String              @id @default(uuid())
+  projectId   String              @map("project_id")
+  version     Int                 @default(1)
+  payload     Json
+  pdfUrl      String?             @map("pdf_url")
+  zipUrl      String?             @map("zip_url")
+  markdownUrl String?             @map("markdown_url")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  project     LaunchProject       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  phases      LaunchPhase[]
+  triggersMap LaunchTriggersMap[]
+
+  @@index([projectId])
+  @@map("launch_dossiers")
+}
+
+model LaunchPhase {
+  id                String        @id @default(uuid())
+  dossierId         String        @map("dossier_id")
+  phaseSlug         String        @map("phase_slug")
+  scheduledDate     DateTime?     @map("scheduled_date") @db.Date
+  triggersActivated String[]      @default([]) @map("triggers_activated")
+  copyBlocks        Json?         @map("copy_blocks")
+  status            String        @default("planned")
+  dossier           LaunchDossier @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+
+  @@index([dossierId])
+  @@map("launch_phases")
+}
+
+model LaunchTriggersMap {
+  id                  String        @id @default(uuid())
+  dossierId           String        @map("dossier_id")
+  triggerName         String        @map("trigger_name")
+  phaseSlug           String        @map("phase_slug")
+  intensity           Int           @default(5)
+  implementationNotes String?       @map("implementation_notes")
+  dossier             LaunchDossier @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+
+  @@index([dossierId])
+  @@map("launch_triggers_map")
+}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
-import { resolveSextouToolsProUser } from "@/lib/sextou-tools/auth"
+import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 import { SextouToolsProSuiteHeader } from "@/components/sextou-tools-pro/suite-header"
 import { ZapLeadsConnectionManager } from "@/components/sextou-tools-pro/zapleads/connection-manager"
 import { ZapLeadsGroupExtractor } from "@/components/sextou-tools-pro/zapleads/group-extractor"
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ZapLeadsPage() {
-  const result = await resolveSextouToolsProUser()
+  const result = await resolveSextouToolsPremiumUser()
 
   if (result.kind === "unauthorized") {
     redirect("/login?next=/sextou-tools-pro/zapleads")

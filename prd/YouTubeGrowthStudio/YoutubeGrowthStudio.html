@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Growth Studio AI — SextouTools Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --display: 'Bricolage Grotesque', system-ui, sans-serif;
+            --font: 'Inter', system-ui, sans-serif;
+            --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+            --bg: #0D0D0D;
+            --surface: #171717;
+            --surface2: #1F1F1F;
+            --surface3: #262626;
+            --text: #F0EDE6;
+            --text-dim: #A8A59E;
+            --text-mute: #6B6862;
+            --border: #2A2A2A;
+
+            --red: #FF3D57;
+            --orange: #FF8C00;
+            --green: #3DDC97;
+            --yellow: #FFC857;
+            --blue: #5B9DFF;
+            --purple: #B485FF;
+
+            --redbg: rgba(255, 61, 87, .12);
+            --gbg: rgba(61, 220, 151, .12);
+            --ybg: rgba(255, 200, 87, .12);
+            --bbg: rgba(91, 157, 255, .12);
+            --obg: rgba(255, 140, 0, .12);
+            --pbg: rgba(180, 133, 255, .12);
+
+            --grad-brand: linear-gradient(135deg, #FF3D57 0%, #FF8C00 100%);
+            --grad-celebrate: linear-gradient(135deg, #FF3D57 0%, #B485FF 50%, #5B9DFF 100%);
+            --grad-brand-soft: linear-gradient(135deg, rgba(255, 61, 87, .12) 0%, rgba(255, 140, 0, .12) 100%);
+
+            --r: 8px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 22px;
+
+            --sh: 0 4px 16px rgba(0, 0, 0, .3);
+            --sh-2: 0 8px 32px rgba(0, 0, 0, .5);
+            --sh-glow: 0 8px 32px rgba(255, 61, 87, .35), 0 4px 16px rgba(255, 140, 0, .25);
+            --tap: 48px;
+            --cta: 54px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 15px;
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased
+        }
+
+        body {
+            overflow-x: hidden
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        img {
+            max-width: 100%;
+            display: block
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 20px
+        }
+
+        /* NAV */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(13, 13, 13, .85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            max-width: 1080px;
+            margin: 0 auto
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 17px
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: var(--grad-brand);
+            display: grid;
+            place-items: center;
+            font-family: var(--display);
+            font-weight: 800;
+            color: #fff;
+            font-size: 16px
+        }
+
+        .badge-pro {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: var(--grad-brand);
+            color: #fff;
+            letter-spacing: .5px;
+            text-transform: uppercase
+        }
+
+        /* HERO */
+        .hero {
+            padding: 56px 20px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 61, 87, .15) 0%, transparent 60%);
+            pointer-events: none
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            margin-bottom: 20px
+        }
+
+        .hero-kicker .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green)
+        }
+
+        .hero h1 {
+            font-family: var(--display);
+            font-weight: 800;
+            font-size: clamp(32px, 7vw, 48px);
+            line-height: 1.08;
+            letter-spacing: -.02em;
+            margin-bottom: 16px
+        }
+
+        .hero h1 .grad {
+            background: var(--grad-brand);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent
+        }
+
+        .hero p.lead {
+            font-size: 17px;
+            color: var(--text-dim);
+            max-width: 620px;
+            margin: 0 auto 28px
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: var(--cta);
+            padding: 0 28px;
+            border-radius: var(--r-lg);
+            background: var(--grad-brand);
+            color: #fff;
+            font-family: var(--font);
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--sh-glow);
+            min-width: 240px;
+            transition: transform .15s ease
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px)
+        }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: var(--tap);
+            padding: 0 22px;
+            border-radius: var(--r-lg);
+            background: transparent;
+            color: var(--text-dim);
+            font-family: var(--font);
+            font-weight: 500;
+            font-size: 14px;
+            border: 1px solid var(--border);
+            cursor: pointer
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 56px 20px
+        }
+
+        .section-head {
+            text-align: center;
+            margin-bottom: 36px
+        }
+
+        .section-tag {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--orange);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px
+        }
+
+        .section-head h2 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: clamp(26px, 5vw, 34px);
+            line-height: 1.15;
+            letter-spacing: -.01em;
+            margin-bottom: 12px
+        }
+
+        .section-head p {
+            color: var(--text-dim);
+            max-width: 560px;
+            margin: 0 auto;
+            font-size: 15px
+        }
+
+        /* PAYWALL BANNER */
+        .paywall {
+            margin: 0 20px 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-2xl);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden
+        }
+
+        .paywall::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--grad-brand-soft);
+            pointer-events: none
+        }
+
+        .paywall>* {
+            position: relative
+        }
+
+        .paywall-lock {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--grad-brand);
+            display: grid;
+            place-items: center;
+            font-size: 20px
+        }
+
+        .paywall h3 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 4px
+        }
+
+        .paywall p {
+            color: var(--text-dim);
+            font-size: 14px
+        }
+
+        .paywall .btn-primary {
+            width: 100%;
+            margin-top: 4px
+        }
+
+        /* FEATURES */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px
+        }
+
+        .feature {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl);
+            padding: 20px;
+            position: relative;
+            transition: border-color .2s ease
+        }
+
+        .feature:hover {
+            border-color: #3A3A3A
+        }
+
+        .feature-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 20px
+        }
+
+        .feature h3 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 17px;
+            margin-bottom: 6px
+        }
+
+        .feature p {
+            color: var(--text-dim);
+            font-size: 14px;
+            line-height: 1.5
+        }
+
+        .feature .pro-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-family: var(--mono);
+            font-size: 9px;
+            padding: 3px 7px;
+            border-radius: 5px;
+            background: var(--surface3);
+            color: var(--orange);
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            border: 1px solid var(--border)
+        }
+
+        .ic-cal {
+            background: var(--bbg);
+            color: var(--blue)
+        }
+
+        .ic-vid {
+            background: var(--redbg);
+            color: var(--red)
+        }
+
+        .ic-idea {
+            background: var(--ybg);
+            color: var(--yellow)
+        }
+
+        .ic-post {
+            background: var(--pbg);
+            color: var(--purple)
+        }
+
+        .ic-car {
+            background: var(--obg);
+            color: var(--orange)
+        }
+
+        .ic-cap {
+            background: var(--gbg);
+            color: var(--green)
+        }
+
+        .ic-hash {
+            background: var(--bbg);
+            color: var(--blue)
+        }
+
+        .ic-art {
+            background: var(--redbg);
+            color: var(--red)
+        }
+
+        .ic-desc {
+            background: var(--pbg);
+            color: var(--purple)
+        }
+
+        .ic-title {
+            background: var(--ybg);
+            color: var(--yellow)
+        }
+
+        /* EXAMPLE */
+        .example {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-2xl);
+            padding: 24px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .example::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 140, 0, .1) 0%, transparent 70%);
+            pointer-events: none
+        }
+
+        .example-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px
+        }
+
+        .example-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--grad-brand);
+            display: grid;
+            place-items: center;
+            font-size: 22px
+        }
+
+        .example-head h3 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 18px
+        }
+
+        .example-head .sub {
+            font-size: 13px;
+            color: var(--text-dim)
+        }
+
+        .example-items {
+            display: grid;
+            gap: 10px
+        }
+
+        .ex-item {
+            display: flex;
+            gap: 12px;
+            padding: 14px;
+            background: var(--surface2);
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border)
+        }
+
+        .ex-type {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--orange);
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            min-width: 90px;
+            padding-top: 2px
+        }
+
+        .ex-content {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text)
+        }
+
+        .ex-item .lock {
+            color: var(--text-mute);
+            font-size: 14px
+        }
+
+        /* STEPPER */
+        .stepper {
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .step {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-xl)
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            display: grid;
+            place-items: center;
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-dim)
+        }
+
+        .step.active .step-num {
+            background: var(--grad-brand);
+            color: #fff;
+            border-color: transparent
+        }
+
+        .step h4 {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 4px
+        }
+
+        .step p {
+            font-size: 13px;
+            color: var(--text-dim)
+        }
+
+        /* COACH TIP */
+        .coach {
+            background: var(--grad-brand-soft);
+            border: 1px solid rgba(255, 140, 0, .25);
+            border-radius: var(--r-xl);
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            margin: 24px auto;
+            max-width: 640px
+        }
+
+        .coach-ico {
+            font-size: 20px;
+            flex-shrink: 0
+        }
+
+        .coach p {
+            font-size: 14px;
+            color: var(--text)
+        }
+
+        .coach strong {
+            color: var(--orange)
+        }
+
+        /* VALUE LIST */
+        .value-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px
+        }
+
+        .value-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 14px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg)
+        }
+
+        .value-check {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            background: var(--gbg);
+            color: var(--green);
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+            font-weight: 700
+        }
+
+        .value-item p {
+            font-size: 14px;
+            color: var(--text)
+        }
+
+        /* FINAL CTA */
+        .final-cta {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .final-cta::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(255, 61, 87, .18) 0%, transparent 60%);
+            pointer-events: none
+        }
+
+        .final-cta>* {
+            position: relative
+        }
+
+        .final-emoji {
+            font-size: 48px;
+            margin-bottom: 16px
+        }
+
+        .final-cta h2 {
+            font-family: var(--display);
+            font-weight: 800;
+            font-size: clamp(28px, 6vw, 40px);
+            line-height: 1.1;
+            margin-bottom: 14px
+        }
+
+        .final-cta h2 .grad {
+            background: var(--grad-brand);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent
+        }
+
+        .final-cta p {
+            color: var(--text-dim);
+            max-width: 480px;
+            margin: 0 auto 24px;
+            font-size: 15px
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 30px 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-mute);
+            font-size: 12px;
+            font-family: var(--mono)
+        }
+
+        footer .suite {
+            color: var(--text-dim);
+            margin-bottom: 6px
+        }
+
+        /* RESPONSIVE */
+        @media (min-width:640px) {
+            .features {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .value-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .paywall {
+                flex-direction: row;
+                align-items: center;
+                padding: 24px
+            }
+
+            .paywall .btn-primary {
+                width: auto;
+                margin-top: 0;
+                margin-left: auto
+            }
+        }
+
+        @media (min-width:900px) {
+            .features {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .value-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <div class="logo">
+                <div class="logo-mark">Y</div>
+                <span>YouTube Growth Studio</span>
+            </div>
+            <span class="badge-pro">PRO</span>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-kicker"><span class="dot"></span> SextouTools Premium</div>
+            <h1>Transforme seu YouTube em <span class="grad">máquina de autoridade</span> e vendas</h1>
+            <p class="lead">Crie em minutos um plano completo para seu canal — vídeos, Shorts, posts, carrosséis,
+                legendas, hashtags e artes sugeridas. Tudo adaptado ao seu nicho, sua cidade e seu público nos Estados
+                Unidos.</p>
+            <div class="hero-cta">
+                <button class="btn-primary"
+                    onclick="document.getElementById('upgrade').scrollIntoView({behavior:'smooth'})">✨ Desbloquear
+                    acesso Premium</button>
+                <button class="btn-ghost"
+                    onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Ver o que você
+                    ganha ↓</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAYWALL BANNER -->
+    <div class="container">
+        <div class="paywall">
+            <div class="paywall-lock">🔒</div>
+            <div>
+                <h3>Acesso exclusivo para assinantes Premium</h3>
+                <p>Este app faz parte da suite SextouTools PRO. Veja abaixo tudo que você está perdendo e desbloqueie
+                    agora.</p>
+            </div>
+            <button class="btn-primary"
+                onclick="document.getElementById('upgrade').scrollIntoView({behavior:'smooth'})">Assinar
+                Premium</button>
+        </div>
+    </div>
+
+    <!-- FEATURES -->
+    <section id="features">
+        <div class="container">
+            <div class="section-head">
+                <div class="section-tag">O que você ganha</div>
+                <h2>10 ferramentas em um único plano mensal</h2>
+                <p>Em vez de depender da inspiração do momento, você passa a ter um plano editorial claro, alinhado ao
+                    seu público, seu mercado e seus objetivos de venda.</p>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-cal">📅</div>
+                    </div>
+                    <h3>Calendário mensal</h3>
+                    <p>Plano completo de vídeos, Shorts e posts para 30 dias. Evita improviso e mantém consistência.</p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-vid">🎬</div>
+                    </div>
+                    <h3>Roteiros de vídeo</h3>
+                    <p>Estrutura de abertura, desenvolvimento, CTA e fechamento. Para vender sem parecer forçado.</p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-idea">💡</div>
+                    </div>
+                    <h3>Ideias de vídeos</h3>
+                    <p>Temas baseados no seu nicho, cidade, oferta e dúvidas comuns do público brasileiro nos EUA.</p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-post">📣</div>
+                    </div>
+                    <h3>Posts de divulgação</h3>
+                    <p>Textos prontos para Instagram, Facebook, LinkedIn, WhatsApp e comunidade do YouTube.</p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-car">🎠</div>
+                    </div>
+                    <h3>Carrosséis</h3>
+                    <p>Estrutura de slides educativos ou promocionais derivados de cada vídeo. Reaproveite tudo.</p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-cap">✍️</div>
+                    </div>
+                    <h3>Legendas</h3>
+                    <p>Legendas curtas, médias e longas para redes sociais. Publique em múltiplos canais sem esforço.
+                    </p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-hash">#</div>
+                    </div>
+                    <h3>Hashtags</h3>
+                    <p>Hashtags por nicho, cidade, comunidade e intenção de busca. Melhora descoberta e segmentação.</p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-art">🎨</div>
+                    </div>
+                    <h3>Artes sugeridas</h3>
+                    <p>Briefing de thumbnail, capa, carrossel e imagem de apoio. Direção visual mesmo sem designer.</p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-desc">📝</div>
+                    </div>
+                    <h3>Descrição do vídeo</h3>
+                    <p>Texto otimizado com resumo, links, CTA e palavras-chave. Ajuda na apresentação e busca.</p>
+                </div>
+
+                <div class="feature">
+                    <span class="pro-badge">PRO</span>
+                    <div class="feature-top">
+                        <div class="feature-icon ic-title">🎯</div>
+                    </div>
+                    <h3>Títulos alternativos</h3>
+                    <p>Variações com foco em curiosidade, autoridade, SEO e venda. Aumenta chance de clique.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COACH TIP -->
+    <div class="container">
+        <div class="coach">
+            <div class="coach-ico">💡</div>
+            <p><strong>Dica:</strong> um único vídeo bem planejado vira conteúdo para YouTube, Instagram, Facebook,
+                WhatsApp e Google Business Profile. O app faz esse reaproveitamento automaticamente para você.</p>
+        </div>
+    </div>
+
+    <!-- EXAMPLE -->
+    <section>
+        <div class="container">
+            <div class="section-head">
+                <div class="section-tag">Exemplo real</div>
+                <h2>Veja o que o app gera para uma empresa de limpeza em Orlando</h2>
+                <p>Um pacote completo, pronto para publicar em todos os canais na mesma semana.</p>
+            </div>
+
+            <div class="example">
+                <div class="example-head">
+                    <div class="example-avatar">🧽</div>
+                    <div>
+                        <h3>Limpeza Residencial Orlando</h3>
+                        <div class="sub">Nicho: Serviços · Cidade: Orlando, FL</div>
+                    </div>
+                </div>
+
+                <div class="example-items">
+                    <div class="ex-item">
+                        <div class="ex-type">Vídeo longo</div>
+                        <div class="ex-content">"Como escolher uma empresa de limpeza confiável para sua casa em
+                            Orlando"</div>
+                        <div class="lock">🔒</div>
+                    </div>
+                    <div class="ex-item">
+                        <div class="ex-type">Shorts</div>
+                        <div class="ex-content">"3 sinais de que sua casa precisa de deep cleaning"</div>
+                        <div class="lock">🔒</div>
+                    </div>
+                    <div class="ex-item">
+                        <div class="ex-type">Carrossel</div>
+                        <div class="ex-content">"Checklist antes de contratar uma empresa de limpeza"</div>
+                        <div class="lock">🔒</div>
+                    </div>
+                    <div class="ex-item">
+                        <div class="ex-type">Post</div>
+                        <div class="ex-content">"Você sabe a diferença entre regular cleaning e deep cleaning?"</div>
+                        <div class="lock">🔒</div>
+                    </div>
+                    <div class="ex-item">
+                        <div class="ex-type">Thumbnail</div>
+                        <div class="ex-content">Pessoa segurando checklist + casa limpa ao fundo</div>
+                        <div class="lock">🔒</div>
+                    </div>
+                    <div class="ex-item">
+                        <div class="ex-type">CTA</div>
+                        <div class="ex-content">"Peça um orçamento para sua casa ou Airbnb em Orlando"</div>
+                        <div class="lock">🔒</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section>
+        <div class="container">
+            <div class="section-head">
+                <div class="section-tag">Como funciona</div>
+                <h2>Em 5 passos simples, seu plano está pronto</h2>
+                <p>Fluxo guiado, mobile-first, feito para quem não tem tempo a perder.</p>
+            </div>
+
+            <div class="stepper">
+                <div class="step active">
+                    <div class="step-num">1</div>
+                    <div>
+                        <h4>Conte sobre seu negócio</h4>
+                        <p>Nicho, cidade, oferta principal e público-alvo. A gente faz o resto.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div>
+                        <h4>Escolha estratégia e tom</h4>
+                        <p>Autoridade amigável, educativo leve, energético ou sofisticado. Você decide a voz.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div>
+                        <h4>IA gera seu calendário</h4>
+                        <p>30 dias de vídeos, Shorts, posts e ideias — baseados no seu mercado nos EUA.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div>
+                        <h4>Receba o pacote completo</h4>
+                        <p>Roteiros, títulos, descrições, hashtags, carrosséis, legendas e briefings de arte.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <div>
+                        <h4>Exporte e publique</h4>
+                        <p>Baixe em PDF, DOCX, CSV ou Markdown. Copie, edite e publique onde quiser.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VALUE -->
+    <section>
+        <div class="container">
+            <div class="section-head">
+                <div class="section-tag">Por que vale a pena</div>
+                <h2>Para brasileiros empreendendo nos EUA</h2>
+                <p>Você tem bom serviço, boa experiência e boas histórias. Falta só transformar isso em conteúdo
+                    consistente.</p>
+            </div>
+
+            <div class="value-grid">
+                <div class="value-item">
+                    <div class="value-check">✓</div>
+                    <p>Criar autoridade no mercado local</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-check">✓</div>
+                    <p>Explicar seus serviços com clareza</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-check">✓</div>
+                    <p>Ser encontrado por brasileiros e clientes fora da comunidade</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-check">✓</div>
+                    <p>Reaproveitar um vídeo em vários canais</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-check">✓</div>
+                    <p>Economizar tempo com planejamento</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-check">✓</div>
+                    <p>Publicar com mais frequência</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-check">✓</div>
+                    <p>Vender com mais confiança</p>
+                </div>
+                <div class="value-item">
+                    <div class="value-check">✓</div>
+                    <p>Construir presença digital de longo prazo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta" id="upgrade">
+        <div class="container">
+            <div class="final-emoji">🎉</div>
+            <h2>Seu canal merece um <span class="grad">plano de verdade</span></h2>
+            <p>Desbloqueie o YouTube Growth Studio AI e transforme seu conhecimento em uma vitrine permanente de
+                autoridade, conteúdo e geração de oportunidades.</p>
+            <button class="btn-primary">✨ Assinar SextouTools Premium</button>
+            <div style="margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--text-mute)">Acesso imediato ·
+                Cancele quando quiser</div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="suite">SextouTools Premium Suite</div>
+        <div>YouTube Growth Studio AI · v1.0</div>
+    </footer>
+
+</body>
+
+</html>

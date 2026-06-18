@@ -226,10 +226,49 @@ const sextouToolsProCatalog: SextouToolsProTool[] = [
       "Perguntas frequentes, respostas curtas e objecoes comuns organizadas para WhatsApp, perfil e apresentacao comercial.",
     nextActions: ["Criar respostas de WhatsApp", "Criar bio do negocio", "Criar calendario de conteudo educativo"],
   },
+  {
+    slug: "storybrand-strategy-generator",
+    title: "Clareza — Gerador de Estratégia de Marketing (SB7)",
+    shortDescription: "Transforme ideias de marketing em uma estratégia de marca clara baseada no método StoryBrand SB7.",
+    description: "Crie um BrandScript completo, One-liner, wireframe de homepage e sequências de e-mail de vendas e nutrição seguindo o método de Donald Miller.",
+    category: "sales",
+    status: "live",
+    icon: "SB7",
+    coachTip: "Seja específico sobre o público-alvo e o principal problema para que a cópia gerada tenha máximo impacto.",
+    exampleTitle: "Estratégia para agência local",
+    exampleOutput: "BrandScript completo (7 etapas), frase One-liner de impacto, wireframe estruturado com copy da homepage e e-mails de vendas.",
+    nextActions: ["Gerar anúncio local", "Precificar serviço", "Criar roteiro de Reels"],
+  },
+  {
+    slug: "youtube-growth-studio",
+    title: "YouTube Growth Studio AI",
+    shortDescription: "Gere um plano completo com cronograma, roteiros, títulos, descrições, tags e briefings de thumbnails.",
+    description: "Mini-app premium para transformar o YouTube em um gerador permanente de autoridade e vendas para seu negócio nos EUA.",
+    category: "content",
+    status: "live",
+    icon: "YT",
+    coachTip: "Descreva a oferta e o público-alvo local para gerar roteiros e cronogramas extremamente alinhados ao seu negócio.",
+    exampleTitle: "Estratégia de canal de negócios nos EUA",
+    exampleOutput: "Calendário de 30 dias, roteiros de vídeos longos/Shorts, copys de SEO e mídias sociais, e briefings visuais para thumbnails.",
+    nextActions: ["Planejar canal", "Ver calendário", "Exportar roteiros"],
+  },
 ]
+
+// Apps Premium (gate hasActiveAds AND isPremium). Os demais do catálogo são Pacote PRO (hasActiveAds).
+const PREMIUM_SLUGS = new Set<string>(["storybrand-strategy-generator", "youtube-growth-studio"])
 
 export function getSextouToolsProCatalog() {
   return sextouToolsProCatalog
+}
+
+/** Apps do Pacote PRO (acesso por anúncio ativo) — exclui os apps Premium. */
+export function getSextouToolsProOnly() {
+  return sextouToolsProCatalog.filter((tool) => !PREMIUM_SLUGS.has(tool.slug))
+}
+
+/** Apps Premium (acesso por anúncio ativo + assinatura premium). */
+export function getSextouToolsPremiumOnly() {
+  return sextouToolsProCatalog.filter((tool) => PREMIUM_SLUGS.has(tool.slug))
 }
 
 export function getSextouToolsProTool(slug: string) {

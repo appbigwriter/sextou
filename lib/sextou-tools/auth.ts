@@ -108,7 +108,9 @@ export async function resolveSextouToolsProUser(): Promise<SextouToolsProUserLoo
     return result
   }
 
-  if (!result.user.hasActiveAds && !result.user.isPremium) {
+  // Pacote PRO: o "pagamento" se dá única e exclusivamente pelos anúncios — acesso liberado
+  // unicamente para anunciante ativo (hasActiveAds). Publicar um anúncio ativa hasActiveAds.
+  if (!result.user.hasActiveAds) {
     return {
       kind: "forbidden",
       user: result.user,
@@ -120,6 +122,42 @@ export async function resolveSextouToolsProUser(): Promise<SextouToolsProUserLoo
 
 export async function requireSextouToolsProApiUser() {
   const result = await resolveSextouToolsProUser()
+
+  if (result.kind === "ok") {
+    return result.user
+  }
+
+  if (result.kind === "db-unavailable") {
+    throw new ToolkitDatabaseUnavailableError()
+  }
+
+  return result.kind === "forbidden" ? false : null
+}
+
+/**
+ * Gate dos APPS PREMIUM da suite (ex.: YouTube Growth Studio, Launch Studio PRO).
+ * Diferente do Pacote PRO (que basta hasActiveAds), os apps Premium exigem AMBOS:
+ * anunciante ativo (hasActiveAds) E assinatura premium (isPremium). Faltando qualquer um → forbidden.
+ */
+export async function resolveSextouToolsPremiumUser(): Promise<SextouToolsProUserLookupResult> {
+  const result = await lookupToolkitUser()
+
+  if (result.kind !== "ok") {
+    return result
+  }
+
+  if (!result.user.hasActiveAds || !result.user.isPremium) {
+    return {
+      kind: "forbidden",
+      user: result.user,
+    }
+  }
+
+  return result
+}
+
+export async function requireSextouToolsPremiumApiUser() {
+  const result = await resolveSextouToolsPremiumUser()
 
   if (result.kind === "ok") {
     return result.user

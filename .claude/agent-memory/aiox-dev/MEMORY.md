@@ -1,0 +1,1 @@
+- [Stripe SDK version mismatch](project_stripe-sdk-version-mismatch.md) — SDK v22 vs pinned apiVersion; current_period_end & invoice→subscription fields moved
