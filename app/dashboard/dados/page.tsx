@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 import { DadosForm } from "./dados-form"
+import { LogoutButton } from "@/components/logout-button"
 
 export default async function MeusDadosPage() {
   const session = await auth()
@@ -46,6 +47,7 @@ export default async function MeusDadosPage() {
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center gap-4">
               <span className="text-sm text-gray-600">Olá, {user.fullName}</span>
+              <LogoutButton />
               <Link
                 href="/dashboard/anunciar"
                 className="bg-[#F97316] hover:bg-[#EA580C] text-white px-4 py-2 rounded-lg font-medium text-sm"
@@ -61,7 +63,7 @@ export default async function MeusDadosPage() {
               { href: "/dashboard/dados", label: "Meus Dados" },
               { href: "/dashboard/configuracoes", label: "Configurações" },
               { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
-            ]} />
+            ]} showLogout />
           </div>
         </div>
       </header>

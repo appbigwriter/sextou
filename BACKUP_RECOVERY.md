@@ -11,6 +11,9 @@ Este projeto deve ter backup em 3 camadas:
 - `npm run backup:db`
 - `npm run backup:project`
 - `npm run backup:all`
+- `npm run backup:prune`
+- `npm run backup:upload`
+- `npm run backup:maintain`
 
 Os arquivos sao gravados em:
 
@@ -65,6 +68,58 @@ Use isso apenas se o destino do backup for realmente seguro.
 npm run backup:all
 ```
 
+## Retencao automatica
+
+Para manter apenas os backups mais recentes:
+
+```powershell
+npm run backup:prune
+```
+
+Variaveis opcionais:
+
+```powershell
+$env:BACKUP_KEEP_DB="14"
+$env:BACKUP_KEEP_PROJECT="14"
+```
+
+## Envio externo para S3 compativel
+
+Se quiser mandar os arquivos para S3, Backblaze, Wasabi ou outro endpoint compativel:
+
+```powershell
+$env:BACKUP_S3_BUCKET="meu-bucket"
+$env:BACKUP_S3_REGION="us-east-1"
+$env:BACKUP_S3_PREFIX="sextou-prod"
+npm run backup:upload
+```
+
+Se o provider exigir endpoint proprio:
+
+```powershell
+$env:BACKUP_S3_ENDPOINT="https://SEU-ENDPOINT"
+$env:BACKUP_S3_FORCE_PATH_STYLE="1"
+```
+
+Credenciais esperadas pelo SDK:
+
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_SESSION_TOKEN` (se houver)
+
+## Pipeline unico para agendar
+
+O comando abaixo:
+
+1. gera backup do banco
+2. gera backup do projeto
+3. aplica retencao
+4. envia para S3 se `BACKUP_S3_BUCKET` estiver configurado
+
+```powershell
+npm run backup:maintain
+```
+
 ## Restauracao do banco
 
 Para restaurar um dump custom do Postgres:
@@ -99,6 +154,36 @@ Idealmente, copie os artefatos para um destino fora da VPS:
 - Google Drive corporativo
 - Outro servidor
 
+## Agendamento
+
+### Linux / VPS / cron
+
+Exemplo diario as 03:15:
+
+```bash
+15 3 * * * cd /caminho/do/projeto && /usr/bin/npm run backup:maintain >> /var/log/sextou-backup.log 2>&1
+```
+
+### Windows Task Scheduler
+
+Programa:
+
+```text
+npm.cmd
+```
+
+Argumentos:
+
+```text
+run backup:maintain
+```
+
+Diretorio inicial:
+
+```text
+C:\Projetos\2SextaEmpreendedor
+```
+
 ## Rotina minima recomendada
 
 1. Backup diario do banco.
@@ -112,3 +197,4 @@ Idealmente, copie os artefatos para um destino fora da VPS:
 - Se o banco principal estiver em Supabase, habilite tambem os backups nativos/PITR no painel do provider.
 - Se houver estado operacional em `.wwebjs_auth` e `.wwebjs_cache`, ele ja entra no backup do projeto quando esses diretorios existirem.
 - Cloudinary e outros assets externos devem ter politica propria de export/retencao, porque nao ficam dentro do Postgres.
+- Para Supabase, o ideal e combinar os dumps locais com PITR nativo do provider.

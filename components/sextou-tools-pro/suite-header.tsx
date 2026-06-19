@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { MobileMenu } from "@/components/layout/mobile-menu"
+import { LogoutButton } from "@/components/logout-button"
 
 interface SextouToolsProSuiteHeaderProps {
   userName?: string | null
@@ -11,6 +13,21 @@ export function SextouToolsProSuiteHeader({
   businessName,
   showPublicNav = false,
 }: SextouToolsProSuiteHeaderProps) {
+  const publicLinks = [
+    { href: "/", label: "Home" },
+    { href: "/sextou-tools", label: "Sextou Tools" },
+    { href: "/sextou-tools-pro", label: "SextouTools PRO" },
+    { href: "/login?next=/sextou-tools-pro/dashboard", label: "Entrar para usar", isAction: true },
+  ]
+
+  const privateLinks = [
+    { href: "/", label: "Home" },
+    { href: "/dashboard", label: "Meu Dashboard" },
+    { href: "/sextou-tools", label: "Sextou Tools" },
+    { href: "/sextou-tools-pro", label: "Suite PRO" },
+    { href: "/dashboard/configuracoes", label: "Configuracoes" },
+  ]
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0D0D0D]/92 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
@@ -44,11 +61,28 @@ export function SextouToolsProSuiteHeader({
             </Link>
           </div>
         ) : (
-          <div className="hidden text-right md:block">
-            <p className="text-sm font-semibold text-[#F0EDE6]">{userName || "Membro Sextou"}</p>
-            <p className="text-xs text-[#A09D97]">{businessName || "Conta ativa no portal"}</p>
+          <div className="hidden items-center gap-3 md:flex">
+            <Link
+              href="/dashboard"
+              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-[#F0EDE6] transition hover:bg-white/10"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/sextou-tools"
+              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-[#F0EDE6] transition hover:bg-white/10"
+            >
+              Sextou Tools
+            </Link>
+            <div className="text-right">
+              <p className="text-sm font-semibold text-[#F0EDE6]">{userName || "Membro Sextou"}</p>
+              <p className="text-xs text-[#A09D97]">{businessName || "Conta ativa no portal"}</p>
+            </div>
+            <LogoutButton className="text-sm font-semibold text-[#F0EDE6] hover:text-[#FCD34D]" />
           </div>
         )}
+
+        <MobileMenu links={showPublicNav ? publicLinks : privateLinks} showLogout={!showPublicNav} />
       </div>
     </header>
   )

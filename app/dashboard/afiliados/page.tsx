@@ -5,6 +5,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 import { CopyAffiliateLink } from "@/components/copy-affiliate-link"
+import { LogoutButton } from "@/components/logout-button"
 
 
 export default async function AfiliadosPage() {
@@ -56,6 +57,7 @@ export default async function AfiliadosPage() {
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center gap-4">
               <span className="text-sm text-gray-600">Olá, {user.fullName}</span>
+              <LogoutButton />
               <a
                 href="/Manual_Afiliado_SEXTOU.pdf"
                 download="Manual_Afiliado_SEXTOU.pdf"
@@ -83,7 +85,7 @@ export default async function AfiliadosPage() {
               { href: "/Manual_Afiliado_SEXTOU.pdf", label: "📄 Manual do Afiliado" },
               { href: "/dashboard/configuracoes", label: "Configurações" },
               { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
-            ]} />
+            ]} showLogout />
           </div>
         </div>
       </header>

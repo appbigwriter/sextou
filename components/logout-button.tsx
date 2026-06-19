@@ -2,11 +2,11 @@
 
 import { signOut } from "next-auth/react"
 
-export function LogoutButton() {
+export function LogoutButton({ className }: { className?: string }) {
   return (
     <button
       onClick={() => signOut({ callbackUrl: "/" })}
-      className="text-sm text-gray-600 hover:text-[#F97316]"
+      className={className || "text-sm text-gray-600 hover:text-[#F97316]"}
     >
       Sair
     </button>

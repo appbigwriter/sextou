@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { PaymentOptions } from "@/components/payment-options"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 import { DeleteAdButton } from "@/components/delete-ad-button"
+import { LogoutButton } from "@/components/logout-button"
 
 interface Props {
   params: { id: string }
@@ -92,6 +93,7 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
               <Link href="/dashboard/anunciar" className="text-gray-600 hover:text-[#F97316]">
                 Novo Anuncio
               </Link>
+              <LogoutButton />
             </nav>
             <MobileMenu links={[
               { href: "/", label: "Home" },
@@ -99,7 +101,7 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
               { href: "/dashboard", label: "Meu Dashboard" },
               { href: "/dashboard/configuracoes", label: "Configurações" },
               { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
-            ]} />
+            ]} showLogout />
           </div>
         </div>
       </header>

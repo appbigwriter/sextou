@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { MobileMenu } from "@/components/layout/mobile-menu"
+import { LogoutButton } from "@/components/logout-button"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -236,13 +237,16 @@ export default function CriarAnuncioPage() {
             <Link href="/dashboard" className="hidden md:block text-sm text-gray-600 hover:text-[#F97316]">
               Voltar ao Dashboard
             </Link>
+            <div className="hidden md:block">
+              <LogoutButton />
+            </div>
             <MobileMenu links={[
               { href: "/", label: "Home" },
               { href: "/anuncios", label: "Ver Vitrine" },
               { href: "/dashboard", label: "Meu Dashboard" },
               { href: "/dashboard/configuracoes", label: "Configurações" },
               { href: "/dashboard/anunciar", label: "+ Novo Anúncio", isAction: true },
-            ]} />
+            ]} showLogout />
           </div>
         </div>
       </header>
