@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
+import { signOut } from "next-auth/react"
 
 export interface NavLink {
   href: string
@@ -12,9 +13,10 @@ export interface NavLink {
 
 interface MobileMenuProps {
   links: NavLink[]
+  showLogout?: boolean
 }
 
-export function MobileMenu({ links }: MobileMenuProps) {
+export function MobileMenu({ links, showLogout = false }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -43,6 +45,15 @@ export function MobileMenu({ links }: MobileMenuProps) {
               {link.label}
             </Link>
           ))}
+          {showLogout && (
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="text-slate-700 hover:text-[#F97316] transition font-medium py-3 px-2 border-t border-slate-100 text-left"
+            >
+              Sair
+            </button>
+          )}
         </div>
       )}
     </div>
