@@ -258,6 +258,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           )}
           {userIsAdmin && (
             <Link
+              href="/admin/videos"
+              className="bg-white rounded-xl p-6 border shadow-sm hover:border-[#F97316] transition group flex flex-col items-center text-center"
+            >
+              <div className="text-4xl mb-3">🎬</div>
+              <h3 className="font-semibold text-gray-900 group-hover:text-[#F97316]">Videos</h3>
+              <p className="text-sm text-gray-600">Admin: CRUD de videos e destaque do hero da home</p>
+            </Link>
+          )}
+          {userIsAdmin && (
+            <Link
               href="/admin/anuncios"
               className="bg-white rounded-xl p-6 border-2 border-yellow-400 shadow-sm hover:border-yellow-500 transition group flex flex-col items-center text-center"
             >
