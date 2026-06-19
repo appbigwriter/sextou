@@ -118,7 +118,7 @@ export function PackageTabs({
               </div>
             </div>
             <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-[#FF3D57]">
-              Abrir
+              {active === "basico" ? "Abrir" : "Ver detalhes"}
               <span className="transition group-hover:translate-x-1">→</span>
             </div>
           </Link>

@@ -3,6 +3,7 @@ import Link from "next/link"
 import { SextouToolsProCard } from "@/components/sextou-tools-pro/tool-card"
 import { SextouToolsProSuiteHeader } from "@/components/sextou-tools-pro/suite-header"
 import { getSextouToolsProCatalog, groupSextouToolsProCatalogByCategory } from "@/lib/sextou-tools-pro/catalog"
+import { getSextouToolsShowcaseHref } from "@/lib/sextou-tools-pro/showcase"
 import { resolveSextouToolsProUser } from "@/lib/sextou-tools/auth"
 
 export const metadata: Metadata = {
@@ -14,12 +15,10 @@ function CategorySection({
   title,
   description,
   tools,
-  hrefBase,
 }: {
   title: string
   description: string
   tools: ReturnType<typeof getSextouToolsProCatalog>
-  hrefBase: string
 }) {
   return (
     <section className="mb-12">
@@ -32,7 +31,7 @@ function CategorySection({
           <SextouToolsProCard
             key={tool.slug}
             tool={tool}
-            href={`${hrefBase}${tool.slug}`}
+            href={getSextouToolsShowcaseHref(tool.slug)}
           />
         ))}
       </div>
@@ -46,11 +45,6 @@ export default async function SextouToolsProLandingPage() {
   const hasAccess = result.kind === "ok"
   const tools = getSextouToolsProCatalog()
   const liveTools = tools.filter((tool) => tool.status === "live")
-  const hrefBase = hasAccess
-    ? "/sextou-tools-pro/"
-    : isLoggedIn
-      ? "/sextou-tools-pro/acesso?next=/sextou-tools-pro/"
-      : "/login?next=/sextou-tools-pro/"
   const { communication, sales, content } = groupSextouToolsProCatalogByCategory()
 
   return (
@@ -114,19 +108,16 @@ export default async function SextouToolsProLandingPage() {
           title="Comunicacao"
           description="Ferramentas para responder mais rapido, com mais clareza e consistencia comercial."
           tools={communication}
-          hrefBase={hrefBase}
         />
         <CategorySection
           title="Vendas"
           description="Ferramentas para transformar servicos e atendimentos em oferta e proposta mais objetivas."
           tools={sales}
-          hrefBase={hrefBase}
         />
         <CategorySection
           title="Conteudo"
           description="Ferramentas para sair do branco e publicar com mais consistencia ao longo da semana."
           tools={content}
-          hrefBase={hrefBase}
         />
       </main>
     </div>

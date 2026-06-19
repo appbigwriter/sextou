@@ -41,7 +41,7 @@ export function SextouToolsProCard({
       </div>
 
       <div className="mt-auto pt-5 text-sm font-semibold text-[#FCD34D]">
-        Abrir pagina independente
+        Ver o que esse app faz
       </div>
     </Link>
   )

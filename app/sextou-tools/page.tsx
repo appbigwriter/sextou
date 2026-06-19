@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { HistoryList } from "@/components/sextou-tools/history-list"
 import { getToolkitCatalog } from "@/lib/sextou-tools/catalog"
 import { getSextouToolsProOnly, getSextouToolsPremiumOnly } from "@/lib/sextou-tools-pro/catalog"
+import { getSextouToolsShowcaseHref } from "@/lib/sextou-tools-pro/showcase"
 import { resolveToolkitUser } from "@/lib/sextou-tools/auth"
 import { listRecentToolkitExecutions } from "@/lib/sextou-tools/history"
 import { PackageTabs, type CatalogCard } from "./package-tabs"
@@ -24,7 +25,7 @@ const proCards: CatalogCard[] = getSextouToolsProOnly().map((tool) => ({
   title: tool.title,
   description: tool.shortDescription,
   icon: tool.icon,
-  href: `/sextou-tools-pro/${tool.slug}`,
+  href: getSextouToolsShowcaseHref(tool.slug),
 }))
 
 const premiumCards: CatalogCard[] = [
@@ -33,7 +34,7 @@ const premiumCards: CatalogCard[] = [
     title: tool.title,
     description: tool.shortDescription,
     icon: tool.icon,
-    href: `/sextou-tools-pro/${tool.slug}`,
+    href: getSextouToolsShowcaseHref(tool.slug),
   })),
   // Apps Premium com rota dedicada (fora do catálogo de mini-apps)
   {
@@ -41,21 +42,21 @@ const premiumCards: CatalogCard[] = [
     title: "EasySocial - Network Studio",
     description: "Crie campanhas e copys baseadas nos 42 ensinamentos de copy de resposta direta.",
     icon: "ES",
-    href: "/sextou-tools-pro/social-network-studio",
+    href: getSextouToolsShowcaseHref("social-network-studio"),
   },
   {
     slug: "launch-studio-pro",
     title: "Launch Studio PRO",
     description: "Sua fábrica de Fórmulas de Lançamento baseada na Product Launch Formula (PLF).",
     icon: "PLF",
-    href: "/sextou-tools-pro/launch-studio-pro",
+    href: getSextouToolsShowcaseHref("launch-studio-pro"),
   },
   {
     slug: "zapleads",
     title: "ZapLeads CRM & Extrator",
     description: "Extraia contatos de grupos e crie um funil Kanban integrado ao WhatsApp.",
     icon: "ZAP",
-    href: "/sextou-tools-pro/zapleads",
+    href: getSextouToolsShowcaseHref("zapleads"),
   },
 ]
 
