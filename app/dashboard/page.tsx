@@ -1,5 +1,6 @@
 import { auth, isAdmin } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { isDatabaseUnavailableError } from "@/lib/prisma-guards"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { MobileMenu } from "@/components/layout/mobile-menu"
@@ -18,18 +19,38 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     redirect("/login")
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    include: {
-      ads: {
-        orderBy: { createdAt: "desc" },
-        take: 10,
+  let user
+  try {
+    user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        ads: {
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        },
+        _count: {
+          select: { ads: true },
+        },
       },
-      _count: {
-        select: { ads: true },
-      },
-    },
-  })
+    })
+  } catch (error) {
+    if (!isDatabaseUnavailableError(error)) {
+      throw error
+    }
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <main className="container mx-auto px-4 py-16">
+          <div className="mx-auto max-w-2xl rounded-2xl border border-amber-300 bg-amber-50 p-6 text-amber-900">
+            <h1 className="text-xl font-bold">Dashboard temporariamente indisponivel</h1>
+            <p className="mt-2 text-sm">
+              Nao foi possivel carregar seus dados agora. Tente novamente em instantes.
+            </p>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   if (!user) {
     redirect("/login")

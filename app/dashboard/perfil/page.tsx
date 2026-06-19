@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { isDatabaseUnavailableError } from "@/lib/prisma-guards"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -12,18 +13,33 @@ export default async function PerfilPage() {
     redirect("/login")
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    include: {
-      ads: {
-        where: { status: "PUBLISHED" },
-        orderBy: { publishedAt: "desc" },
+  let user
+  try {
+    user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        ads: {
+          where: { status: "PUBLISHED" },
+          orderBy: { publishedAt: "desc" },
+        },
+        _count: {
+          select: { ads: true, payments: true },
+        },
       },
-      _count: {
-        select: { ads: true, payments: true },
-      },
-    },
-  })
+    })
+  } catch (error) {
+    if (!isDatabaseUnavailableError(error)) {
+      throw error
+    }
+
+    return (
+      <main className="container mx-auto px-4 py-16 max-w-4xl">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-6 text-amber-900">
+          O perfil publico nao pode ser carregado agora.
+        </div>
+      </main>
+    )
+  }
 
   if (!user) {
     redirect("/login")

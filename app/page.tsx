@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { isDatabaseUnavailableError } from "@/lib/prisma-guards"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 
 const getYoutubeVideoId = (url: string) => {
@@ -12,15 +13,26 @@ export default async function Home() {
   const session = await auth()
   const isLoggedIn = !!session?.user?.email
 
-  const featuredVideo =
-    (await prisma.video.findFirst({
-      where: { isFeatured: true, isActive: true },
-      orderBy: { createdAt: "desc" },
-    })) ||
-    (await prisma.video.findFirst({
-      where: { isActive: true },
-      orderBy: { createdAt: "desc" },
-    }))
+  let featuredVideo = null
+  let isDatabaseUnavailable = false
+
+  try {
+    featuredVideo =
+      (await prisma.video.findFirst({
+        where: { isFeatured: true, isActive: true },
+        orderBy: { createdAt: "desc" },
+      })) ||
+      (await prisma.video.findFirst({
+        where: { isActive: true },
+        orderBy: { createdAt: "desc" },
+      }))
+  } catch (error) {
+    if (!isDatabaseUnavailableError(error)) {
+      throw error
+    }
+
+    isDatabaseUnavailable = true
+  }
 
   const videoId = featuredVideo?.youtubeUrl
     ? getYoutubeVideoId(featuredVideo.youtubeUrl)
@@ -119,7 +131,9 @@ export default async function Home() {
                     className="relative flex items-center justify-center overflow-hidden rounded-xl bg-slate-800 shadow-inner"
                     style={{ aspectRatio: "16/9" }}
                   >
-                    <p className="text-slate-400">Video nao disponivel</p>
+                    <p className="text-slate-400">
+                      {isDatabaseUnavailable ? "Conteudo temporariamente indisponivel" : "Video nao disponivel"}
+                    </p>
                   </div>
                 )}
 
@@ -240,6 +254,11 @@ export default async function Home() {
 
       <section className="bg-white py-20">
         <div className="container mx-auto px-4">
+          {isDatabaseUnavailable && (
+            <div className="mb-8 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+              Parte do conteudo dinamico esta temporariamente indisponivel. O site segue no ar enquanto a conexao com o banco e estabilizada.
+            </div>
+          )}
           <div className="mb-12 rounded-2xl border border-[#F97316]/20 bg-gradient-to-r from-[#FFF7ED] to-white p-6 shadow-sm">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>

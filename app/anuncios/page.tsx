@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { getActiveCategories } from "@/lib/default-categories"
+import { isDatabaseUnavailableError } from "@/lib/prisma-guards"
 import { SearchFilters } from "@/components/search-filters"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 
@@ -11,84 +12,94 @@ interface Props {
 export const dynamic = "force-dynamic"
 
 export default async function AnunciosPage({ searchParams }: Props) {
-  const categories = await getActiveCategories()
-
-  const where: Record<string, unknown> = { status: "PUBLISHED" }
-
-  if (searchParams.search) {
-    where.OR = [
-      { title: { contains: searchParams.search } },
-      { shortDescription: { contains: searchParams.search } },
-    ]
-  }
-
-  if (searchParams.category) {
-    const category = categories.find((item) => item.slug === searchParams.category)
-    if (category) {
-      where.categoryId = category.id
-    }
-  }
-
-  if (searchParams.city) {
-    where.city = { contains: searchParams.city }
-  }
-
+  let categories: Awaited<ReturnType<typeof getActiveCategories>> = []
   let ads: any[] = []
   let adDistances: Record<string, number> = {}
+  let isDatabaseUnavailable = false
 
-  if (searchParams.lat && searchParams.lng) {
-    const userLat = parseFloat(searchParams.lat)
-    const userLng = parseFloat(searchParams.lng)
+  try {
+    categories = await getActiveCategories()
 
-    const adsWithCoords = await prisma.ad.findMany({
-      where: {
-        ...where,
-        latitude: { not: null },
-        longitude: { not: null },
-      },
-      include: {
-        category: true,
-        images: {
-          orderBy: { order: "asc" },
-          take: 1,
+    const where: Record<string, unknown> = { status: "PUBLISHED" }
+
+    if (searchParams.search) {
+      where.OR = [
+        { title: { contains: searchParams.search } },
+        { shortDescription: { contains: searchParams.search } },
+      ]
+    }
+
+    if (searchParams.category) {
+      const category = categories.find((item) => item.slug === searchParams.category)
+      if (category) {
+        where.categoryId = category.id
+      }
+    }
+
+    if (searchParams.city) {
+      where.city = { contains: searchParams.city }
+    }
+
+    if (searchParams.lat && searchParams.lng) {
+      const userLat = parseFloat(searchParams.lat)
+      const userLng = parseFloat(searchParams.lng)
+
+      const adsWithCoords = await prisma.ad.findMany({
+        where: {
+          ...where,
+          latitude: { not: null },
+          longitude: { not: null },
         },
-      },
-      take: 200,
-    })
-
-    const toRad = (value: number) => (value * Math.PI) / 180
-    const R = 6371 // Raio da Terra em km
-
-    adsWithCoords.forEach((ad) => {
-      const dLat = toRad(ad.latitude! - userLat)
-      const dLon = toRad(ad.longitude! - userLng)
-      const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRad(userLat)) *
-          Math.cos(toRad(ad.latitude!)) *
-          Math.sin(dLon / 2) *
-          Math.sin(dLon / 2)
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-      const distance = R * c
-      adDistances[ad.id] = distance
-    })
-
-    ads = adsWithCoords
-      .sort((a, b) => adDistances[a.id] - adDistances[b.id])
-      .slice(0, 50)
-  } else {
-    ads = await prisma.ad.findMany({
-      where,
-      include: {
-        category: true,
-        images: {
-          orderBy: { order: "asc" },
-          take: 1,
+        include: {
+          category: true,
+          images: {
+            orderBy: { order: "asc" },
+            take: 1,
+          },
         },
-      },
-      orderBy: { publishedAt: "desc" },
-      take: 50,
-    })
+        take: 200,
+      })
+
+      const toRad = (value: number) => (value * Math.PI) / 180
+      const R = 6371
+
+      adsWithCoords.forEach((ad) => {
+        const dLat = toRad(ad.latitude! - userLat)
+        const dLon = toRad(ad.longitude! - userLng)
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(toRad(userLat)) *
+            Math.cos(toRad(ad.latitude!)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2)
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        const distance = R * c
+        adDistances[ad.id] = distance
+      })
+
+      ads = adsWithCoords
+        .sort((a, b) => adDistances[a.id] - adDistances[b.id])
+        .slice(0, 50)
+    } else {
+      ads = await prisma.ad.findMany({
+        where,
+        include: {
+          category: true,
+          images: {
+            orderBy: { order: "asc" },
+            take: 1,
+          },
+        },
+        orderBy: { publishedAt: "desc" },
+        take: 50,
+      })
+    }
+  } catch (error) {
+    if (!isDatabaseUnavailableError(error)) {
+      throw error
+    }
+
+    isDatabaseUnavailable = true
   }
 
   return (
@@ -140,6 +151,11 @@ export default async function AnunciosPage({ searchParams }: Props) {
 
       <section className="border-b bg-white py-6">
         <div className="container mx-auto px-4">
+          {isDatabaseUnavailable && (
+            <div className="mb-4 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+              A vitrine esta temporariamente operando em modo reduzido. Os filtros e anuncios podem nao carregar enquanto os dados sao estabilizados.
+            </div>
+          )}
           <SearchFilters
             categories={categories.map((category) => ({
               id: category.id,

@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { isDatabaseUnavailableError } from "@/lib/prisma-guards"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { MobileMenu } from "@/components/layout/mobile-menu"
@@ -13,14 +14,29 @@ export default async function AfiliadosPage() {
     redirect("/login")
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    include: {
-      affiliates: {
-        orderBy: { createdAt: "desc" },
+  let user
+  try {
+    user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        affiliates: {
+          orderBy: { createdAt: "desc" },
+        },
       },
-    },
-  })
+    })
+  } catch (error) {
+    if (!isDatabaseUnavailableError(error)) {
+      throw error
+    }
+
+    return (
+      <main className="container mx-auto px-4 py-16">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-6 text-amber-900">
+          A area de afiliados esta temporariamente indisponivel.
+        </div>
+      </main>
+    )
+  }
 
   if (!user) {
     redirect("/login")

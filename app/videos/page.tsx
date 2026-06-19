@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { isDatabaseUnavailableError } from "@/lib/prisma-guards"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 
 const getYoutubeVideoId = (url: string) => {
@@ -14,10 +15,21 @@ export default async function VideosPage() {
   const session = await auth()
   const isLoggedIn = !!session?.user?.email
 
-  const videos = await prisma.video.findMany({
-    where: { isActive: true },
-    orderBy: { createdAt: "desc" },
-  })
+  let videos: Awaited<ReturnType<typeof prisma.video.findMany>> = []
+  let isDatabaseUnavailable = false
+
+  try {
+    videos = await prisma.video.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: "desc" },
+    })
+  } catch (error) {
+    if (!isDatabaseUnavailableError(error)) {
+      throw error
+    }
+
+    isDatabaseUnavailable = true
+  }
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -75,6 +87,11 @@ export default async function VideosPage() {
       </section>
 
       <main className="flex-1 container mx-auto px-4 py-12">
+        {isDatabaseUnavailable && (
+          <div className="mb-8 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+            A galeria de videos esta temporariamente indisponivel por falha ao carregar dados.
+          </div>
+        )}
         {videos.length === 0 ? (
           <div className="text-center py-20">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Nenhum vídeo disponível no momento.</h2>
