@@ -100,7 +100,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               { href: "/anuncios", label: "Ver Vitrine" },
               { href: "/dashboard", label: "Meu Dashboard" },
               { href: "/sextou-tools", label: "Sextou Tools" },
-              { href: "/sextou-tools-pro", label: "SextouTools PRO" },
               { href: "/dashboard/afiliados", label: "Meus Afiliados" },
               { href: "/dashboard/dados", label: "Meus Dados" },
               { href: "/Manual_Afiliado_SEXTOU.pdf", label: "📄 Manual do Afiliado" },
@@ -143,25 +142,6 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               className="inline-flex items-center justify-center rounded-xl bg-[#F97316] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#EA580C]"
             >
               Abrir Sextou Tools
-            </Link>
-          </div>
-        </div>
-
-        <div className="mb-8 rounded-2xl border border-[#FF3D57]/20 bg-gradient-to-r from-[#FFF1F3] to-white p-5 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#FF3D57]">Novo</p>
-              <h2 className="mt-1 text-lg font-semibold text-gray-900">SextouTools PRO</h2>
-              <p className="mt-1 text-sm text-gray-600">
-                Nova suite com IA leve para respostas, ofertas, conteudo, propostas e roteiros,
-                com uma pagina propria e independente para cada app.
-              </p>
-            </div>
-            <Link
-              href="/sextou-tools-pro"
-              className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[#FF3D57] to-[#FF8C00] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-95"
-            >
-              Abrir SextouTools PRO
             </Link>
           </div>
         </div>

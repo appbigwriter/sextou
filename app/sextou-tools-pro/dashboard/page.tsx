@@ -23,7 +23,7 @@ export default async function SextouToolsProDashboardPage() {
   }
 
   if (result.kind === "forbidden") {
-    redirect("/sextou-tools-pro/acesso")
+    redirect("/sextou-tools-pro/acesso?next=/sextou-tools-pro/dashboard")
   }
 
   const user =

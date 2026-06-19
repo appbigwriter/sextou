@@ -63,6 +63,16 @@ export default function CriarAnuncioPage() {
   const [savingCity, setSavingCity] = useState(false)
   const [citySaved, setCitySaved] = useState(false)
 
+  const getSafeNextPath = () => {
+    if (typeof window === "undefined") {
+      return ""
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    const raw = params.get("next")
+    return raw && raw.startsWith("/") ? raw : ""
+  }
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -205,7 +215,9 @@ export default function CriarAnuncioPage() {
       }
 
       setFormData(initialFormData)
-      router.push(`/dashboard/anuncios/${data.id}?payment=required`)
+      const nextPath = getSafeNextPath()
+      const nextSuffix = nextPath ? `&next=${encodeURIComponent(nextPath)}` : ""
+      router.push(`/dashboard/anuncios/${data.id}?payment=required${nextSuffix}`)
     } catch (_err) {
       setError("Erro ao criar anuncio")
     } finally {

@@ -30,7 +30,7 @@ export default async function SocialNetworkPage() {
 
   // Se o usuário não tem anúncios ativos ou não é premium, redireciona para a página de vendas central
   if (!user.hasActiveAds || !user.isPremium) {
-    redirect("/sextou-tools-pro/acesso")
+    redirect("/sextou-tools-pro/acesso?next=/sextou-tools-pro/social-network-studio")
   }
 
   // Busca projetos e campanhas do usuário

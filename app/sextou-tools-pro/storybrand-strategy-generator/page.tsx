@@ -19,7 +19,7 @@ export default async function StoryBrandDashboardPage() {
 
   // App Premium: exige anúncio ativo (hasActiveAds) E assinatura premium (isPremium)
   if (access.kind === "forbidden" || access.kind === "db-unavailable") {
-    redirect("/sextou-tools-pro/acesso")
+    redirect("/sextou-tools-pro/acesso?next=/sextou-tools-pro/storybrand-strategy-generator")
   }
 
   const user = access.user

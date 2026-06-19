@@ -1,44 +1,89 @@
-import { redirect } from "next/navigation"
 import { SextouToolsProSuiteHeader } from "@/components/sextou-tools-pro/suite-header"
-import { resolveSextouToolsProUser } from "@/lib/sextou-tools/auth"
+import { resolveToolkitUser } from "@/lib/sextou-tools/auth"
 import { AcessoPremiumClient } from "./acesso-client"
 
 export const metadata = {
-  title: "SextouTools PRO Premium | Página de Vendas",
-  description: "Desbloqueie o acesso a 20 ferramentas de marketing e vendas com inteligência artificial avançada.",
+  title: "Ativar acesso PRO | SextouTools",
+  description: "Publique seu anuncio para liberar os apps PRO e veja como funciona a ativacao do Premium.",
 }
 
-export default async function SextouToolsProAccessPage() {
-  const result = await resolveSextouToolsProUser()
+const PREMIUM_PATH_PREFIXES = [
+  "/sextou-tools-pro/social-network-studio",
+  "/sextou-tools-pro/storybrand-strategy-generator",
+  "/sextou-tools-pro/youtube-growth-studio",
+  "/sextou-tools-pro/zapleads",
+  "/sextou-tools-pro/launch-studio-pro",
+]
 
-  if (result.kind === "unauthorized") {
-    redirect("/login?next=/sextou-tools-pro/acesso")
+function getSafePath(path?: string) {
+  return path && path.startsWith("/") ? path : null
+}
+
+function isPremiumIntent(path: string | null) {
+  return !!path && PREMIUM_PATH_PREFIXES.some((prefix) => path.startsWith(prefix))
+}
+
+export default async function SextouToolsProAccessPage({
+  searchParams,
+}: {
+  searchParams?: {
+    next?: string
+    premium?: string
   }
+}) {
+  const result = await resolveToolkitUser()
+  const requestedPath = getSafePath(searchParams?.next)
+  const premiumIntent = searchParams?.premium === "cancelled" || isPremiumIntent(requestedPath)
 
-  if (result.kind === "db-unavailable") {
-    return (
-      <div className="min-h-screen bg-[#0D0D0D] text-[#F0EDE6] flex items-center justify-center">
-        <p className="text-sm text-[#A09D97]">O banco de dados está temporariamente indisponível. Tente novamente mais tarde.</p>
-      </div>
-    )
-  }
+  const createAdNext = premiumIntent
+    ? `/sextou-tools-pro/acesso${requestedPath ? `?next=${encodeURIComponent(requestedPath)}` : ""}`
+    : null
+  const createAdPath = createAdNext
+    ? `/dashboard/anunciar?next=${encodeURIComponent(createAdNext)}`
+    : "/dashboard/anunciar"
+  const createAdHref =
+    result.kind === "unauthorized"
+      ? `/cadastro?next=${encodeURIComponent(createAdPath)}`
+      : createAdPath
+  const loginHref = `/login?next=${encodeURIComponent(createAdPath)}`
+  const signupHref = `/cadastro?next=${encodeURIComponent(createAdPath)}`
 
-  const user = result.user
-
-  // Formata o usuário para o client component
-  const clientUser = {
-    fullName: user.fullName || "Membro Sextou",
-    businessName: user.businessName || "Conta ativa no portal",
-    hasActiveAds: user.hasActiveAds || false,
-    isPremium: user.isPremium || false,
-  }
+  const user =
+    result.kind === "ok"
+      ? {
+          fullName: result.user.fullName || "Membro Sextou",
+          businessName: result.user.businessName || "Conta ativa no portal",
+          hasActiveAds: result.user.hasActiveAds || false,
+          isPremium: result.user.isPremium || false,
+        }
+      : null
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] text-[#F0EDE6] font-sans">
-      <SextouToolsProSuiteHeader userName={clientUser.fullName} businessName={clientUser.businessName} />
+      <SextouToolsProSuiteHeader
+        userName={user?.fullName}
+        businessName={user?.businessName}
+        showPublicNav
+      />
 
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <AcessoPremiumClient user={clientUser} />
+        {result.kind === "db-unavailable" ? (
+          <div className="mb-6 rounded-[24px] border border-amber-500/20 bg-amber-500/10 px-5 py-4 text-sm text-amber-100">
+            O banco de dados esta temporariamente indisponivel. A pagina de orientacao continua no ar,
+            mas a validacao do seu status de anunciante pode demorar.
+          </div>
+        ) : null}
+
+        <AcessoPremiumClient
+          user={user}
+          createAdHref={createAdHref}
+          loginHref={loginHref}
+          signupHref={signupHref}
+          premiumReturnTo={requestedPath || undefined}
+          requestedPath={requestedPath}
+          premiumIntent={premiumIntent}
+          premiumCancelled={searchParams?.premium === "cancelled"}
+        />
       </main>
     </div>
   )

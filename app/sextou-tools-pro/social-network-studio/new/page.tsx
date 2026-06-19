@@ -25,7 +25,7 @@ export default async function NewSocialNetworkCampaignPage() {
 
   // Acesso estrito a usuários autorizados (ambos hasActiveAds === true e isPremium === true)
   if (result.kind === "forbidden" || !result.user.hasActiveAds || !result.user.isPremium) {
-    redirect("/sextou-tools-pro/acesso")
+    redirect("/sextou-tools-pro/acesso?next=/sextou-tools-pro/social-network-studio/new")
   }
 
   const user = result.user

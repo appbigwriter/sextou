@@ -12,7 +12,12 @@ interface Props {
     submitted?: string
     payment?: string
     session_id?: string
+    next?: string
   }
+}
+
+function getSafePath(path?: string) {
+  return path && path.startsWith("/") ? path : null
 }
 
 export default async function DashboardAdDetailPage({ params, searchParams }: Props) {
@@ -69,6 +74,8 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
       : ad.status === "AWAITING_PAYMENT"
       ? "bg-blue-100 text-blue-700"
       : "bg-gray-100 text-gray-700"
+
+  const nextPath = getSafePath(searchParams?.next)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -149,6 +156,22 @@ export default async function DashboardAdDetailPage({ params, searchParams }: Pr
             <p className="text-sm">
               O anuncio continua salvo, mas voce ainda precisa concluir o pagamento para prosseguir.
             </p>
+          </div>
+        )}
+
+        {nextPath && (
+          <div className="mb-6 rounded-xl border border-[#F97316]/20 bg-[#FFF7ED] p-4 text-[#7C2D12]">
+            <p className="font-semibold">Fluxo de acesso salvo.</p>
+            <p className="text-sm">
+              Depois de concluir a publicacao do anuncio, voce pode voltar para continuar a liberacao
+              dos apps PRO e do pacote Premium.
+            </p>
+            <Link
+              href={nextPath}
+              className="mt-3 inline-flex items-center rounded-lg bg-[#F97316] px-4 py-2 text-sm font-semibold text-white hover:bg-[#EA580C]"
+            >
+              Voltar para a pagina de acesso
+            </Link>
           </div>
         )}
 

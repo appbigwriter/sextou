@@ -30,7 +30,7 @@ export default async function EasySocialResultPage({
 
   // Acesso estrito a usuários autorizados (hasActiveAds === true E isPremium === true)
   if (result.kind === "forbidden" || !result.user.hasActiveAds || !result.user.isPremium) {
-    redirect("/sextou-tools-pro/acesso")
+    redirect(`/sextou-tools-pro/acesso?next=/sextou-tools-pro/social-network-studio/${params.campaignId}/result`)
   }
 
   const user = result.user

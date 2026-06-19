@@ -20,7 +20,7 @@ export default async function ZapLeadsPage() {
   }
 
   if (result.kind === "forbidden") {
-    redirect("/sextou-tools-pro/acesso")
+    redirect("/sextou-tools-pro/acesso?next=/sextou-tools-pro/zapleads")
   }
 
   const user = result.kind === "ok" ? result.user : null

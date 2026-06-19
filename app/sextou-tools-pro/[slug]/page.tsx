@@ -61,7 +61,7 @@ export default async function SextouToolsProToolPage({
   }
 
   if (result.kind === "forbidden") {
-    redirect("/sextou-tools-pro/acesso")
+    redirect(`/sextou-tools-pro/acesso?next=/sextou-tools-pro/${params.slug}`)
   }
 
   const tool = getSextouToolsProTool(params.slug)

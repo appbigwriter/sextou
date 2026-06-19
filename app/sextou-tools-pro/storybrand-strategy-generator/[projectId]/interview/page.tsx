@@ -45,6 +45,7 @@ export default async function StoryBrandInterviewPage({
 }: {
   params: { projectId: string }
 }) {
+  const projectId = params.projectId
   const access = await resolveSextouToolsPremiumUser()
 
   if (access.kind === "unauthorized") {
@@ -52,12 +53,10 @@ export default async function StoryBrandInterviewPage({
   }
 
   if (access.kind === "forbidden" || access.kind === "db-unavailable") {
-    redirect("/sextou-tools-pro/acesso")
+    redirect(`/sextou-tools-pro/acesso?next=/sextou-tools-pro/storybrand-strategy-generator/${projectId}/interview`)
   }
 
   const user = access.user
-
-  const projectId = params.projectId
 
   const project = await prisma.sb7Project.findFirst({
     where: { id: projectId, userId: user.id }
