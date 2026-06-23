@@ -14,13 +14,20 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
 
     const checkStatus = async () => {
       try {
-        const res = await fetch("/api/zapleads/whatsapp/status")
+        // Bate no /qr: ele expõe status + qrCodeUrl assim que o puppeteer emitir o evento "qr"
+        const res = await fetch("/api/zapleads/whatsapp/qr")
         const data = await res.json()
-        
+
         if (data.status === "CONNECTED") {
           setStatus("CONNECTED")
+          setQrCodeUrl(null)
+        } else if (data.status === "AWAITING_QR" && data.qrCodeUrl) {
+          const QRCode = await import("qrcode")
+          const url = await QRCode.default.toDataURL(data.qrCodeUrl)
+          setQrCodeUrl(url)
         } else if (data.status === "DISCONNECTED" && status === "CONNECTED") {
           setStatus("DISCONNECTED")
+          setQrCodeUrl(null)
         }
       } catch (err) {}
     }
@@ -28,7 +35,7 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
     if (status === "AWAITING_QR" || status === "CONNECTED") {
       interval = setInterval(checkStatus, 3000)
     }
-    
+
     return () => clearInterval(interval)
   }, [status])
 
