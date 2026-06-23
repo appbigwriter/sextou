@@ -8,14 +8,14 @@ import { BulkSenderModal } from "./bulk-sender-modal"
 
 // País padrão aplicado a números sem DDI explícito (+). Números com + são respeitados.
 const IMPORT_COUNTRIES: { code: CountryCode; label: string }[] = [
-  { code: "US", label: "🇺🇸 EUA (+1)" },
-  { code: "BR", label: "🇧🇷 Brasil (+55)" },
-  { code: "CA", label: "🇨🇦 Canadá (+1)" },
-  { code: "MX", label: "🇲🇽 México (+52)" },
-  { code: "GB", label: "🇬🇧 Reino Unido (+44)" },
-  { code: "PT", label: "🇵🇹 Portugal (+351)" },
-  { code: "ES", label: "🇪🇸 Espanha (+34)" },
-  { code: "AR", label: "🇦🇷 Argentina (+54)" },
+  { code: "US", label: "🇺🇸 +1" },
+  { code: "BR", label: "🇧🇷 +55" },
+  { code: "CA", label: "🇨🇦 +1" },
+  { code: "MX", label: "🇲🇽 +52" },
+  { code: "GB", label: "🇬🇧 +44" },
+  { code: "PT", label: "🇵🇹 +351" },
+  { code: "ES", label: "🇪🇸 +34" },
+  { code: "AR", label: "🇦🇷 +54" },
 ]
 
 // Aliases de cabeçalho aceitos (case-insensitive, por "inclui")
@@ -275,50 +275,50 @@ export function ZapLeadsKanbanBoard() {
 
   return (
     <div className="mt-12 w-full">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-[#F0EDE6]">CRM Kanban</h2>
           <p className="text-sm text-[#A09D97]">Gerencie seus leads extraídos movendo os cartões</p>
         </div>
-        <div className="flex gap-2">
-          <button 
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto">
+          <button
             onClick={() => setIsBulkSenderOpen(true)}
-            className="rounded-xl bg-[#9d4edd] px-4 py-2 text-sm text-white font-bold hover:bg-[#9d4edd]/90 transition shadow-lg shadow-[#9d4edd]/20 flex items-center gap-2"
+            className="flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[#9d4edd] px-4 py-2 text-sm font-bold text-white shadow-lg shadow-[#9d4edd]/20 transition hover:bg-[#9d4edd]/90 sm:flex-none"
           >
             🚀 Disparo em Massa
           </button>
-          <div className="flex items-center gap-1 rounded-xl border border-[#25D366]/30 bg-black/40 pl-2">
+          <div className="flex flex-1 items-center rounded-xl border border-[#25D366]/30 bg-black/40 sm:flex-none">
             <select
               value={importCountry}
               onChange={(e) => setImportCountry(e.target.value as CountryCode)}
               title="País padrão para números sem +DDI"
-              className="bg-transparent py-2 text-sm text-[#A09D97] outline-none cursor-pointer"
+              className="cursor-pointer rounded-l-xl border-r border-white/10 bg-transparent py-2 pl-2 pr-1 text-sm text-[#A09D97] outline-none"
             >
               {IMPORT_COUNTRIES.map((c) => (
                 <option key={c.code} value={c.code} className="bg-[#171717]">{c.label}</option>
               ))}
             </select>
-            <label className="cursor-pointer rounded-xl px-3 py-2 text-sm text-[#25D366] font-semibold hover:bg-white/5 transition flex items-center gap-2">
-              📥 Importar CSV
+            <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-r-xl px-3 py-2 text-sm font-semibold text-[#25D366] transition hover:bg-white/5">
+              📥 Importar
               <input type="file" accept=".csv" className="hidden" onChange={handleImportCSV} />
             </label>
           </div>
-          <button 
-            onClick={handleClearAll} 
-            className="rounded-xl border border-[#FF3D57]/30 bg-[#FF3D57]/10 px-4 py-2 text-sm text-[#FF3D57] font-semibold hover:bg-[#FF3D57]/20 transition flex items-center gap-2"
+          <button
+            onClick={handleClearAll}
+            className="flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#FF3D57]/30 bg-[#FF3D57]/10 px-4 py-2 text-sm font-semibold text-[#FF3D57] transition hover:bg-[#FF3D57]/20 sm:flex-none"
           >
             🗑️ Limpar CRM
           </button>
-          <button 
-            onClick={handleExportCSV} 
-            className="rounded-xl border border-[#25D366]/30 bg-[#25D366]/10 px-4 py-2 text-sm text-[#25D366] font-semibold hover:bg-[#25D366]/20 transition flex items-center gap-2"
+          <button
+            onClick={handleExportCSV}
+            className="flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-[#25D366]/30 bg-[#25D366]/10 px-4 py-2 text-sm font-semibold text-[#25D366] transition hover:bg-[#25D366]/20 sm:flex-none"
           >
             📊 Exportar CSV
           </button>
-          <button 
-            onClick={fetchLeads} 
+          <button
+            onClick={fetchLeads}
             disabled={isLoading}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-[#F0EDE6] hover:bg-white/10 transition"
+            className="flex flex-1 items-center justify-center whitespace-nowrap rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-[#F0EDE6] transition hover:bg-white/10 sm:flex-none"
           >
             {isLoading ? "Carregando..." : "Atualizar"}
           </button>
