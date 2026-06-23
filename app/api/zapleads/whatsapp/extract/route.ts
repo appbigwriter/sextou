@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { whatsappEngine } from "@/lib/whatsapp"
+import { getEngine } from "@/lib/whatsapp"
 import { prisma } from "@/lib/prisma"
 import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 

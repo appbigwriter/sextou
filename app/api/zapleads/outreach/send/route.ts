@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { whatsappEngine } from "@/lib/whatsapp"
+import { getEngine } from "@/lib/whatsapp"
 import { prisma } from "@/lib/prisma"
 import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 
@@ -19,11 +19,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Parâmetros insuficientes" }, { status: 400 })
     }
 
-    if (whatsappEngine.status !== "CONNECTED") {
+    const engine = getEngine(result.user.id)
+    if (engine.status !== "CONNECTED") {
       return NextResponse.json({ error: "WhatsApp não está conectado para envio" }, { status: 400 })
     }
 
-    const client = whatsappEngine.getClient()
+    const client = engine.getClient()
     if (!client) {
       return NextResponse.json({ error: "Cliente WhatsApp não encontrado" }, { status: 500 })
     }

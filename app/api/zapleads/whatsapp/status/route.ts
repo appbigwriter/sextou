@@ -1,14 +1,22 @@
 import { NextResponse } from "next/server"
-import { whatsappEngine } from "@/lib/whatsapp"
+import { peekEngine } from "@/lib/whatsapp"
+import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 
 export const dynamic = "force-dynamic"
 
 export async function GET() {
-  const client = whatsappEngine.getClient()
+  const result = await resolveSextouToolsPremiumUser()
+
+  if (result.kind !== "ok") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  const engine = peekEngine(result.user.id)
+  const client = engine?.getClient()
   const connectedPhone = client?.info?.wid?.user || null
 
   return NextResponse.json({
-    status: whatsappEngine.status,
-    connectedPhone
+    status: engine?.status || "DISCONNECTED",
+    connectedPhone,
   })
 }
