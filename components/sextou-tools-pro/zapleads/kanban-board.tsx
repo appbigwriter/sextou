@@ -2,8 +2,25 @@
 
 import { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
+import { parsePhoneNumberFromString, type CountryCode } from "libphonenumber-js"
 import { ZapLeadDrawer } from "./lead-drawer"
 import { BulkSenderModal } from "./bulk-sender-modal"
+
+// País padrão aplicado a números sem DDI explícito (+). Números com + são respeitados.
+const IMPORT_COUNTRIES: { code: CountryCode; label: string }[] = [
+  { code: "US", label: "🇺🇸 EUA (+1)" },
+  { code: "BR", label: "🇧🇷 Brasil (+55)" },
+  { code: "CA", label: "🇨🇦 Canadá (+1)" },
+  { code: "MX", label: "🇲🇽 México (+52)" },
+  { code: "GB", label: "🇬🇧 Reino Unido (+44)" },
+  { code: "PT", label: "🇵🇹 Portugal (+351)" },
+  { code: "ES", label: "🇪🇸 Espanha (+34)" },
+  { code: "AR", label: "🇦🇷 Argentina (+54)" },
+]
+
+// Aliases de cabeçalho aceitos (case-insensitive, por "inclui")
+const NAME_ALIASES = ["nome completo", "first name", "nome", "name"]
+const PHONE_ALIASES = ["whatsapp", "telefone", "celular", "mobile", "phone"]
 
 type Contact = {
   id: string
@@ -40,6 +57,7 @@ export function ZapLeadsKanbanBoard() {
   
   // Need this to prevent hydration errors with drag and drop
   const [isMounted, setIsMounted] = useState(false)
+  const [importCountry, setImportCountry] = useState<CountryCode>("US")
 
   useEffect(() => {
     setIsMounted(true)
@@ -163,51 +181,70 @@ export function ZapLeadsKanbanBoard() {
       const text = event.target?.result as string
       if (!text) return
 
-      // Parsing de CSV mais resiliente
-      const lines = text.split("\\n")
+      // Divide em linhas (aceita \n e \r\n)
+      const lines = text.split(/\r?\n/)
       const parsedContacts: { name: string, phone: string }[] = []
-      
+      let invalidCount = 0
+
+      // Splitter de coluna que respeita vírgulas entre aspas
+      const splitCols = (line: string): string[] => {
+        const out: string[] = []
+        let cur = ""
+        let inQuotes = false
+        for (const ch of line) {
+          if (ch === '"') { inQuotes = !inQuotes; continue }
+          if (ch === "," && !inQuotes) { out.push(cur); cur = ""; continue }
+          cur += ch
+        }
+        out.push(cur)
+        return out.map(c => c.trim())
+      }
+
+      const findAlias = (cols: string[], aliases: string[]): number =>
+        cols.findIndex(c => aliases.some(a => c.includes(a)))
+
       let nameIdx = 0
       let phoneIdx = 1
 
+      // Detecta cabeçalho: 1ª linha contém algum alias de telefone
+      const firstCols = splitCols(lines[0] || "").map(c => c.toLowerCase())
+      const hasHeader = PHONE_ALIASES.some(a => firstCols.some(c => c.includes(a)))
+      if (hasHeader) {
+        const nI = findAlias(firstCols, NAME_ALIASES)
+        const pI = findAlias(firstCols, PHONE_ALIASES)
+        if (nI !== -1) nameIdx = nI
+        if (pI !== -1) phoneIdx = pI
+      }
+
       lines.forEach((line, index) => {
         if (!line.trim()) return
+        if (hasHeader && index === 0) return
 
-        // Lidando com vírgulas dentro de aspas usando RegEx básico
-        const cols = line.match(/(".*?"|[^",\\s]+)(?=\\s*,|\\s*$)/g) || line.split(",")
-        const cleanCols = cols.map(c => c.replace(/^"|"$/g, "").trim())
+        const cols = splitCols(line)
+        if (cols.length <= Math.max(nameIdx, phoneIdx)) return
 
-        // Verifica o Cabeçalho
-        if (index === 0 && line.toLowerCase().includes("telefone")) {
-          const lowerCols = cleanCols.map(c => c.toLowerCase())
-          const nI = lowerCols.findIndex(c => c.includes("nome"))
-          const pI = lowerCols.findIndex(c => c.includes("telefone") || c.includes("phone") || c.includes("celular"))
-          
-          if (nI !== -1) nameIdx = nI
-          if (pI !== -1) phoneIdx = pI
+        const name = cols[nameIdx] || ""
+        const rawPhone = cols[phoneIdx]
+        if (!rawPhone) return
+
+        // libphonenumber: respeita +DDI; senão assume o país padrão do lote
+        const parsed = parsePhoneNumberFromString(rawPhone, importCountry)
+        if (!parsed || !parsed.isValid()) {
+          invalidCount++
           return
         }
-        
-        if (cleanCols.length > Math.max(nameIdx, phoneIdx)) {
-          let name = cleanCols[nameIdx]
-          let phone = cleanCols[phoneIdx]
-          
-          if (!phone) return
 
-          // Força DDI BR +55 se o número não tiver
-          let cleanPhone = phone.replace(/\\D/g, "")
-          if (cleanPhone.length >= 10 && cleanPhone.length <= 11) {
-            cleanPhone = "55" + cleanPhone
-          }
-          if (!cleanPhone.startsWith("+")) cleanPhone = "+" + cleanPhone
-
-          parsedContacts.push({ name, phone: cleanPhone })
-        }
+        parsedContacts.push({ name, phone: parsed.number }) // E.164, ex: +12125551234
       })
 
       if (parsedContacts.length === 0) {
-        alert("Não foi possível encontrar dados válidos no CSV. Use o formato: Nome,Telefone")
+        alert("Nenhum número válido encontrado no CSV. Verifique o separador (vírgula) e os telefones.")
         return
+      }
+
+      if (invalidCount > 0) {
+        const ok = confirm(`${parsedContacts.length} números válidos. ${invalidCount} inválidos serão ignorados.\n\nContinuar a importação?`)
+        if (!ok) { if (e.target) e.target.value = ''; return }
       }
 
       setIsLoading(true)
@@ -250,10 +287,22 @@ export function ZapLeadsKanbanBoard() {
           >
             🚀 Disparo em Massa
           </button>
-          <label className="cursor-pointer rounded-xl border border-[#25D366]/30 bg-black/40 px-4 py-2 text-sm text-[#25D366] font-semibold hover:bg-white/5 transition flex items-center gap-2">
-            📥 Importar CSV
-            <input type="file" accept=".csv" className="hidden" onChange={handleImportCSV} />
-          </label>
+          <div className="flex items-center gap-1 rounded-xl border border-[#25D366]/30 bg-black/40 pl-2">
+            <select
+              value={importCountry}
+              onChange={(e) => setImportCountry(e.target.value as CountryCode)}
+              title="País padrão para números sem +DDI"
+              className="bg-transparent py-2 text-sm text-[#A09D97] outline-none cursor-pointer"
+            >
+              {IMPORT_COUNTRIES.map((c) => (
+                <option key={c.code} value={c.code} className="bg-[#171717]">{c.label}</option>
+              ))}
+            </select>
+            <label className="cursor-pointer rounded-xl px-3 py-2 text-sm text-[#25D366] font-semibold hover:bg-white/5 transition flex items-center gap-2">
+              📥 Importar CSV
+              <input type="file" accept=".csv" className="hidden" onChange={handleImportCSV} />
+            </label>
+          </div>
           <button 
             onClick={handleClearAll} 
             className="rounded-xl border border-[#FF3D57]/30 bg-[#FF3D57]/10 px-4 py-2 text-sm text-[#FF3D57] font-semibold hover:bg-[#FF3D57]/20 transition flex items-center gap-2"
