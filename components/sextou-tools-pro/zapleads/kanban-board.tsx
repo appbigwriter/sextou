@@ -58,6 +58,7 @@ export function ZapLeadsKanbanBoard() {
   // Need this to prevent hydration errors with drag and drop
   const [isMounted, setIsMounted] = useState(false)
   const [importCountry, setImportCountry] = useState<CountryCode>("US")
+  const [mobilePhase, setMobilePhase] = useState<string>(COLUMNS[0].id)
 
   useEffect(() => {
     setIsMounted(true)
@@ -78,42 +79,37 @@ export function ZapLeadsKanbanBoard() {
     }
   }
 
-  const handleDragEnd = async (result: any) => {
-    if (!result.destination) return
-
-    const { source, destination, draggableId } = result
-
-    if (source.droppableId === destination.droppableId && source.index === destination.index) {
-      return
-    }
-
-    // Optimistic UI update
-    const movedLead = leads.find(l => l.id === draggableId)
+  // Muda o status de um lead (usado por drag-and-drop no desktop e pelo seletor no mobile).
+  const changeLeadStatus = async (leadId: string, toStatus: string) => {
+    const movedLead = leads.find(l => l.id === leadId)
     if (!movedLead) return
 
     const prevStatus = movedLead.status
-    const newStatus = destination.droppableId
+    if (prevStatus === toStatus) return
 
-    setLeads(prev => prev.map(l => l.id === draggableId ? { ...l, status: newStatus } : l))
+    // Optimistic UI update
+    setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status: toStatus } : l))
 
     // Backend sync
     try {
       const res = await fetch("/api/zapleads/leads/status", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          leadId: draggableId,
-          fromStatus: prevStatus,
-          toStatus: newStatus
-        })
+        body: JSON.stringify({ leadId, fromStatus: prevStatus, toStatus })
       })
       if (!res.ok) {
-        // Revert on error
-        setLeads(prev => prev.map(l => l.id === draggableId ? { ...l, status: prevStatus } : l))
+        setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status: prevStatus } : l))
       }
     } catch (e) {
-      setLeads(prev => prev.map(l => l.id === draggableId ? { ...l, status: prevStatus } : l))
+      setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status: prevStatus } : l))
     }
+  }
+
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return
+    const { source, destination, draggableId } = result
+    if (source.droppableId === destination.droppableId && source.index === destination.index) return
+    changeLeadStatus(draggableId, destination.droppableId)
   }
 
   const getLeadsByStatus = (status: string) => leads.filter(l => l.status === status)
@@ -137,7 +133,7 @@ export function ZapLeadsKanbanBoard() {
     const csvContent = [
       headers.join(","),
       ...rows.map(r => r.join(","))
-    ].join("\\n")
+    ].join("\n")
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
     const url = URL.createObjectURL(blob)
@@ -325,7 +321,71 @@ export function ZapLeadsKanbanBoard() {
         </div>
       </div>
 
-      <div className="flex w-full gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10">
+      {/* ── Mobile: pills roláveis + lista da fase ativa ── */}
+      <div className="sm:hidden">
+        <div className="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-thin scrollbar-thumb-white/10">
+          {COLUMNS.map(col => {
+            const count = getLeadsByStatus(col.id).length
+            const active = mobilePhase === col.id
+            return (
+              <button
+                key={col.id}
+                onClick={() => setMobilePhase(col.id)}
+                className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-sm transition ${active ? "border-[#FF3D57] bg-[#FF3D57]/15 font-semibold text-[#F0EDE6]" : "border-white/10 bg-white/5 text-[#A09D97]"}`}
+              >
+                {col.title}
+                <span className={`flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[10px] font-bold ${active ? "bg-[#FF3D57] text-white" : "bg-white/10 text-[#A09D97]"}`}>
+                  {count}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="space-y-3">
+          {getLeadsByStatus(mobilePhase).length === 0 ? (
+            <p className="rounded-xl border border-white/5 bg-[#0D0D0D] p-6 text-center text-sm text-[#A09D97]">
+              Nenhum lead nesta fase.
+            </p>
+          ) : (
+            getLeadsByStatus(mobilePhase).map(lead => (
+              <div key={lead.id} className="rounded-xl border border-white/10 bg-[#171717] p-4 shadow-lg">
+                <div onClick={() => setSelectedLead(lead)} className="cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <p className="truncate text-sm font-semibold text-[#F0EDE6]">
+                      {lead.contact.displayName || lead.contact.phoneE164}
+                    </p>
+                    {lead.heatScore > 0 && (
+                      <span className="ml-2 flex shrink-0 items-center text-xs font-bold text-[#FF3D57]">
+                        🔥 {lead.heatScore}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1 text-xs text-[#A09D97]">
+                    {lead.contact.displayName ? lead.contact.phoneE164 : "Sem nome"}
+                  </p>
+                </div>
+                <div className="mt-3 flex items-center gap-2">
+                  <span className="text-[10px] uppercase tracking-wide text-[#5A5755]">Mover para</span>
+                  <select
+                    value={lead.status}
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => changeLeadStatus(lead.id, e.target.value)}
+                    className="flex-1 rounded-lg border border-white/10 bg-black/40 px-2 py-1.5 text-sm text-[#F0EDE6] outline-none"
+                  >
+                    {COLUMNS.map(c => (
+                      <option key={c.id} value={c.id} className="bg-[#171717]">{c.title}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* ── Desktop: kanban com drag-and-drop ── */}
+      <div className="hidden w-full gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10 sm:flex">
         <DragDropContext onDragEnd={handleDragEnd}>
           {COLUMNS.map(col => {
             const colLeads = getLeadsByStatus(col.id)
