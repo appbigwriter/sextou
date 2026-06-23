@@ -51,7 +51,11 @@ const createWhatsAppEngine = (): WhatsAppEngine => {
         authStrategy: new LocalAuth({ clientId: "zapleads-local" }),
         puppeteer: {
           headless: true,
-          executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          // Em produção (Linux/Docker) usa o Chromium do sistema via env.
+          // Em dev local (Windows) cai no fallback do Chrome instalado.
+          executablePath:
+            process.env.PUPPETEER_EXECUTABLE_PATH ||
+            "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
           args: ["--no-sandbox", "--disable-setuid-sandbox"],
         },
       })
