@@ -14,11 +14,12 @@ export async function POST(req: Request) {
 
   const { groupId, connectionId, purpose } = await req.json()
 
-  if (whatsappEngine.status !== "CONNECTED") {
+  const engine = getEngine(result.user.id)
+  if (engine.status !== "CONNECTED") {
     return NextResponse.json({ error: "WhatsApp disconnected" }, { status: 400 })
   }
 
-  const client = whatsappEngine.getClient()
+  const client = engine.getClient()
   if (!client) {
     return NextResponse.json({ error: "Client not found" }, { status: 500 })
   }

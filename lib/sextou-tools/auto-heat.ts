@@ -7,23 +7,24 @@ const openai = new OpenAI({
 
 const OPT_OUT_KEYWORDS = ["sair", "pare", "parar", "não quero", "nao quero", "descadastrar", "stop"]
 
-export async function handleInboundMessage(fromNumber: string, messageBody: string) {
+export async function handleInboundMessage(userId: string, fromNumber: string, messageBody: string) {
   try {
     // 1. Limpar número que vem como 551199999999@c.us
     const cleanPhone = fromNumber.split("@")[0]
     const phoneE164 = "+" + cleanPhone
 
-    // 2. Localizar o Contato
+    // 2. Localizar o Contato DO DONO DA SESSÃO (isolamento por usuário)
     const contact = await prisma.contact.findFirst({
-      where: { phoneE164 }
+      where: { phoneE164, userId }
     })
 
-    if (!contact) return // Não é um contato extraído conhecido
+    if (!contact) return // Não é um contato extraído conhecido deste usuário
 
-    // 3. Localizar o ZapLead (apenas frio ou contatado)
+    // 3. Localizar o ZapLead (apenas frio ou contatado), escopado ao usuário
     const zapLead = await prisma.zapLead.findFirst({
       where: {
         contactId: contact.id,
+        userId,
         status: {
           in: ["frio", "contatado"]
         }

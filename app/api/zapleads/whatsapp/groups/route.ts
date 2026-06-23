@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { whatsappEngine } from "@/lib/whatsapp"
+import { getEngine } from "@/lib/whatsapp"
 import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 
 export const dynamic = "force-dynamic"
@@ -11,11 +11,12 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  if (whatsappEngine.status !== "CONNECTED") {
+  const engine = getEngine(result.user.id)
+  if (engine.status !== "CONNECTED") {
     return NextResponse.json({ error: "WhatsApp disconnected" }, { status: 400 })
   }
 
-  const client = whatsappEngine.getClient()
+  const client = engine.getClient()
   if (!client) {
     return NextResponse.json({ error: "Client not found" }, { status: 500 })
   }
