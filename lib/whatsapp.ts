@@ -1,6 +1,29 @@
 import { Client, LocalAuth } from "whatsapp-web.js"
+import fs from "fs"
+import path from "path"
 
 export type WhatsAppStatus = "DISCONNECTED" | "AWAITING_QR" | "CONNECTED" | "INITIALIZING"
+
+// Diretório base das sessões (perfis do Chromium). No container = /app/.wwebjs_auth (volume).
+const AUTH_DIR = path.join(process.cwd(), ".wwebjs_auth")
+
+/**
+ * Remove travas órfãs do perfil do Chromium (SingletonLock/Socket/Cookie).
+ * Necessário porque o volume persistente preserva a trava de um container
+ * derrubado com Chromium ativo — o novo container a vê como "de outra máquina"
+ * e o launch falha com "profile appears to be in use" (Code: 21).
+ * Seguro: após restart, o processo Chromium antigo já não existe.
+ */
+const clearStaleLock = (userId: string) => {
+  const sessionDir = path.join(AUTH_DIR, `session-zapleads-${userId}`)
+  for (const f of ["SingletonLock", "SingletonSocket", "SingletonCookie"]) {
+    try {
+      fs.rmSync(path.join(sessionDir, f), { force: true })
+    } catch (err) {
+      console.error(`[zapleads] Falha ao limpar ${f} de ${userId}:`, err)
+    }
+  }
+}
 
 // ── Limites (configuráveis por env) ─────────────────────────────────────────
 // Cada sessão conectada = 1 processo Chromium (~300-700MB). Limite protege o VPS.
@@ -82,10 +105,13 @@ const createEngine = (userId: string): WhatsAppEngine => {
       const execPath = resolveExecutablePath()
       console.log(`[zapleads] init ${userId} | execPath=${execPath} | NODE_ENV=${process.env.NODE_ENV}`)
 
+      // Remove travas órfãs antes do launch (perfil preservado no volume).
+      clearStaleLock(userId)
+
       try {
         this.client = new Client({
           // clientId + dataPath POR USUÁRIO: isola a sessão de cada conta.
-          authStrategy: new LocalAuth({ clientId: `zapleads-${userId}` }),
+          authStrategy: new LocalAuth({ clientId: `zapleads-${userId}`, dataPath: AUTH_DIR }),
           puppeteer: {
             headless: true,
             executablePath: execPath,
