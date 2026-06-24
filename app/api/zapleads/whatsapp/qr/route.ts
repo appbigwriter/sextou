@@ -22,6 +22,7 @@ export async function GET() {
     return NextResponse.json({
       status: engine.status,
       qrCodeUrl: engine.qrCodeUrl,
+      lastError: engine.lastError,
     })
   } catch (err) {
     if (err instanceof SessionLimitError) {

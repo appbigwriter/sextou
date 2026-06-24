@@ -23,6 +23,7 @@ interface WhatsAppEngine {
   status: WhatsAppStatus
   qrCodeUrl: string | null
   lastActivityAt: number
+  lastError: string | null
   initialize: () => void
   getClient: () => Client | null
   disconnect: () => Promise<void>
@@ -50,6 +51,7 @@ const createEngine = (userId: string): WhatsAppEngine => {
     status: "DISCONNECTED",
     qrCodeUrl: null,
     lastActivityAt: Date.now(),
+    lastError: null,
 
     getClient() {
       return this.client
@@ -75,27 +77,42 @@ const createEngine = (userId: string): WhatsAppEngine => {
 
       this.status = "INITIALIZING"
       this.qrCodeUrl = null
+      this.lastError = null
 
-      this.client = new Client({
-        // clientId + dataPath POR USUÁRIO: isola a sessão de cada conta.
-        authStrategy: new LocalAuth({ clientId: `zapleads-${userId}` }),
-        puppeteer: {
-          headless: true,
-          executablePath: resolveExecutablePath(),
-          args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        },
-      })
+      const execPath = resolveExecutablePath()
+      console.log(`[zapleads] init ${userId} | execPath=${execPath} | NODE_ENV=${process.env.NODE_ENV}`)
+
+      try {
+        this.client = new Client({
+          // clientId + dataPath POR USUÁRIO: isola a sessão de cada conta.
+          authStrategy: new LocalAuth({ clientId: `zapleads-${userId}` }),
+          puppeteer: {
+            headless: true,
+            executablePath: execPath,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+          },
+        })
+      } catch (err: any) {
+        // Erro síncrono (ex.: clientId inválido no LocalAuth)
+        this.lastError = `Construção do Client falhou: ${err?.message || String(err)}`
+        console.error(`[zapleads] ${this.lastError}`)
+        this.status = "DISCONNECTED"
+        this.client = null
+        return
+      }
 
       this.client.on("qr", (qr) => {
         console.log(`[zapleads] QR recebido para ${userId}`)
         this.qrCodeUrl = qr
         this.status = "AWAITING_QR"
+        this.lastError = null
       })
 
       this.client.on("ready", () => {
         console.log(`[zapleads] Cliente pronto para ${userId}`)
         this.status = "CONNECTED"
         this.qrCodeUrl = null
+        this.lastError = null
       })
 
       this.client.on("disconnected", (reason) => {
@@ -103,6 +120,7 @@ const createEngine = (userId: string): WhatsAppEngine => {
         this.status = "DISCONNECTED"
         this.qrCodeUrl = null
         this.client = null
+        this.lastError = `disconnected: ${reason}`
       })
 
       this.client.on("auth_failure", (msg) => {
@@ -110,6 +128,7 @@ const createEngine = (userId: string): WhatsAppEngine => {
         this.status = "DISCONNECTED"
         this.qrCodeUrl = null
         this.client = null
+        this.lastError = `auth_failure: ${msg}`
       })
 
       // Listener de inbound (Auto-Heat) — escopado ao DONO da sessão.
@@ -124,9 +143,11 @@ const createEngine = (userId: string): WhatsAppEngine => {
         }
       })
 
-      this.client.initialize().catch((err) => {
-        console.error(`[zapleads] Falha ao inicializar cliente (${userId}):`, err)
+      this.client.initialize().catch((err: any) => {
+        this.lastError = `initialize falhou: ${err?.message || String(err)}`
+        console.error(`[zapleads] ${this.lastError}`)
         this.status = "DISCONNECTED"
+        this.client = null
       })
     },
   }
@@ -166,6 +187,32 @@ if (!globalForWhatsApp.whatsappSweeper) {
  * Aplica limite de sessões simultâneas com despejo da mais ociosa (respeitando grace).
  * @throws {SessionLimitError} quando no limite e não há sessão ociosa a despejar.
  */
+/**
+ * Snapshot de diagnóstico — diz exatamente o estado do subsistema p/ este usuário.
+ * NÃO cria engine. fs check (chromium existe) fica na rota.
+ */
+export function getDiagnostics(userId: string) {
+  const engine = registry.get(userId)
+  return {
+    nodeEnv: process.env.NODE_ENV || null,
+    puppeteerEnvPath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
+    resolvedExecutablePath: resolveExecutablePath(),
+    maxSessions: MAX_SESSIONS,
+    idleTimeoutMin: IDLE_TIMEOUT_MS / 60000,
+    registrySize: registry.size,
+    atLimit: registry.size >= MAX_SESSIONS,
+    user: engine
+      ? {
+          status: engine.status,
+          hasQr: !!engine.qrCodeUrl,
+          lastError: engine.lastError,
+          idleSeconds: Math.round((Date.now() - engine.lastActivityAt) / 1000),
+          hasClient: !!engine.client,
+        }
+      : null,
+  }
+}
+
 /**
  * Lê a engine do usuário SEM criar uma nova (não conta no limite).
  * Usado para checar status sem disparar inicialização de Chromium.

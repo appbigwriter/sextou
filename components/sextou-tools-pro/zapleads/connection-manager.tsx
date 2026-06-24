@@ -8,6 +8,7 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
   const [connecting, setConnecting] = useState(false)
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null)
   const [status, setStatus] = useState(initialStatus || "disconnected")
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -18,13 +19,22 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
         const res = await fetch("/api/zapleads/whatsapp/qr")
         const data = await res.json()
 
+        if (!res.ok) {
+          setErrorMsg(data.error || `Falha (${res.status}) ao consultar conexão.`)
+          return
+        }
+
+        if (data.lastError) setErrorMsg(data.lastError)
+
         if (data.status === "CONNECTED") {
           setStatus("CONNECTED")
           setQrCodeUrl(null)
+          setErrorMsg(null)
         } else if (data.status === "AWAITING_QR" && data.qrCodeUrl) {
           const QRCode = await import("qrcode")
           const url = await QRCode.default.toDataURL(data.qrCodeUrl)
           setQrCodeUrl(url)
+          setErrorMsg(null)
         } else if (data.status === "DISCONNECTED" && status === "CONNECTED") {
           setStatus("DISCONNECTED")
           setQrCodeUrl(null)
@@ -41,10 +51,17 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
 
   const handleConnect = async () => {
     setConnecting(true)
+    setErrorMsg(null)
     try {
       const res = await fetch("/api/zapleads/whatsapp/qr")
       const data = await res.json()
-      
+
+      if (!res.ok) {
+        setErrorMsg(data.error || `Falha (${res.status}) ao iniciar conexão.`)
+        return
+      }
+      if (data.lastError) setErrorMsg(data.lastError)
+
       if (data.status === "AWAITING_QR" && data.qrCodeUrl) {
         import("qrcode").then((QRCode) => {
           QRCode.default.toDataURL(data.qrCodeUrl)
@@ -72,7 +89,20 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
       <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-[#5A5755]">
         Conexao WhatsApp
       </p>
-      
+
+      {errorMsg && (
+        <div className="mt-4 rounded-xl border border-[#FF3D57]/30 bg-[#FF3D57]/10 p-3">
+          <p className="text-sm font-semibold text-[#FF3D57]">Falha na conexão</p>
+          <p className="mt-1 break-words text-xs text-[#FF3D57]/80">{errorMsg}</p>
+          <p className="mt-2 text-[11px] text-[#A09D97]">
+            Diagnóstico completo:{" "}
+            <a href="/api/zapleads/whatsapp/diag" target="_blank" rel="noreferrer" className="underline">
+              /api/zapleads/whatsapp/diag
+            </a>
+          </p>
+        </div>
+      )}
+
       {status === "CONNECTED" ? (
         <div className="mt-6 flex items-center gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366]/20">
