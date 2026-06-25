@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getEngine } from "@/lib/whatsapp"
+import { getConnectionState, sendText, instanceNameFor } from "@/lib/evolution"
 import { prisma } from "@/lib/prisma"
 import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 
@@ -19,22 +19,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Parâmetros insuficientes" }, { status: 400 })
     }
 
-    const engine = getEngine(result.user.id)
-    if (engine.status !== "CONNECTED") {
+    const instance = instanceNameFor(result.user.id)
+    const state = await getConnectionState(instance)
+    if (state.status !== "CONNECTED") {
       return NextResponse.json({ error: "WhatsApp não está conectado para envio" }, { status: 400 })
     }
 
-    const client = engine.getClient()
-    if (!client) {
-      return NextResponse.json({ error: "Cliente WhatsApp não encontrado" }, { status: 500 })
-    }
-
-    // Limpa o número e garante DDI
+    // Evolution espera só dígitos (DDI+DDD+número), sem `+` nem sufixo.
     const cleanPhone = phoneE164.replace(/\D/g, "")
-    const chatId = `${cleanPhone}@c.us`
-
-    // Tenta enviar
-    await client.sendMessage(chatId, message)
+    await sendText(instance, cleanPhone, message)
 
     // Loga a mensagem enviada
     const zapMessage = await prisma.zapMessage.create({
@@ -45,8 +38,8 @@ export async function POST(req: Request) {
         channel: "whatsapp",
         body: message,
         aiGenerated: true,
-        status: "sent"
-      }
+        status: "sent",
+      },
     })
 
     // Atualiza o Status do Lead para "Contatado" se for o primeiro envio
@@ -54,7 +47,7 @@ export async function POST(req: Request) {
     if (lead && lead.status === "frio") {
       await prisma.zapLead.update({
         where: { id: leadId },
-        data: { status: "contatado", lastInteractionAt: new Date() }
+        data: { status: "contatado", lastInteractionAt: new Date() },
       })
 
       await prisma.leadStatusHistory.create({
@@ -62,13 +55,13 @@ export async function POST(req: Request) {
           leadId: leadId,
           fromStatus: "frio",
           toStatus: "contatado",
-          reason: "Enviado quebra-gelo com IA"
-        }
+          reason: "Enviado quebra-gelo com IA",
+        },
       })
     } else {
       await prisma.zapLead.update({
         where: { id: leadId },
-        data: { lastInteractionAt: new Date() }
+        data: { lastInteractionAt: new Date() },
       })
     }
 

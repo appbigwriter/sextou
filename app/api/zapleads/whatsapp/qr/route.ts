@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
-import { getEngine, SessionLimitError } from "@/lib/whatsapp"
+import { ensureInstanceAndQr, EvolutionConfigError } from "@/lib/evolution"
 import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
+import { syncZapConnection } from "@/lib/sextou-tools/zap-connection"
 
 export const dynamic = "force-dynamic"
 
@@ -12,22 +13,22 @@ export async function GET() {
   }
 
   try {
-    const engine = getEngine(result.user.id)
+    // Garante a instância na Evolution e obtém o QR (raw code) quando aplicável.
+    const { status, qrCode } = await ensureInstanceAndQr(result.user.id)
+    await syncZapConnection(result.user.id, status)
 
-    if (engine.status === "DISCONNECTED") {
-      // Inicia a engine apenas quando o usuário pedir o QR Code
-      engine.initialize()
+    // `qrCodeUrl` é o code raw — o frontend gera a imagem com a lib `qrcode`.
+    return NextResponse.json({ status, qrCodeUrl: qrCode, lastError: null })
+  } catch (err: any) {
+    if (err instanceof EvolutionConfigError) {
+      return NextResponse.json(
+        { status: "DISCONNECTED", qrCodeUrl: null, lastError: err.message },
+        { status: 503 }
+      )
     }
-
-    return NextResponse.json({
-      status: engine.status,
-      qrCodeUrl: engine.qrCodeUrl,
-      lastError: engine.lastError,
-    })
-  } catch (err) {
-    if (err instanceof SessionLimitError) {
-      return NextResponse.json({ error: err.message }, { status: 503 })
-    }
-    throw err
+    return NextResponse.json(
+      { status: "DISCONNECTED", qrCodeUrl: null, lastError: err?.message || "Erro ao conectar" },
+      { status: 500 }
+    )
   }
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface Group {
   id: string
@@ -14,9 +14,32 @@ export function ZapLeadsGroupExtractor({ connectionId }: { connectionId?: string
   const [groups, setGroups] = useState<Group[]>([])
   const [selectedGroupId, setSelectedGroupId] = useState<string>("")
   const [result, setResult] = useState<{ imported: number, total: number } | null>(null)
+  // Fonte de verdade da conexão é a engine em memória (por usuário), não o registro
+  // do banco — por isso consultamos o status real em vez de depender do connectionId.
+  const [isConnected, setIsConnected] = useState(false)
+
+  useEffect(() => {
+    let active = true
+
+    const checkStatus = async () => {
+      try {
+        const res = await fetch("/api/zapleads/whatsapp/status")
+        if (!res.ok) return
+        const data = await res.json()
+        if (active) setIsConnected(data.status === "CONNECTED")
+      } catch {}
+    }
+
+    checkStatus()
+    const interval = setInterval(checkStatus, 3000)
+    return () => {
+      active = false
+      clearInterval(interval)
+    }
+  }, [])
 
   const handleLoadGroups = async () => {
-    if (!connectionId) {
+    if (!isConnected) {
       alert("Conecte o WhatsApp primeiro!")
       return
     }
@@ -42,11 +65,11 @@ export function ZapLeadsGroupExtractor({ connectionId }: { connectionId?: string
   }
 
   const handleExtract = async () => {
-    if (!connectionId) {
+    if (!isConnected) {
       alert("Conecte o WhatsApp primeiro!")
       return
     }
-    
+
     if (!selectedGroupId) {
       alert("Selecione um grupo primeiro!")
       return
@@ -86,10 +109,16 @@ export function ZapLeadsGroupExtractor({ connectionId }: { connectionId?: string
             Carregue seus grupos do WhatsApp, selecione o alvo e inicie o aquecimento de leads.
           </p>
           
+          {!isConnected && (
+            <p className="mb-4 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-xs text-amber-200/80">
+              Conecte o WhatsApp no painel ao lado para liberar a extração de grupos.
+            </p>
+          )}
+
           {groups.length === 0 ? (
             <button
               onClick={handleLoadGroups}
-              disabled={isLoadingGroups || !connectionId}
+              disabled={isLoadingGroups || !isConnected}
               className="mt-2 mb-4 flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-white/10 px-4 text-sm font-semibold text-white transition hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoadingGroups ? "Buscando grupos no celular..." : "Carregar Lista de Grupos"}

@@ -52,18 +52,14 @@ RUN npm run build
 # ===== STAGE 2: Runner =====
 FROM node:20-alpine AS runner
 
-# chromium + libs necessárias pro whatsapp-web.js (puppeteer headless) no Alpine
-RUN apk add --no-cache libc6-compat openssl \
-    chromium nss freetype harfbuzz ca-certificates ttf-freefont
+# WhatsApp agora roda via Evolution API (serviço externo) — sem Chromium/puppeteer.
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
-# Usa o Chromium do sistema; não baixar o do puppeteer no build
-ENV PUPPETEER_SKIP_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./

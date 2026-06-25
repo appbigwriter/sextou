@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
-import { peekEngine } from "@/lib/whatsapp"
+import { getConnectionState, instanceNameFor } from "@/lib/evolution"
 import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
+import { syncZapConnection } from "@/lib/sextou-tools/zap-connection"
 
 export const dynamic = "force-dynamic"
 
@@ -11,12 +12,12 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const engine = peekEngine(result.user.id)
-  const client = engine?.getClient()
-  const connectedPhone = client?.info?.wid?.user || null
-
-  return NextResponse.json({
-    status: engine?.status || "DISCONNECTED",
-    connectedPhone,
-  })
+  try {
+    const state = await getConnectionState(instanceNameFor(result.user.id))
+    await syncZapConnection(result.user.id, state.status)
+    return NextResponse.json({ status: state.status, connectedPhone: null })
+  } catch {
+    // Evolution indisponível: reporta desconectado sem derrubar o frontend.
+    return NextResponse.json({ status: "DISCONNECTED", connectedPhone: null })
+  }
 }
