@@ -26,6 +26,7 @@ type Contact = {
   id: string
   displayName: string | null
   phoneE164: string
+  batch?: string | null
   sourceGroup?: {
     name: string | null
   } | null

@@ -17,7 +17,9 @@ export async function GET(req: Request) {
         userId: result.user.id,
       },
       include: {
-        contact: true,
+        contact: {
+          include: { sourceGroup: true },
+        },
       },
       orderBy: {
         createdAt: "desc"

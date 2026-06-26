@@ -12,6 +12,7 @@ type BulkSenderModalProps = {
 
 export function BulkSenderModal({ isOpen, onClose, leads, onLeadsUpdated }: BulkSenderModalProps) {
   const [selectedGroup, setSelectedGroup] = useState<string>("all")
+  const [selectedBatch, setSelectedBatch] = useState<string>("all")
   const [selectedStatus, setSelectedStatus] = useState<string>("frio")
   const [messageTemplate, setMessageTemplate] = useState("Olá {{nome}}, tudo bem?")
   const [presetOption, setPresetOption] = useState<"none" | "new_account" | "safe_margins">("safe_margins")
@@ -37,10 +38,12 @@ export function BulkSenderModal({ isOpen, onClose, leads, onLeadsUpdated }: Bulk
   
   // Derived data
   const groups = Array.from(new Set(leads.map(l => l.contact.sourceGroup?.name).filter(Boolean))) as string[]
+  const batches = Array.from(new Set(leads.map(l => l.contact.batch).filter(Boolean))) as string[]
   const targetLeads = leads.filter(l => {
     const matchStatus = selectedStatus === "all" || l.status === selectedStatus
-  const matchGroup = selectedGroup === "all" || l.contact.sourceGroup?.name === selectedGroup
-    return matchStatus && matchGroup
+    const matchGroup = selectedGroup === "all" || l.contact.sourceGroup?.name === selectedGroup
+    const matchBatch = selectedBatch === "all" || l.contact.batch === selectedBatch
+    return matchStatus && matchGroup && matchBatch
   })
 
   const finalLeads = targetLeads.slice(0, Number(volumeOption))
@@ -295,6 +298,20 @@ export function BulkSenderModal({ isOpen, onClose, leads, onLeadsUpdated }: Bulk
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-[#5A5755] uppercase block mb-2">Escopo do Lote</label>
+                <select
+                  value={selectedBatch}
+                  onChange={(e) => setSelectedBatch(e.target.value)}
+                  className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-sm text-[#F0EDE6] focus:border-[#FF3D57] outline-none"
+                >
+                  <option value="all">Todos os Lotes</option>
+                  {batches.map(b => (
+                    <option key={b} value={b}>{b}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="bg-white/5 rounded-xl p-3 flex justify-between items-center border border-white/10">
