@@ -90,6 +90,10 @@ export function ZapLeadsGroupExtractor({ connectionId }: { connectionId?: string
       }
       
       setResult({ imported: data.leadsExtracted, total: data.totalMembers || data.leadsExtracted })
+      // Notifica o Kanban (componente irmão) para recarregar os leads recém-extraídos.
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("zapleads:extracted"))
+      }
     } catch (err: any) {
       alert(err.message || "Erro desconhecido")
     } finally {

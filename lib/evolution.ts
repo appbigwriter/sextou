@@ -179,8 +179,28 @@ export async function deleteInstance(instance: string): Promise<void> {
 // ── Grupos ───────────────────────────────────────────────────────────────────
 
 export interface EvoParticipant {
-  id: string // ex.: "5511999999999@s.whatsapp.net"
+  /** Pode ser um LID anônimo ("...@lid") em grupos novos — NÃO é confiável como telefone. */
+  id: string
+  /** Telefone real resolvido ("5521999999999@s.whatsapp.net"), quando disponível. */
+  phoneNumber?: string | null
   admin: string | null
+}
+
+/**
+ * Extrai o telefone E.164 de um participante.
+ * Prefere `phoneNumber` (número real); `id` só serve quando já é @s.whatsapp.net
+ * (grupos antigos). Participantes que só têm LID, sem telefone, retornam null.
+ */
+export function participantPhoneE164(p: EvoParticipant): string | null {
+  const source =
+    p.phoneNumber && p.phoneNumber.includes("@s.whatsapp.net")
+      ? p.phoneNumber
+      : p.id && p.id.includes("@s.whatsapp.net")
+        ? p.id
+        : null
+  if (!source) return null
+  const raw = source.split("@")[0].replace(/\D/g, "")
+  return raw ? "+" + raw : null
 }
 
 export interface EvoGroup {

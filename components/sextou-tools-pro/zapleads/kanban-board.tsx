@@ -63,6 +63,10 @@ export function ZapLeadsKanbanBoard() {
   useEffect(() => {
     setIsMounted(true)
     fetchLeads()
+    // Recarrega quando o extrator (componente irmão) conclui uma extração.
+    const onExtracted = () => fetchLeads()
+    window.addEventListener("zapleads:extracted", onExtracted)
+    return () => window.removeEventListener("zapleads:extracted", onExtracted)
   }, [])
 
   const fetchLeads = async () => {

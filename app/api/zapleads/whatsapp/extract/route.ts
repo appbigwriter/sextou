@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getConnectionState, fetchAllGroups, instanceNameFor } from "@/lib/evolution"
+import { getConnectionState, fetchAllGroups, instanceNameFor, participantPhoneE164 } from "@/lib/evolution"
 import { prisma } from "@/lib/prisma"
 import { resolveSextouToolsPremiumUser } from "@/lib/sextou-tools/auth"
 import { getZapConnectionId } from "@/lib/sextou-tools/zap-connection"
@@ -32,16 +32,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Grupo não encontrado" }, { status: 404 })
     }
 
-    // Participantes vêm como "5511999999999@s.whatsapp.net" → extrai dígitos e monta E.164.
-    // A Evolution não retorna o nome do participante em fetchAllGroups (só id/admin),
-    // então o displayName fica vazio e é enriquecido depois pela primeira interação.
+    // O `id` do participante pode ser um LID anônimo (@lid); o telefone real vem em
+    // `phoneNumber`. participantPhoneE164 resolve isso e descarta quem só tem LID.
+    // A Evolution não retorna o nome em fetchAllGroups, então displayName fica vazio.
     const participants = group.participants || []
+    const seen = new Set<string>()
     const extractedContacts = participants
       .map((p) => {
-        const raw = (p.id || "").split("@")[0].replace(/\D/g, "")
-        return raw ? { phone: "+" + raw, name: "" } : null
+        const phone = participantPhoneE164(p)
+        return phone ? { phone, name: "" } : null
       })
-      .filter((c): c is { phone: string; name: string } => c !== null)
+      .filter((c): c is { phone: string; name: string } => {
+        if (!c) return false
+        if (seen.has(c.phone)) return false // dedup dentro do mesmo grupo
+        seen.add(c.phone)
+        return true
+      })
 
     const connectionId = await getZapConnectionId(result.user.id)
 
