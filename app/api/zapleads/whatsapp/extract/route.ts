@@ -13,7 +13,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const { groupId, purpose } = await req.json()
+  const { groupId, purpose, batch } = await req.json()
+  const batchLabel = typeof batch === "string" && batch.trim() ? batch.trim() : null
   const instance = instanceNameFor(result.user.id)
 
   try {
@@ -102,10 +103,12 @@ export async function POST(req: Request) {
             userId: result.user.id,
             phoneE164: contact.phone,
             displayName: contact.name,
+            batch: batchLabel,
             sourceType: "group",
             sourceGroupId: dbGroup.id,
           },
-          update: {}, // Do not overwrite if exists
+          // Reclassifica o lote ao re-extrair; não sobrescreve outros campos.
+          update: batchLabel ? { batch: batchLabel } : {},
         })
 
         const existingLead = await prisma.zapLead.findFirst({

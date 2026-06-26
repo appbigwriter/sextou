@@ -22,6 +22,7 @@ export function ZapLeadDrawer({ lead: initialLead, onClose }: { lead: Lead | nul
     phoneE164: "",
     email: "",
     company: "",
+    batch: "",
     estimatedValue: "",
     nextFollowupAt: "",
     notes: ""
@@ -65,6 +66,7 @@ export function ZapLeadDrawer({ lead: initialLead, onClose }: { lead: Lead | nul
           phoneE164: data.lead.contact.phoneE164 || "",
           email: data.lead.contact.email || "",
           company: data.lead.contact.company || "",
+          batch: data.lead.contact.batch || "",
           estimatedValue: data.lead.estimatedValue?.toString() || "",
           nextFollowupAt: data.lead.nextFollowupAt ? new Date(data.lead.nextFollowupAt).toISOString().slice(0, 10) : "",
           notes: data.lead.contact.notes || ""
@@ -92,6 +94,7 @@ export function ZapLeadDrawer({ lead: initialLead, onClose }: { lead: Lead | nul
             phoneE164: formData.phoneE164,
             email: formData.email,
             company: formData.company,
+            batch: formData.batch,
             notes: formData.notes
           }
         })
@@ -280,6 +283,29 @@ export function ZapLeadDrawer({ lead: initialLead, onClose }: { lead: Lead | nul
                   placeholder="Nome do Negócio"
                   className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-sm text-[#F0EDE6] placeholder:text-[#5A5755] focus:border-[#FF3D57] focus:outline-none"
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-[#5A5755] uppercase">Lote</label>
+                  <input
+                    type="text"
+                    value={formData.batch}
+                    onChange={(e) => setFormData({...formData, batch: e.target.value})}
+                    placeholder="ex: pizzarias"
+                    className="w-full rounded-xl border border-white/10 bg-black/40 p-3 text-sm text-[#F0EDE6] placeholder:text-[#5A5755] focus:border-[#FF3D57] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-[#5A5755] uppercase">Grupo de Origem</label>
+                  <input
+                    type="text"
+                    value={fullLead?.contact?.sourceGroup?.name || "—"}
+                    readOnly
+                    title="Grupo de onde o contato foi extraído"
+                    className="w-full cursor-default rounded-xl border border-white/10 bg-black/20 p-3 text-sm text-[#A09D97] focus:outline-none"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

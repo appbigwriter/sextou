@@ -15,7 +15,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     const lead = await prisma.zapLead.findUnique({
       where: { id: params.id, userId: result.user.id },
       include: {
-        contact: true,
+        contact: {
+          include: { sourceGroup: true },
+        },
         messages: {
           orderBy: { createdAt: "desc" }
         },
@@ -63,7 +65,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
           email: contact.email,
           company: contact.company,
           notes: contact.notes,
-          phoneE164: contact.phoneE164
+          phoneE164: contact.phoneE164,
+          batch: contact.batch,
         }
       })
     }

@@ -9,6 +9,7 @@ interface Group {
 
 export function ZapLeadsGroupExtractor({ connectionId }: { connectionId?: string }) {
   const [purpose, setPurpose] = useState("")
+  const [batch, setBatch] = useState("")
   const [isExtracting, setIsExtracting] = useState(false)
   const [isLoadingGroups, setIsLoadingGroups] = useState(false)
   const [groups, setGroups] = useState<Group[]>([])
@@ -81,7 +82,7 @@ export function ZapLeadsGroupExtractor({ connectionId }: { connectionId?: string
       const res = await fetch("/api/zapleads/whatsapp/extract", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ connectionId, purpose, groupId: selectedGroupId })
+        body: JSON.stringify({ connectionId, purpose, batch, groupId: selectedGroupId })
       })
       const data = await res.json()
       
@@ -145,6 +146,22 @@ export function ZapLeadsGroupExtractor({ connectionId }: { connectionId?: string
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#F0EDE6] mb-2">
+                  Lote
+                </label>
+                <input
+                  type="text"
+                  value={batch}
+                  onChange={(e) => setBatch(e.target.value)}
+                  placeholder="ex: pizzarias, alunos, lojas"
+                  className="w-full rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-[#F0EDE6] placeholder:text-[#5A5755] focus:border-[#FF3D57] focus:outline-none focus:ring-1 focus:ring-[#FF3D57]"
+                />
+                <p className="mt-1 text-xs text-[#5A5755]">
+                  Etiqueta para identificar este grupo de contatos extraídos.
+                </p>
               </div>
 
               <div>
