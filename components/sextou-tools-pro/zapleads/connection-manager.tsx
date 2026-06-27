@@ -9,6 +9,7 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null)
   const [status, setStatus] = useState(initialStatus || "disconnected")
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [disconnecting, setDisconnecting] = useState(false)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -48,6 +49,28 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
 
     return () => clearInterval(interval)
   }, [status])
+
+  const handleDisconnect = async () => {
+    if (!confirm("Desconectar a conta do WhatsApp? Será necessário escanear o QR Code novamente para reconectar.")) {
+      return
+    }
+    setDisconnecting(true)
+    setErrorMsg(null)
+    try {
+      const res = await fetch("/api/zapleads/whatsapp/disconnect", { method: "POST" })
+      const data = await res.json()
+      if (!res.ok) {
+        setErrorMsg(data.error || "Falha ao desconectar.")
+        return
+      }
+      setStatus("DISCONNECTED")
+      setQrCodeUrl(null)
+    } catch (err) {
+      setErrorMsg("Erro ao desconectar.")
+    } finally {
+      setDisconnecting(false)
+    }
+  }
 
   const handleConnect = async () => {
     setConnecting(true)
@@ -104,14 +127,23 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
       )}
 
       {status === "CONNECTED" ? (
-        <div className="mt-6 flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366]/20">
-            <span className="text-xl">✅</span>
+        <div className="mt-6">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366]/20">
+              <span className="text-xl">✅</span>
+            </div>
+            <div>
+              <p className="font-semibold text-[#F0EDE6]">WhatsApp Conectado</p>
+              <p className="text-sm text-[#A09D97]">Sessao ativa e pronta para operacao.</p>
+            </div>
           </div>
-          <div>
-            <p className="font-semibold text-[#F0EDE6]">WhatsApp Conectado</p>
-            <p className="text-sm text-[#A09D97]">Sessao ativa e pronta para operacao.</p>
-          </div>
+          <button
+            onClick={handleDisconnect}
+            disabled={disconnecting}
+            className="mt-6 flex h-10 w-full items-center justify-center rounded-2xl border border-[#FF3D57]/30 bg-[#FF3D57]/10 px-4 text-sm font-semibold text-[#FF3D57] transition hover:bg-[#FF3D57]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {disconnecting ? "Desconectando..." : "Desconectar WhatsApp"}
+          </button>
         </div>
       ) : !qrCodeUrl ? (
         <div className="mt-6">

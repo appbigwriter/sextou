@@ -41,12 +41,15 @@ export async function DELETE(req: Request) {
   }
 
   try {
-    // Apaga todos os Leads do Kanban deste usuário (o histórico também some via Cascade no banco)
-    const deleted = await prisma.zapLead.deleteMany({
-      where: {
-        userId: result.user.id,
-      }
-    })
+    // Apaga os filhos explicitamente antes dos leads — não depende de ON DELETE CASCADE
+    // estar configurado nas FKs do banco (evita erro de constraint ao limpar o CRM).
+    const userId = result.user.id
+    const [, , , deleted] = await prisma.$transaction([
+      prisma.zapMessage.deleteMany({ where: { userId } }),
+      prisma.leadEvent.deleteMany({ where: { userId } }),
+      prisma.leadStatusHistory.deleteMany({ where: { lead: { userId } } }),
+      prisma.zapLead.deleteMany({ where: { userId } }),
+    ])
 
     return NextResponse.json({ message: "Leads removidos com sucesso", count: deleted.count })
   } catch (error: any) {
