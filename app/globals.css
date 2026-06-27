@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@theme inline {
+:root {
   /* Fontes */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
