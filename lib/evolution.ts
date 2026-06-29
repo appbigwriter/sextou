@@ -169,7 +169,8 @@ export async function connectInstance(instance: string): Promise<QrResult> {
 }
 
 export async function logoutInstance(instance: string): Promise<void> {
-  await evoFetch(`/instance/logout/${instance}`, { method: "DELETE", allowStatuses: [404] })
+  await evoFetch(`/instance/logout/${instance}`, { method: "DELETE", allowStatuses: [404] }).catch(() => {})
+  await evoFetch(`/instance/delete/${instance}`, { method: "DELETE", allowStatuses: [404] }).catch(() => {})
 }
 
 export async function deleteInstance(instance: string): Promise<void> {
