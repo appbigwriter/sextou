@@ -48,15 +48,23 @@ export function ZapLeadsGroupExtractor({ connectionId }: { connectionId?: string
     setIsLoadingGroups(true)
     try {
       const res = await fetch("/api/zapleads/whatsapp/groups")
-      const data = await res.json()
+      
+      let data;
+      try {
+        data = await res.json()
+      } catch (e) {
+        throw new Error(res.status === 504 ? "O servidor demorou muito para responder. O WhatsApp pode estar sincronizando muitos grupos. Tente novamente em alguns instantes." : "Erro inesperado ao buscar grupos (o servidor retornou um formato inválido).")
+      }
       
       if (!res.ok) {
         throw new Error(data.error || "Erro ao carregar grupos")
       }
       
-      setGroups(data.groups)
-      if (data.groups.length > 0) {
+      setGroups(data.groups || [])
+      if (data.groups && data.groups.length > 0) {
         setSelectedGroupId(data.groups[0].id)
+      } else {
+        alert("Nenhum grupo encontrado. Se você acabou de conectar, o WhatsApp ainda está sincronizando. Aguarde cerca de 1 a 2 minutos e tente novamente!")
       }
     } catch (err: any) {
       alert(err.message || "Erro desconhecido")
