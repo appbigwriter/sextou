@@ -35,8 +35,9 @@ export function ZapLeadsConnectionManager({ initialStatus }: { initialStatus?: s
           const QRCode = await import("qrcode")
           const url = await QRCode.default.toDataURL(data.qrCodeUrl)
           setQrCodeUrl(url)
+          setStatus("AWAITING_QR")
           setErrorMsg(null)
-        } else if (data.status === "DISCONNECTED" && status === "CONNECTED") {
+        } else if (data.status === "DISCONNECTED" && status !== "DISCONNECTED") {
           setStatus("DISCONNECTED")
           setQrCodeUrl(null)
         }
