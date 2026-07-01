@@ -53,8 +53,7 @@ export function isConfigured(): boolean {
 
 /** Mapeia o `state` da Evolution ("open"|"connecting"|"close") para o status interno. */
 export function mapState(state?: string | null): WhatsAppStatus {
-  if (state === "open") return "CONNECTED"
-  if (state === "connecting") return "AWAITING_QR"
+  if (state === "open" || state === "connecting") return "CONNECTED"
   return "DISCONNECTED"
 }
 
