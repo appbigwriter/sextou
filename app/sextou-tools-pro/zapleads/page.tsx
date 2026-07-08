@@ -29,7 +29,9 @@ export default async function ZapLeadsPage() {
     return null
   }
 
-  // Check existing connection
+  // Só precisamos do id da conexão (para o extrator). O STATUS não é lido daqui:
+  // o ConnectionManager consulta o estado REAL da instância na Evolution ao montar,
+  // evitando abrir "conectado" com base num registro obsoleto do banco.
   const connection = await prisma.zapConnection.findFirst({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
@@ -49,7 +51,7 @@ export default async function ZapLeadsPage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[1.25fr_minmax(0,0.75fr)]">
-          <ZapLeadsConnectionManager initialStatus={connection?.status} />
+          <ZapLeadsConnectionManager />
           
           <ZapLeadsGroupExtractor connectionId={connection?.id} />
         </div>
