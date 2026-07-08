@@ -51,9 +51,17 @@ export function isConfigured(): boolean {
   return Boolean(BASE_URL && API_KEY)
 }
 
-/** Mapeia o `state` da Evolution ("open"|"connecting"|"close") para o status interno. */
+/**
+ * Mapeia o `state` da Evolution ("open"|"connecting"|"close") para o status interno.
+ *
+ * IMPORTANTE: só `open` é CONNECTED. `connecting` significa que a instância existe
+ * mas a sessão NÃO está aberta (aguardando scan do QR ou reconectando) — tratá-la
+ * como conectada fazia o app abrir "conectado" sem o usuário ter escaneado e deixava
+ * a extração/envio falharem no meio de uma reconexão.
+ */
 export function mapState(state?: string | null): WhatsAppStatus {
-  if (state === "open" || state === "connecting") return "CONNECTED"
+  if (state === "open") return "CONNECTED"
+  if (state === "connecting") return "AWAITING_QR"
   return "DISCONNECTED"
 }
 
