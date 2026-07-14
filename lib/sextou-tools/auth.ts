@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { ToolkitDatabaseUnavailableError, isToolkitDatabaseConnectionError } from "@/lib/sextou-tools/prisma-guards"
+import { ToolkitDatabaseUnavailableError, isToolkitDatabaseUnavailable } from "@/lib/sextou-tools/prisma-guards"
 import { redirect } from "next/navigation"
 
 type ToolkitUserLookupResult =
@@ -61,7 +61,7 @@ async function lookupToolkitUser(): Promise<ToolkitUserLookupResult> {
 
     return { kind: "ok", user }
   } catch (error) {
-    if (isToolkitDatabaseConnectionError(error)) {
+    if (isToolkitDatabaseUnavailable(error)) {
       return { kind: "db-unavailable" }
     }
 

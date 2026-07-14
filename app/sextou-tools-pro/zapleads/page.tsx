@@ -25,8 +25,36 @@ export default async function ZapLeadsPage() {
 
   const user = result.kind === "ok" ? result.user : null
 
+  // O unico caminho ate aqui sem `user` e o banco indisponivel (conexao recusada,
+  // schema ausente ou bloqueio por RLS). Nunca retornamos null (tela branca): exibimos
+  // um estado explicito e amigavel, no padrao das demais paginas da suite.
   if (!user) {
-    return null
+    return (
+      <div className="min-h-screen bg-[#0D0D0D] text-[#F0EDE6] font-sans">
+        <SextouToolsProSuiteHeader showPublicNav />
+        <main className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="rounded-[24px] border border-amber-500/20 bg-amber-500/10 px-6 py-8 text-center">
+            <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-amber-400">
+              Conexao com o banco temporariamente indisponivel
+            </p>
+            <h1 className="mt-3 font-toolkit text-3xl font-extrabold text-[#F0EDE6]">
+              O ZapLeads CRM nao conseguiu carregar agora
+            </h1>
+            <p className="mt-4 text-sm leading-7 text-[#A09D97]">
+              O servico de banco de dados pode estar indisponivel ou a configuracao de
+              permissoes (RLS) pode estar bloqueando o acesso. Tente novamente em alguns
+              instantes. Se o problema persistir, contate o suporte.
+            </p>
+            <a
+              href="/sextou-tools-pro/dashboard"
+              className="mt-6 inline-flex h-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-6 text-sm font-semibold text-[#F0EDE6] transition hover:bg-white/10"
+            >
+              Voltar ao dashboard PRO
+            </a>
+          </div>
+        </main>
+      </div>
+    )
   }
 
   // Só precisamos do id da conexão (para o extrator). O STATUS não é lido daqui:
