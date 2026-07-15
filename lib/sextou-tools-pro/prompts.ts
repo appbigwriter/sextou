@@ -106,6 +106,11 @@ export function buildSextouToolsProUserPrompt({
     businessName: string
     city?: string
     state?: string
+    businessType?: string | null
+    whatYouSell?: string | null
+    idealCustomer?: string | null
+    mainSalesChannel?: string | null
+    preferredLanguage?: string | null
   }
 }) {
   return [
@@ -113,6 +118,11 @@ export function buildSextouToolsProUserPrompt({
     `Negocio: ${profile.businessName}`,
     `Responsavel: ${profile.fullName}`,
     profile.city && profile.state ? `Local: ${profile.city}, ${profile.state}` : null,
+    profile.businessType ? `Tipo de negocio: ${profile.businessType}` : null,
+    profile.whatYouSell ? `Produto/servico principal: ${profile.whatYouSell}` : null,
+    profile.idealCustomer ? `Cliente ideal: ${profile.idealCustomer}` : null,
+    profile.mainSalesChannel ? `Canal principal de venda: ${profile.mainSalesChannel}` : null,
+    profile.preferredLanguage ? `Idioma preferido: ${profile.preferredLanguage}` : null,
     "Use o contexto abaixo para montar a resposta estruturada:",
     stringifyInput(input),
   ]

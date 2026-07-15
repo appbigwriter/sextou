@@ -2,6 +2,10 @@ import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import OpenAI from "openai"
+import {
+  assertSextouToolsProUsageAllowed,
+  recordSextouToolsProUsageEvent,
+} from "@/lib/sextou-tools-pro/usage"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -45,6 +49,16 @@ export async function POST(
 
     if (!user || !user.hasActiveAds || !user.isPremium) {
       return new NextResponse("Acesso restrito para usuários Premium com anúncios ativos", { status: 403 })
+    }
+
+    // Limite diario compartilhado com os apps PRO (5 geracoes/dia).
+    try {
+      await assertSextouToolsProUsageAllowed(user.id)
+    } catch (limitErr: any) {
+      if (limitErr?.message === "daily-limit-reached" || limitErr?.message === "regeneration-limit-reached") {
+        return NextResponse.json({ error: limitErr.message }, { status: 429 })
+      }
+      throw limitErr
     }
 
     const campaignId = params.id
@@ -262,6 +276,8 @@ Responda estritamente em formato JSON com o seguinte schema:
         outputJson: parsedResult
       }
     })
+
+    await recordSextouToolsProUsageEvent(user.id, "social-network-studio", "GENERATE")
 
     return NextResponse.json({ success: true, campaignId })
   } catch (err: any) {

@@ -34,6 +34,13 @@ model User {
   premiumSince              DateTime?                  @map("premium_since")
   premiumExpiresAt          DateTime?                  @map("premium_expires_at")
   zelleCode                 String?                    @map("zelle_code")
+  // Onboarding comercial (PRD §5.4) — preenchido pelo usuario apos cadastro.
+  // Alimenta os prompts da IA para gerar conteudo mais contextualizado.
+  businessType              String?                    @map("business_type")
+  whatYouSell               String?                    @map("what_you_sell")
+  idealCustomer             String?                    @map("ideal_customer")
+  mainSalesChannel          String?                    @map("main_sales_channel")
+  preferredLanguage         String                     @default("pt-BR") @map("preferred_language")
   ads                       Ad[]
   territories               AffiliateTerritory[]
   consentLogs               ConsentLog[]

@@ -14,6 +14,11 @@ type ToolkitUserLookupResult =
         isAdmin: boolean
         hasActiveAds: boolean
         isPremium: boolean
+        businessType: string | null
+        whatYouSell: string | null
+        idealCustomer: string | null
+        mainSalesChannel: string | null
+        preferredLanguage: string
       }
     }
   | { kind: "unauthorized" }
@@ -31,6 +36,11 @@ type SextouToolsProUserLookupResult =
         isAdmin: boolean
         hasActiveAds: boolean
         isPremium: boolean
+        businessType: string | null
+        whatYouSell: string | null
+        idealCustomer: string | null
+        mainSalesChannel: string | null
+        preferredLanguage: string
       }
     }
 
@@ -52,6 +62,11 @@ async function lookupToolkitUser(): Promise<ToolkitUserLookupResult> {
         isAdmin: true,
         hasActiveAds: true,
         isPremium: true,
+        businessType: true,
+        whatYouSell: true,
+        idealCustomer: true,
+        mainSalesChannel: true,
+        preferredLanguage: true,
       },
     })
 

@@ -701,6 +701,11 @@ export async function generateSextouToolsProResult(options: {
     businessName: string
     city?: string
     state?: string
+    businessType?: string | null
+    whatYouSell?: string | null
+    idealCustomer?: string | null
+    mainSalesChannel?: string | null
+    preferredLanguage?: string | null
   }
   appId: string
   input: Record<string, unknown>
@@ -776,6 +781,12 @@ export async function generateSextouToolsProResult(options: {
       parsedOutput = providerResponse.parsedOutput
     } catch (error) {
       if (error instanceof Error && error.message === "openai-key-missing") {
+        // Em producao, nao existe fallback mock: o usuario recebe um erro claro
+        // em vez de conteudo falso que parece real. O mock so e permitido em
+        // desenvolvimento/staging para testes sem chave de API.
+        if (process.env.NODE_ENV === "production") {
+          throw error
+        }
         provider = "mock"
         parsedOutput = buildMockOutput(options.appId, parsedInput)
       } else {

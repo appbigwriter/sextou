@@ -42,6 +42,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Usage limit reached", code: (error as Error).message }, { status: 429 })
     }
 
+    if (error instanceof Error && error.message === "openai-key-missing") {
+      return NextResponse.json(
+        { error: "O servico de IA nao esta configurado. Contate o administrador." },
+        { status: 503 },
+      )
+    }
+
     if (
       error instanceof Error &&
       (error.message === "unsupported-app" ||

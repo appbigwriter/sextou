@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { SextouToolsProCard } from "@/components/sextou-tools-pro/tool-card"
 import { SextouToolsProSuiteHeader } from "@/components/sextou-tools-pro/suite-header"
 import { SextouToolsProHistoryList } from "@/components/sextou-tools-pro/history-list"
+import { OnboardingBanner } from "@/components/sextou-tools-pro/onboarding-banner"
 import { getSextouToolsProCatalog } from "@/lib/sextou-tools-pro/catalog"
 import { listRecentSextouToolsProGenerations } from "@/lib/sextou-tools-pro/history"
 import { getOperationalStatus } from "@/lib/sextou-tools-pro/metadata"
@@ -55,6 +56,16 @@ export default async function SextouToolsProDashboardPage() {
       <SextouToolsProSuiteHeader userName={user.fullName} businessName={user.businessName} />
 
       <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        {result.kind === "ok" && (
+          <OnboardingBanner
+            initialBusinessType={result.user.businessType}
+            initialWhatYouSell={result.user.whatYouSell}
+            initialIdealCustomer={result.user.idealCustomer}
+            initialMainSalesChannel={result.user.mainSalesChannel}
+            initialPreferredLanguage={result.user.preferredLanguage}
+          />
+        )}
+
         <section className="mb-10 grid gap-6 lg:grid-cols-[1.25fr_minmax(0,0.75fr)]">
           <div className="rounded-[28px] border border-[#FF3D57]/20 bg-[linear-gradient(135deg,rgba(255,61,87,0.16),rgba(255,140,0,0.16))] p-7">
             <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.14em] text-[#FF3D57]">

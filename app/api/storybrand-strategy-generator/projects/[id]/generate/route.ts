@@ -2,6 +2,10 @@ import { NextResponse } from "next/server"
 import { requireSextouToolsPremiumApiUser } from "@/lib/sextou-tools/auth"
 import { prisma } from "@/lib/prisma"
 import OpenAI from "openai"
+import {
+  assertSextouToolsProUsageAllowed,
+  recordSextouToolsProUsageEvent,
+} from "@/lib/sextou-tools-pro/usage"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -20,6 +24,16 @@ export async function POST(
       return new NextResponse("Acesso restrito ao Pacote Premium (anúncio ativo + assinatura)", { status: 403 })
     }
     const user = proUser
+
+    // Limite diario compartilhado com os apps PRO (5 geracoes/dia).
+    try {
+      await assertSextouToolsProUsageAllowed(user.id)
+    } catch (limitErr: any) {
+      if (limitErr?.message === "daily-limit-reached" || limitErr?.message === "regeneration-limit-reached") {
+        return NextResponse.json({ error: limitErr.message }, { status: 429 })
+      }
+      throw limitErr
+    }
 
     const projectId = params.id
 
@@ -301,6 +315,8 @@ Responda estritamente em formato JSON:
         outputJson: { bsResult, collateralResult, reviewResult }
       }
     })
+
+    await recordSextouToolsProUsageEvent(user.id, "storybrand-strategy-generator", "GENERATE")
 
     return NextResponse.json({ success: true, projectId })
   } catch (err: any) {

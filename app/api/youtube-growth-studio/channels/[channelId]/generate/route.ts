@@ -2,6 +2,10 @@ import { NextResponse } from "next/server"
 import { requireSextouToolsPremiumApiUser } from "@/lib/sextou-tools/auth"
 import { prisma } from "@/lib/prisma"
 import OpenAI from "openai"
+import {
+  assertSextouToolsProUsageAllowed,
+  recordSextouToolsProUsageEvent,
+} from "@/lib/sextou-tools-pro/usage"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -293,6 +297,8 @@ Certifique-se de escrever o conteúdo no idioma '${plan.channel.language || "pt-
         totalLlmCalls: items.length
       }
     })
+
+    await recordSextouToolsProUsageEvent(user.id, "youtube-growth-studio", "GENERATE")
 
     return NextResponse.json({ success: true, generatedCount: items.length })
   } catch (err: any) {
